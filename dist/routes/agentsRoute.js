@@ -18,6 +18,20 @@ agentRouter.post("/", async (req, res) => {
         return res.status(500).json({ message: error });
     }
 });
+/* POST Login users */
+agentRouter.post("/login", async (req, res) => {
+    try {
+        const data = req.body;
+        const response = await (0, agentsController_1.loginUser)(data);
+        return res.status(200).json({
+            message: "Success",
+            response,
+        });
+    }
+    catch (error) {
+        return res.status(500).json({ message: error });
+    }
+});
 /* GET  agents */
 agentRouter.get("/", async (req, res) => {
     try {

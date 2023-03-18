@@ -1,6 +1,6 @@
 import z from 'zod';
 
-export const loginUserSchema = z.object({
+export const loginAgentSchema = z.object({
   email: z.string().email().optional(),
   userName: z.string().trim().optional(),
   password: z.string()
@@ -22,7 +22,9 @@ export const registerAgentSchema = z
       .string({
         required_error: 'Password is required'
       })
-      .min(6, { message: 'Password must be 6 or more characters long' }),
+      .min(6, {
+        message: 'Password must be 6 or more characters long'
+      }),
     confirmPassword: z
       .string()
       .min(6, {

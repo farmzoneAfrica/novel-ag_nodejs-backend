@@ -3,14 +3,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteAgent = exports.updateAgent = exports.getAgent = exports.getAgents = exports.registerAgent = void 0;
+exports.deleteAgent = exports.updateAgent = exports.getAgent = exports.getAgents = exports.loginUser = exports.registerAgent = void 0;
 const prismaClient_1 = __importDefault(require("../utils/prismaClient"));
-const validation_1 = require("../utils/validation");
+const agentValidation_1 = require("../utils/agentValidation");
 const hashPassword_1 = require("../utils/hashPassword");
 const cloudinary_1 = __importDefault(require("../utils/cloudinary"));
+const auth_1 = require("../utils/auth");
 /* POST register agent */
 async function registerAgent(userData) {
-    const validateData = validation_1.registerAgentSchema.safeParse(userData);
+    const validateData = agentValidation_1.registerAgentSchema.safeParse(userData);
     if (!validateData.success) {
         throw validateData.error;
     }
@@ -47,6 +48,42 @@ async function registerAgent(userData) {
     return response;
 }
 exports.registerAgent = registerAgent;
+/* POST login user */
+async function loginUser(data) {
+    const isValidData = agentValidation_1.loginAgentSchema.safeParse(data);
+    if (!isValidData.success) {
+        throw isValidData.error;
+    }
+    const record = isValidData.data;
+    //   let agent = {
+    //       id: "",
+    //   email: "",
+    //   password: "",
+    //    userName: "",
+    //   };
+    let agent;
+    if (record.email) {
+        agent = await prismaClient_1.default.agent.findUnique({ where: { email: record.email },
+            select: { email: true, password: true, userName: true, id: true }
+        });
+    }
+    if (record.userName) {
+        agent = await prismaClient_1.default.agent.findUnique({ where: { email: record.userName },
+            select: { email: true, password: true, userName: true, id: true }
+        });
+    }
+    if (!agent) {
+        throw "Login details incorrect";
+    }
+    const match = await (0, hashPassword_1.decryptPassword)(record.password, agent.password);
+    if (!match) {
+        throw "Incorrect password. Access denied";
+    }
+    return {
+        token: (0, auth_1.generateAccessToken)(agent.id),
+    };
+}
+exports.loginUser = loginUser;
 /* GET get all agents */
 async function getAgents() {
     const response = await prismaClient_1.default.agent.findMany();
@@ -66,7 +103,7 @@ async function getAgent(id) {
 exports.getAgent = getAgent;
 /* PATCH update agent */
 async function updateAgent(id, data) {
-    const validData = validation_1.updateAgentSchema.safeParse(data);
+    const validData = agentValidation_1.updateAgentSchema.safeParse(data);
     if (!validData.success) {
         throw validData.error;
     }
