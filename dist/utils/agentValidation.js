@@ -56,4 +56,4 @@ exports.updateAgentSchema = zod_1.default.object({
     avatar: zod_1.default.string().optional(),
     isVerified: zod_1.default.boolean().optional()
 });
-//# sourceMappingURL=validation.js.map
+//# sourceMappingURL=agentValidation.js.map
