@@ -4,7 +4,7 @@ const express_1 = require("express");
 const agentsController_1 = require("../controllers/agentsController");
 const auth_1 = require("../utils/auth");
 const agentRouter = (0, express_1.Router)();
-/* POST register agent */
+/* register agent  */
 agentRouter.post("/", async (req, res) => {
     try {
         const data = req.body;
@@ -15,7 +15,25 @@ agentRouter.post("/", async (req, res) => {
         });
     }
     catch (error) {
-        return res.status(500).json({ message: error });
+        return res.status(500).json({
+            msg: error
+        });
+    }
+});
+/* verify agent registration  */
+agentRouter.post("/verify", async (req, res) => {
+    try {
+        const data = req.body;
+        const response = await (0, agentsController_1.verifyAgent)(data);
+        return res.status(200).json({
+            message: "Success",
+            response,
+        });
+    }
+    catch (error) {
+        return res.status(500).json({
+            msg: error
+        });
     }
 });
 /* POST Login users */
@@ -62,10 +80,11 @@ agentRouter.get("/:id", async (req, res) => {
     }
 });
 /* PATCH update agent */
-agentRouter.patch("/:id", auth_1.auth, async (req, res) => {
+agentRouter.patch("/:id", async (req, res) => {
     try {
         const { id } = req.params;
         const data = req.body;
+        console.log("94", data);
         const user = await (0, agentsController_1.updateAgent)(id, data);
         return res.status(200).json({
             message: "Success",
@@ -94,5 +113,28 @@ agentRouter.delete("/:id", auth_1.auth, async (req, res) => {
         });
     }
 });
+agentRouter.post("/forgot-password", async (req, res) => {
+    try {
+        const data = req.body;
+        const response = await (0, agentsController_1.forgotPassword)(data);
+        return res.status(200).json({
+            msg: "Check your email to reset your password",
+            response,
+        });
+    }
+    catch (error) {
+        return res.status(400).json({ message: error });
+    }
+});
+// agentRouter.post("/reset-password", async (req, res) => {
+// 	const token = req.body.token;
+// 	const newPassword: string = req.body.password;
+// 	try {
+// 		await resetPassword(token, newPassword);
+// 		return res.status(200).json({ message: "Success" });
+// 	} catch (error) {
+// 		return res.status(400).json(error);
+// 	}
+// });
 exports.default = agentRouter;
 //# sourceMappingURL=agentsRoute.js.map

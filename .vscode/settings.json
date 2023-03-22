@@ -1,0 +1,27 @@
+{
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 5432,
+            "driver": "PostgreSQL",
+            "name": "test tool",
+            "database": "test",
+            "username": "postgres",
+            "password": "usha"
+        },
+        {
+            "pgOptions": {
+                "ssl": true
+            },
+            "previewLimit": 50,
+            "server": "dpg-cg80g6hmbg53mc3bg3bg-a.oregon-postgres.render.com",
+            "port": 5432,
+            "driver": "PostgreSQL",
+            "name": "render database",
+            "database": "novel_ag",
+            "username": "usha",
+            "password": "ouTMGbxtLOllFHmcAbLYagbpGM5aq7DA"
+        }
+    ]
+}

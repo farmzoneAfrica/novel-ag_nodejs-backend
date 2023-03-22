@@ -6,10 +6,6 @@ export const loginAgentSchema = z.object({
   password: z.string()
 });
 
-export const emailSchema = z.object({
-  email: z.string().email()
-});
-
 export const registerAgentSchema = z
   .object({
     userName: z.string(),
@@ -53,5 +49,9 @@ export const registerAgentSchema = z
   confirmPassword: z.string().min(4).optional(),
   avatar: z.string().optional(),
   isVerified: z.boolean().optional()
+  });
+
+  export const emailSchema = z.object({
+  email: z.string().email()
 });
 
