@@ -3,13 +3,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteAgent = exports.updateAgent = exports.getAgent = exports.getAgents = exports.loginUser = exports.registerAgent = void 0;
+exports.forgotPassword = exports.deleteAgent = exports.updateAgent = exports.getAgent = exports.getAgents = exports.loginUser = exports.verifyAgent = exports.registerAgent = void 0;
 const prismaClient_1 = __importDefault(require("../utils/prismaClient"));
-const agentValidation_1 = require("../utils/agentValidation");
+const agentValidation_1 = require("../validations/agentValidation");
 const hashPassword_1 = require("../utils/hashPassword");
 const cloudinary_1 = __importDefault(require("../utils/cloudinary"));
 const auth_1 = require("../utils/auth");
-/* POST register agent */
+const emailServices_1 = require("../services/emailServices");
 async function registerAgent(userData) {
     const validateData = agentValidation_1.registerAgentSchema.safeParse(userData);
     if (!validateData.success) {
@@ -48,19 +48,27 @@ async function registerAgent(userData) {
     return response;
 }
 exports.registerAgent = registerAgent;
-/* POST login user */
+async function verifyAgent(data) {
+    const isValidData = agentValidation_1.emailSchema.safeParse(data);
+    if (!isValidData.success) {
+        throw isValidData.error;
+    }
+    const record = isValidData.data;
+    let agent;
+    if (record.email) {
+        agent = await prismaClient_1.default.agent.findUnique({
+            where: { email: record.email },
+            select: { email: true, userName: true, id: true }
+        });
+    }
+}
+exports.verifyAgent = verifyAgent;
 async function loginUser(data) {
     const isValidData = agentValidation_1.loginAgentSchema.safeParse(data);
     if (!isValidData.success) {
         throw isValidData.error;
     }
     const record = isValidData.data;
-    //   let agent = {
-    //       id: "",
-    //   email: "",
-    //   password: "",
-    //    userName: "",
-    //   };
     let agent;
     if (record.email) {
         agent = await prismaClient_1.default.agent.findUnique({ where: { email: record.email },
@@ -84,13 +92,11 @@ async function loginUser(data) {
     };
 }
 exports.loginUser = loginUser;
-/* GET get all agents */
 async function getAgents() {
     const response = await prismaClient_1.default.agent.findMany();
     return response;
 }
 exports.getAgents = getAgents;
-/* GET get single agent */
 async function getAgent(id) {
     const agent = await prismaClient_1.default.agent.findUnique({
         where: { id: id },
@@ -98,10 +104,9 @@ async function getAgent(id) {
     if (agent) {
         return agent;
     }
-    return "Agent not fond on database";
+    throw "Agent not fond on database";
 }
 exports.getAgent = getAgent;
-/* PATCH update agent */
 async function updateAgent(id, data) {
     const validData = agentValidation_1.updateAgentSchema.safeParse(data);
     if (!validData.success) {
@@ -140,7 +145,6 @@ async function updateAgent(id, data) {
     });
 }
 exports.updateAgent = updateAgent;
-/* DELETE delete user */
 async function deleteAgent(id) {
     const agent = await prismaClient_1.default.agent.findUnique({ where: { id } });
     if (agent) {
@@ -151,4 +155,24 @@ async function deleteAgent(id) {
     throw new Error('Agent not found');
 }
 exports.deleteAgent = deleteAgent;
+async function forgotPassword(data) {
+    const validData = agentValidation_1.emailSchema.safeParse(data);
+    if (!validData.success)
+        throw validData.error;
+    const email = validData.data.email;
+    const agent = await prismaClient_1.default.agent.findUnique({ where: { email } });
+    if (!agent)
+        throw "Agent does not exist";
+    const response = (0, emailServices_1.emailServices)(agent, "resetpassword");
+    return response;
+}
+exports.forgotPassword = forgotPassword;
+// export async function resetPassword(token: string, newPassword: string) {
+// 	const decoded = jwt.verify(token, process.env.AUTH_SECRET as string);
+// 	const id = decoded as string;
+// 	const agent = await prisma.agent.findUnique({ where: { id: agent.id } });
+// 	console.log("158", agent);
+// 	if (!agent) throw "user not found";
+// 	await updateAgent({password: newPassword, id: agent.id} );
+// }
 //# sourceMappingURL=agentsController.js.map

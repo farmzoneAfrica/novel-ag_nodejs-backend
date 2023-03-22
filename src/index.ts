@@ -4,6 +4,8 @@ import createError from 'http-errors';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 import cors from 'cors';
+import swaggerUi from 'swagger-ui-express';
+import swaggerFile from './swagger-output.json';
 
 import agentsRoute from "./routes/agentsRoute";
 
@@ -14,7 +16,7 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile))
 app.use('/api/agents', agentsRoute);
 
 app.get('/', (req, res) => {

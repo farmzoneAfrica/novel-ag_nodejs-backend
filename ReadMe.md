@@ -1,5 +1,10 @@
 # Novel-AG NODE BACKEND
 
+## SCRIPTS
+- Run `yarn dev` to start development server on `localhost:5000`
+- Run `yarn compile` to install npm packages 
+- Swagger api docs avalaible at `http://localhost:5000/apic-docs/`
+
 ## Project Documents
 - [Laravel Backend Git Repo](https://github.com/farmzoneAfrica/novelag-backend-laravel)
 - [Node Backend Git Repo](https://github.com/farmzoneAfrica/novel-ag_nodejs-backend)
@@ -29,3 +34,7 @@
 - [Architectural flow design](https://www.figma.com/file/hE7ScAVxcm89YdVl4KChFH/NOVEL-AG---Architectural-Flow-(Copy)?node-id=107%3A906&t=aFli1Iz6SZQkxSmF-0)
 
 yarn add -D eslint prettier eslint-plugin-prettier eslint-config-prettier eslint-plugin-node eslint-config-node @typescript-eslint/eslint-plugin @typescript-eslint/parser
+
+forgot password POST
+forgot password GET
+

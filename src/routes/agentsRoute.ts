@@ -1,27 +1,46 @@
 import { Router } from "express";
 import {
 	registerAgent,
+	verifyAgent,
 	loginUser,
     getAgents,
     getAgent,
     updateAgent,
-    deleteAgent
+	deleteAgent,
+	forgotPassword
 } from "../controllers/agentsController";
 import {auth} from "../utils/auth";
 
 const agentRouter = Router();
 
-/* POST register agent */
+/* register agent  */
 agentRouter.post("/", async (req, res) => {
 	try {
-        const data = req.body;
+		const data = req.body;
 		const response = await registerAgent(data);
 		return res.status(200).json({
 			message: "Success",
 			response,
 		});
-    } catch (error) {
-		return res.status(500).json({ message: error });
+	} catch (error) {
+		return res.status(500).json({ 
+			msg: error
+		});
+	}
+});
+/* verify agent registration  */
+agentRouter.post("/verify", async (req, res) => {
+	try {
+		const data = req.body;
+		const response = await verifyAgent(data);
+		return res.status(200).json({
+			message: "Success",
+			response,
+		});
+	} catch (error) {
+		return res.status(500).json({ 
+			msg: error
+		});
 	}
 });
 
@@ -67,10 +86,12 @@ agentRouter.get("/:id", async (req, res) => {
 	}
 })
 /* PATCH update agent */
-agentRouter.patch("/:id", auth, async (req, res) => {
+agentRouter.patch("/:id", async (req, res) => {
     try {
         const { id } = req.params;
 		const data = req.body;
+		console.log("94", data);
+		
 		const user = await updateAgent(id, data);
 		return res.status(200).json({
 			message: "Success",
@@ -97,5 +118,29 @@ agentRouter.delete("/:id", auth, async (req, res) => {
 		})
 	}
 })
+
+agentRouter.post("/forgot-password", async (req, res) => {
+	try {
+		const data = req.body;
+		const response = await forgotPassword(data);
+		return res.status(200).json({
+			msg: "Check your email to reset your password",
+			response,
+		});
+	} catch (error) {
+		return res.status(400).json({ message: error });
+	}
+});
+
+// agentRouter.post("/reset-password", async (req, res) => {
+// 	const token = req.body.token;
+// 	const newPassword: string = req.body.password;
+// 	try {
+// 		await resetPassword(token, newPassword);
+// 		return res.status(200).json({ message: "Success" });
+// 	} catch (error) {
+// 		return res.status(400).json(error);
+// 	}
+// });
 
 export default agentRouter;

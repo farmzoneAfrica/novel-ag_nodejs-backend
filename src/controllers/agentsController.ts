@@ -3,13 +3,17 @@ import { IRecord} from "../types/interface";
 import {
 	registerAgentSchema,
 	loginAgentSchema,
-	updateAgentSchema
-} from "../utils/agentValidation";
+	updateAgentSchema,
+	emailSchema
+} from "../validations/agentValidation";
 import { decryptPassword, encryptPassword } from "../utils/hashPassword";
 import cloudinary from "../utils/cloudinary";
 import { generateAccessToken } from "../utils/auth";
+import { emailServices } from "../services/emailServices";
+import { sendEmail } from "../services/emailServices";
+import jwt from "jsonwebtoken";
+import { error } from "console";
 
-/* POST register agent */
 export async function registerAgent(userData: IRecord) {
   const validateData = registerAgentSchema.safeParse(userData);
   if (!validateData.success) {
@@ -45,19 +49,27 @@ export async function registerAgent(userData: IRecord) {
   return response;
 }
 
-/* POST login user */
+export async function verifyAgent(data: IRecord) {
+	const isValidData = emailSchema.safeParse(data);
+	if (!isValidData.success) {
+		throw isValidData.error;
+	}
+	const record = isValidData.data;
+	let agent;
+	if (record.email) {
+		agent = await prisma.agent.findUnique({
+			where: { email: record.email },
+		select: {email: true, userName: true, id: true}})
+	}
+	
+}
+
 export async function loginUser(data: IRecord) {
 	const isValidData = loginAgentSchema.safeParse(data);
 	if (!isValidData.success) {
 		throw isValidData.error;
   }
   const record = isValidData.data;
-//   let agent = {
-//       id: "",
-//   email: "",
-//   password: "",
-//    userName: "",
-//   };
 let agent;
   if (record.email) {
   agent = await prisma.agent.findUnique({ where: { email: record.email }, 
@@ -81,13 +93,11 @@ if (record.userName){
 	};
 }
 
-/* GET get all agents */
 export async function getAgents() {
 	const response = await prisma.agent.findMany()
 	return response;
 }
 
-/* GET get single agent */
 export async function getAgent(id: string) {
 	const agent = await prisma.agent.findUnique({
 		where: {id: id},
@@ -95,9 +105,9 @@ export async function getAgent(id: string) {
 	if (agent) {
 		return agent;
 	}
-	return "Agent not fond on database"
+	throw "Agent not fond on database"
 }
-/* PATCH update agent */
+
 export async function updateAgent(id:string, data: IRecord) {
 	const validData = updateAgentSchema.safeParse(data);
 	if (!validData.success) {
@@ -137,7 +147,6 @@ export async function updateAgent(id:string, data: IRecord) {
 	});
 }
 
-/* DELETE delete user */
 export async function deleteAgent(id:string ) {
   const agent = await prisma.agent.findUnique({ where: { id } });
   if (agent) {
@@ -146,5 +155,23 @@ export async function deleteAgent(id:string ) {
       });  
   }
   throw new Error('Agent not found')
-	
 }
+
+export async function forgotPassword(data: IRecord) {
+	const validData = emailSchema.safeParse(data);
+	if (!validData.success) throw validData.error;
+	const email = validData.data.email;
+	const agent = await prisma.agent.findUnique({ where: { email } });
+	if (!agent) throw "Agent does not exist";
+	const response = emailServices(agent, "resetpassword");
+	return response;
+}
+
+// export async function resetPassword(token: string, newPassword: string) {
+// 	const decoded = jwt.verify(token, process.env.AUTH_SECRET as string);
+// 	const id = decoded as string;
+// 	const agent = await prisma.agent.findUnique({ where: { id: agent.id } });
+// 	console.log("158", agent);
+// 	if (!agent) throw "user not found";
+// 	await updateAgent({password: newPassword, id: agent.id} );
+// }

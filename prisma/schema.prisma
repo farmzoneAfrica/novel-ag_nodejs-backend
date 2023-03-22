@@ -21,7 +21,9 @@ model Agent {
   password String 
   avatar String ?
   role Role @default(USER)
+  provider String?
   isVerified Boolean @default(false)
+  resetLink String @default("")
   isAdmin    Boolean @default(false)
 
   createdAt     DateTime @default(now())
