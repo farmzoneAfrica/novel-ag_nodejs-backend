@@ -22,6 +22,7 @@ agentRouter.post("/", async (req, res) => {
 });
 /* verify agent registration  */
 agentRouter.post("/verify", async (req, res) => {
+    // swagger.tags = ['Users']
     try {
         const data = req.body;
         const response = await (0, agentsController_1.verifyAgent)(data);
@@ -37,6 +38,28 @@ agentRouter.post("/verify", async (req, res) => {
     }
 });
 /* POST Login users */
+/**
+ * @swagger
+ * /login:
+ *   post:
+ *     description: Login to the application
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: username
+ *         description: Username to use for login.
+ *         in: formData
+ *         required: true
+ *         type: string
+ *       - name: password
+ *         description: User's password.
+ *         in: formData
+ *         required: true
+ *         type: string
+ *     responses:
+ *       200:
+ *         description: login
+ */
 agentRouter.post("/login", async (req, res) => {
     try {
         const data = req.body;
