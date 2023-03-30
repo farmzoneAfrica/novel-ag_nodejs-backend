@@ -4,7 +4,7 @@ import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 import cors from 'cors';
 import swaggerUi from 'swagger-ui-express';
-import swaggerJsdoc from 'swagger-jsdoc';
+// import swaggerJsdoc from 'swagger-jsdoc';
 import docs from './swagger-docs.json'
 
 import agentsRoute from "./routes/agentsRoute";
@@ -41,7 +41,7 @@ app.use(function (
   res.render('error');
 });
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT;
 
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}.`);

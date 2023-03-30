@@ -9,6 +9,7 @@ const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const morgan_1 = __importDefault(require("morgan"));
 const cors_1 = __importDefault(require("cors"));
 const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
+// import swaggerJsdoc from 'swagger-jsdoc';
 const swagger_docs_json_1 = __importDefault(require("./swagger-docs.json"));
 const agentsRoute_1 = __importDefault(require("./routes/agentsRoute"));
 const app = (0, express_1.default)();
@@ -32,7 +33,7 @@ app.use(function (err, req, res) {
     res.status(err.status || 500);
     res.render('error');
 });
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT;
 app.listen(PORT, () => {
     console.log(`Server listening on port ${PORT}.`);
 });
