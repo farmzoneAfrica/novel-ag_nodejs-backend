@@ -5,15 +5,18 @@
   "main": "index.js",
   "scripts": {
     "start": "node dist/index.js",
-    "start:dev": "nodemon tsc -w node dist/index.js",
+    "dev": "nodemon tsc -w node dist/index.js",
     "compile": "tsc",
     "compile:w": "tsc -w",
     "test": "echo \"Error: no test specified\" && exit 1",
     "eslint:fix": "eslint --fix",
     "db:migrate": "npx prisma migrate dev --name user-entity --create-only && yarn prisma generate",
-    "prisma-m": "npx prisma migrate dev --name lastest",
+    "prisma-m": "npx prisma migrate dev --name latest",
     "db:push": "npx prisma db push",
-    "swagger-def": "swagger-jsdoc-generator conf.json"
+    "swagger-def": "swagger-jsdoc-generator conf.json",
+    "deploy:test": "",
+    "deploy:staging": "yarn lint && cat .env.staging > .env && yarn build && aws s3 sync build/ s3://internal-dashboard-staging",
+    "deploy:prod": "yarn lint && cat .env.prod > .env && yarn build && aws s3 sync build/ s3://internal-dashboard-prod"
   },
   "author": "",
   "license": "ISC",

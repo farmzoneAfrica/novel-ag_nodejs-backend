@@ -23,6 +23,8 @@ agentRouter.post("/", async (req, res) => {
 			response,
 		});
 	} catch (error) {
+		console.log(error);
+		
 		return res.status(500).json({ 
 			msg: error
 		});
@@ -89,7 +91,8 @@ agentRouter.get("/", async (req, res) => {
 			message: "Success",
 			response,
 		});
-    } catch (error) {
+	} catch (error) {
+		console.log(error);
 		return res.status(500).json({ message: error });
 	}
 });
@@ -103,6 +106,8 @@ agentRouter.get("/:id", async (req, res) => {
 			agent,
 		})
 	} catch (error) {
+		console.log(error);
+		
 		return res.status(500).json({
 			message: error,
 		})
@@ -113,8 +118,6 @@ agentRouter.patch("/:id", async (req, res) => {
     try {
         const { id } = req.params;
 		const data = req.body;
-		console.log("94", data);
-		
 		const user = await updateAgent(id, data);
 		return res.status(200).json({
 			message: "Success",

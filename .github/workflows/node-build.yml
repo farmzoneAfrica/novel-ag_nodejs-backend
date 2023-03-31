@@ -34,7 +34,7 @@ jobs:
           git fetch
           git reset --hard HEAD
           yarn
-          yarn compile
+          yarn prisma generate
           cd dist
           node index.js
           echo "Application deployed!"
