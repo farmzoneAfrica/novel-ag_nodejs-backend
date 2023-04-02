@@ -5,13 +5,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.forgotPassword = exports.deleteAgent = exports.updateAgent = exports.getAgent = exports.getAgents = exports.loginUser = exports.verifyAgent = exports.registerAgent = void 0;
 const prismaClient_1 = __importDefault(require("../utils/prismaClient"));
-const agentValidation_1 = require("../validations/agentValidation");
-const hashPassword_1 = require("../utils/hashPassword");
+const agentSchema_1 = require("../schemas/agentSchema");
+const hashPassword_1 = require("../services/hashPassword");
 const cloudinary_1 = __importDefault(require("../utils/cloudinary"));
 const auth_1 = require("../utils/auth");
 const emailServices_1 = require("../services/emailServices");
 async function registerAgent(userData) {
-    const validateData = agentValidation_1.registerAgentSchema.safeParse(userData);
+    const validateData = agentSchema_1.registerAgentSchema.safeParse(userData);
     if (!validateData.success) {
         throw validateData.error;
     }
@@ -26,11 +26,6 @@ async function registerAgent(userData) {
     });
     if (duplicatePhone)
         throw "Phone number already exist";
-    const duplicateUserName = await prismaClient_1.default.agent.findFirst({
-        where: { userName: validData.userName },
-    });
-    if (duplicateUserName)
-        throw "User name already exist";
     const { firstName, lastName, email, userName, phone, avatar, password, address } = userData;
     const hPassword = await (0, hashPassword_1.encryptPassword)(password);
     const response = await prismaClient_1.default.agent.create({
@@ -38,7 +33,6 @@ async function registerAgent(userData) {
             firstName,
             lastName,
             email,
-            userName,
             phone,
             avatar,
             password: hPassword,
@@ -49,7 +43,7 @@ async function registerAgent(userData) {
 }
 exports.registerAgent = registerAgent;
 async function verifyAgent(data) {
-    const isValidData = agentValidation_1.emailSchema.safeParse(data);
+    const isValidData = agentSchema_1.emailSchema.safeParse(data);
     if (!isValidData.success) {
         throw isValidData.error;
     }
@@ -58,13 +52,13 @@ async function verifyAgent(data) {
     if (record.email) {
         agent = await prismaClient_1.default.agent.findUnique({
             where: { email: record.email },
-            select: { email: true, userName: true, id: true }
+            select: { email: true, id: true }
         });
     }
 }
 exports.verifyAgent = verifyAgent;
 async function loginUser(data) {
-    const isValidData = agentValidation_1.loginAgentSchema.safeParse(data);
+    const isValidData = agentSchema_1.loginAgentSchema.safeParse(data);
     if (!isValidData.success) {
         throw isValidData.error;
     }
@@ -72,12 +66,12 @@ async function loginUser(data) {
     let agent;
     if (record.email) {
         agent = await prismaClient_1.default.agent.findUnique({ where: { email: record.email },
-            select: { email: true, password: true, userName: true, id: true }
+            select: { email: true, password: true, id: true }
         });
     }
     if (record.userName) {
         agent = await prismaClient_1.default.agent.findUnique({ where: { email: record.userName },
-            select: { email: true, password: true, userName: true, id: true }
+            select: { email: true, password: true, id: true }
         });
     }
     if (!agent) {
@@ -108,7 +102,7 @@ async function getAgent(id) {
 }
 exports.getAgent = getAgent;
 async function updateAgent(id, data) {
-    const validData = agentValidation_1.updateAgentSchema.safeParse(data);
+    const validData = agentSchema_1.updateAgentSchema.safeParse(data);
     if (!validData.success) {
         throw validData.error;
     }
@@ -135,9 +129,7 @@ async function updateAgent(id, data) {
             avatar: uploadedResponse ? uploadedResponse.url : record.avatar,
             firstName: record.firstName,
             lastName: record.lastName,
-            userName: record.userName,
             phone: record.phone,
-            isVerified: record.isVerified,
             password: record.password
                 ? (await (0, hashPassword_1.encryptPassword)(record.password))
                 : agent.password,
@@ -156,7 +148,7 @@ async function deleteAgent(id) {
 }
 exports.deleteAgent = deleteAgent;
 async function forgotPassword(data) {
-    const validData = agentValidation_1.emailSchema.safeParse(data);
+    const validData = agentSchema_1.emailSchema.safeParse(data);
     if (!validData.success)
         throw validData.error;
     const email = validData.data.email;

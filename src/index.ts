@@ -7,7 +7,7 @@ import swaggerUi from 'swagger-ui-express';
 // import swaggerJsdoc from 'swagger-jsdoc';
 import docs from './swagger-docs.json'
 
-import agentsRoute from "./routes/agentsRoute";
+import agentsRoute from "./routes/agent.routes";
 
 const app = express();
 

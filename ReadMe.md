@@ -1,5 +1,4 @@
 # Novel-AG NODE BACKEND
-
 ## SCRIPTS
 - Run `yarn dev` to start development server on `localhost:5000`
 - Run `yarn compile` to install npm packages 
@@ -38,3 +37,5 @@ yarn add -D eslint prettier eslint-plugin-prettier eslint-config-prettier eslint
 forgot password POST
 forgot password GET
 
+## KNOWLEGE BASE
+- [Basic Structure](https://codevoweb.com/crud-api-node-prisma-postgresql-reset-password/#:~:text=To%20reset%20the%20password%2C%20the,token%20to%20the%20user's%20email.)

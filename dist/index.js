@@ -11,7 +11,7 @@ const cors_1 = __importDefault(require("cors"));
 const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
 // import swaggerJsdoc from 'swagger-jsdoc';
 const swagger_docs_json_1 = __importDefault(require("./swagger-docs.json"));
-const agentsRoute_1 = __importDefault(require("./routes/agentsRoute"));
+const agent_routes_1 = __importDefault(require("./routes/agent.routes"));
 const app = (0, express_1.default)();
 // const specs = swaggerJsdoc(docs);
 app.use('/api-docs', swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swagger_docs_json_1.default));
@@ -20,7 +20,7 @@ app.use((0, morgan_1.default)('dev'));
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: false }));
 app.use((0, cookie_parser_1.default)());
-app.use('/api/agents', agentsRoute_1.default);
+app.use('/api/agents', agent_routes_1.default);
 app.get('/', (req, res) => {
     res.send('Hello World!');
 });

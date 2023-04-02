@@ -1,20 +1,21 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-const agentsController_1 = require("../controllers/agentsController");
+const user_controller_1 = require("../controllers/user.controller");
 const auth_1 = require("../utils/auth");
 const agentRouter = (0, express_1.Router)();
 /* register agent  */
 agentRouter.post("/", async (req, res) => {
     try {
         const data = req.body;
-        const response = await (0, agentsController_1.registerAgent)(data);
+        const response = await (0, user_controller_1.registerAgent)(data);
         return res.status(200).json({
             message: "Success",
             response,
         });
     }
     catch (error) {
+        console.log(error);
         return res.status(500).json({
             msg: error
         });
@@ -25,7 +26,7 @@ agentRouter.post("/verify", async (req, res) => {
     // swagger.tags = ['Users']
     try {
         const data = req.body;
-        const response = await (0, agentsController_1.verifyAgent)(data);
+        const response = await (0, user_controller_1.verifyAgent)(data);
         return res.status(200).json({
             message: "Success",
             response,
@@ -63,7 +64,7 @@ agentRouter.post("/verify", async (req, res) => {
 agentRouter.post("/login", async (req, res) => {
     try {
         const data = req.body;
-        const response = await (0, agentsController_1.loginUser)(data);
+        const response = await (0, user_controller_1.loginUser)(data);
         return res.status(200).json({
             message: "Success",
             response,
@@ -76,13 +77,14 @@ agentRouter.post("/login", async (req, res) => {
 /* GET  agents */
 agentRouter.get("/", async (req, res) => {
     try {
-        const response = await (0, agentsController_1.getAgents)();
+        const response = await (0, user_controller_1.getAgents)();
         return res.status(200).json({
             message: "Success",
             response,
         });
     }
     catch (error) {
+        console.log(error);
         return res.status(500).json({ message: error });
     }
 });
@@ -90,13 +92,14 @@ agentRouter.get("/", async (req, res) => {
 agentRouter.get("/:id", async (req, res) => {
     try {
         const { id } = req.params;
-        const agent = await (0, agentsController_1.getAgent)(id);
+        const agent = await (0, user_controller_1.getAgent)(id);
         return res.status(200).json({
             message: "Success",
             agent,
         });
     }
     catch (error) {
+        console.log(error);
         return res.status(500).json({
             message: error,
         });
@@ -107,8 +110,7 @@ agentRouter.patch("/:id", async (req, res) => {
     try {
         const { id } = req.params;
         const data = req.body;
-        console.log("94", data);
-        const user = await (0, agentsController_1.updateAgent)(id, data);
+        const user = await (0, user_controller_1.updateAgent)(id, data);
         return res.status(200).json({
             message: "Success",
             user,
@@ -124,7 +126,7 @@ agentRouter.patch("/:id", async (req, res) => {
 agentRouter.delete("/:id", auth_1.auth, async (req, res) => {
     try {
         const { id } = req.params;
-        const response = await (0, agentsController_1.deleteAgent)(id);
+        const response = await (0, user_controller_1.deleteAgent)(id);
         return res.status(200).json({
             msg: "Delete Success",
             response
@@ -139,7 +141,7 @@ agentRouter.delete("/:id", auth_1.auth, async (req, res) => {
 agentRouter.post("/forgot-password", async (req, res) => {
     try {
         const data = req.body;
-        const response = await (0, agentsController_1.forgotPassword)(data);
+        const response = await (0, user_controller_1.forgotPassword)(data);
         return res.status(200).json({
             msg: "Check your email to reset your password",
             response,
