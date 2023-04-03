@@ -1,14 +1,6 @@
-const swaggerJSDoc = require("swagger-jsdoc");
+const swaggerAutogen = require("swagger-autogen")();
 
-const options = {
-  definition: {
-    openapi: "3.0.0",
-    info: {
-      title: "My API",
-      version: "1.0.0",
-    },
-  },
-  apis: ["**/*.js"],
-};
+const outputFile = "./src/swagger-output.json";
+const endpointsFiles = ["./dist/routes/agent.route.js", "./dist/routes/auth.route.js"];
 
-const swaggerSpec = swaggerJSDoc(options);
+swaggerAutogen(outputFile, endpointsFiles);

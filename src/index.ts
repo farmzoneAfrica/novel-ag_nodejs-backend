@@ -4,22 +4,19 @@ import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 import cors from 'cors';
 import swaggerUi from 'swagger-ui-express';
-// import swaggerJsdoc from 'swagger-jsdoc';
-import docs from './swagger-docs.json'
+import swaggerFile from './swagger-output.json';
 
 import agentsRoute from "./routes/agent.routes";
 
 const app = express();
-
-// const specs = swaggerJsdoc(docs);
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(docs))
-
 
 app.use(cors());
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile))
 app.use('/api/agents', agentsRoute);
 
 app.get('/', (req, res) => {
