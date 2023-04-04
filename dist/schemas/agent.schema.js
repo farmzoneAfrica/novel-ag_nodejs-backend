@@ -18,13 +18,15 @@ exports.registerAgentSchema = (0, zod_1.object)({
         phone: (0, zod_1.string)({
             required_error: 'phone number is required',
         }),
+        address: (0, zod_1.string)().optional(),
+        avatar: (0, zod_1.string)().optional(),
         email: (0, zod_1.string)({
             required_error: 'Email address is required',
         }).email('Invalid email address'),
         password: (0, zod_1.string)({
             required_error: 'Password is required',
         })
-            .min(8, 'Password must be more than 8 characters')
+            .min(6, 'Password must be more than 8 characters')
             .max(32, 'Password must be less than 32 characters'),
         confirmPassword: (0, zod_1.string)({
             required_error: 'Please confirm your password',

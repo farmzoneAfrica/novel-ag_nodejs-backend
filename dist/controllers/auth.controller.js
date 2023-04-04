@@ -40,10 +40,12 @@ const registerAgentHandler = async (req, res, next) => {
         const agent = await (0, agent_service_1.createAgent)({
             firstName: req.body.firstName,
             lastName: req.body.lastName,
+            address: req.body.address,
+            phone: req.body.phone,
+            avatar: req.body.avatar,
             email: req.body.email.toLowerCase(),
             password: hashedPassword,
             verificationCode,
-            phone: ''
         });
         const redirectUrl = `${config_1.default.get('origin')}/verifyemail/${verifyCode}`;
         try {

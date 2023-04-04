@@ -62,10 +62,12 @@ export const registerAgentHandler = async (
     const agent = await createAgent({
         firstName: req.body.firstName,
         lastName: req.body.lastName,
+        address: req.body.address,
+        phone: req.body.phone,
+        avatar: req.body.avatar,
         email: req.body.email.toLowerCase(),
         password: hashedPassword,
         verificationCode,
-        phone: ''
     });
 
     const redirectUrl = `${config.get<string>(

@@ -16,13 +16,15 @@ export const registerAgentSchema = object({
     phone: string({
       required_error: 'phone number is required',
     }),
+    address: string().optional(),
+    avatar: string().optional(),
     email: string({
       required_error: 'Email address is required',
     }).email('Invalid email address'),
     password: string({
       required_error: 'Password is required',
     })
-      .min(8, 'Password must be more than 8 characters')
+      .min(6, 'Password must be more than 8 characters')
       .max(32, 'Password must be less than 32 characters'),
     confirmPassword: string({
       required_error: 'Please confirm your password',
@@ -96,7 +98,7 @@ export const resetPasswordSchema = object({
 
 export type RegisterAgentInput = Omit<
   TypeOf<typeof registerAgentSchema>['body'],
-  'passwordConfirm'
+  'confirmPassword'
 >;
 
 export type LoginAgentInput = TypeOf<typeof loginAgentSchema>['body'];

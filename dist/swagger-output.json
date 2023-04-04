@@ -11,6 +11,28 @@
         "http"
     ],
     "paths": {
+        "/": {
+            "get": {
+                "description": "",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/healthchecker": {
+            "get": {
+                "description": "",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
         "/me": {
             "get": {
                 "description": "",
@@ -45,6 +67,15 @@
                                     "example": "any"
                                 },
                                 "lastName": {
+                                    "example": "any"
+                                },
+                                "address": {
+                                    "example": "any"
+                                },
+                                "phone": {
+                                    "example": "any"
+                                },
+                                "avatar": {
                                     "example": "any"
                                 },
                                 "email": {

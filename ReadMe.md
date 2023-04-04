@@ -13,6 +13,7 @@
 - [Laravel Backend Architecture Design flow](https://www.figma.com/file/AaotjepvjFYeakLuc45gBc/NOVEL-AG---Architectural-Flow?node-id=0-1&t=2i8hHbTVFFLejqFe-0)
 - [Product figma design](https://www.figma.com/file/1kcasSQ5fhD8SzcpsJRYfj/Novel-AG-Product?node-id=31-1370&t=1ErRkkydf9KI8Xcd-0)
 - [Project PRD](https://docs.google.com/document/d/1lhtOI0dCOpxuPP0Xul52QdipjiUnPFV9AK47cimLidY/edit)
+- [Figma Design](https://www.figma.com/file/1kcasSQ5fhD8SzcpsJRYfj/Novel-AG-Product?node-id=0-1&t=eHjkXUL2wuJ6dKLO-0)
 ## Description
 - This backend covers for admin, agents, prosperity hubs and warehouses. Database is remotely hosted on render
 
