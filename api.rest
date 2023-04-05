@@ -1,0 +1,47 @@
+### register user
+GET http://localhost:3000
+
+
+### register user
+GET http://localhost:3000/api/auth/test
+
+
+### register user
+POST http://localhost:3000/api/auth/register
+Content-Type: application/json
+
+{
+  "password": "usha0816",
+  "confirmPassword": "usha0816",
+  "firstName": "usha",
+  "lastName": "shir",
+  "address": "Chief Agbara close",
+  "phone": "0816559322715",
+  "avatar": "NA",
+  "email": "ushahembashir1@gmail.com"
+}
+
+### verify user
+GET http://localhost:4300/user/verify/340124c2-72bd-41cd-97d1-fa12f993cec6
+# Content-Type: application/json
+
+# {
+#     "password":"Abayomi",
+#     "email":"Abayomi@test.com"
+# } 
+
+### login user
+POST http://localhost:4300/user/login
+Content-Type: application/json
+
+{
+    "password":"Abayomi",
+    "email":"Abayomi@test.com"
+} 
+### regenerate-access-token
+POST http://localhost:4300/user/regenerate-access-token
+Content-Type: application/json
+
+{
+    "refreshToken":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0MTQ0MTVjOGFiNjhiNmVkN2M4YjRiZiIsImlhdCI6MTY3OTA1MDEwMn0.1qWjjoBcz1up-B2SFXO3E5iQrqL15rxEydpxDFEoOLQ"
+}

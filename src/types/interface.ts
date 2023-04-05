@@ -1,7 +1,11 @@
 import { Request } from "express";
 import { JwtPayload } from "jsonwebtoken";
 
-
+interface MyObject {
+  passwordResetAt?: Date;
+  gt?: Date;
+  // ... other properties
+}
 export interface IRecord  {
   id: string,
   firstName: string,

@@ -1,5 +1,4 @@
 # Novel-AG NODE BACKEND
-
 ## SCRIPTS
 - Run `yarn dev` to start development server on `localhost:5000`
 - Run `yarn compile` to install npm packages 
@@ -14,6 +13,7 @@
 - [Laravel Backend Architecture Design flow](https://www.figma.com/file/AaotjepvjFYeakLuc45gBc/NOVEL-AG---Architectural-Flow?node-id=0-1&t=2i8hHbTVFFLejqFe-0)
 - [Product figma design](https://www.figma.com/file/1kcasSQ5fhD8SzcpsJRYfj/Novel-AG-Product?node-id=31-1370&t=1ErRkkydf9KI8Xcd-0)
 - [Project PRD](https://docs.google.com/document/d/1lhtOI0dCOpxuPP0Xul52QdipjiUnPFV9AK47cimLidY/edit)
+- [Figma Design](https://www.figma.com/file/1kcasSQ5fhD8SzcpsJRYfj/Novel-AG-Product?node-id=0-1&t=eHjkXUL2wuJ6dKLO-0)
 ## Description
 - This backend covers for admin, agents, prosperity hubs and warehouses. Database is remotely hosted on render
 
@@ -38,3 +38,5 @@ yarn add -D eslint prettier eslint-plugin-prettier eslint-config-prettier eslint
 forgot password POST
 forgot password GET
 
+## KNOWLEGE BASE
+- [Basic Structure](https://codevoweb.com/crud-api-node-prisma-postgresql-reset-password/#:~:text=To%20reset%20the%20password%2C%20the,token%20to%20the%20user's%20email.)
