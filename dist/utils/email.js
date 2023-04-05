@@ -16,10 +16,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 var _Email_firstName, _Email_to, _Email_from;
 Object.defineProperty(exports, "__esModule", { value: true });
 const nodemailer_1 = __importDefault(require("nodemailer"));
-const config_1 = __importDefault(require("config"));
 const pug_1 = __importDefault(require("pug"));
 const html_to_text_1 = require("html-to-text");
-const smtp = config_1.default.get('smtp');
+// const smtp = config.get<{
+//   user: string;
+//   pass: string;
+// }>('smtp');
 class Email {
     constructor(agent, url) {
         this.agent = agent;
@@ -29,16 +31,16 @@ class Email {
         _Email_from.set(this, void 0);
         __classPrivateFieldSet(this, _Email_firstName, agent.firstName.split(' ')[0], "f");
         __classPrivateFieldSet(this, _Email_to, agent.email, "f");
-        __classPrivateFieldSet(this, _Email_from, `Codevo <admin@admin.com>`, "f");
+        __classPrivateFieldSet(this, _Email_from, `Novel-AG <dev.farmzoneafrica@gmail.com`, "f");
     }
     newTransport() {
         // if (process.env.NODE_ENV === 'production') {
         // }
         return nodemailer_1.default.createTransport({
-            ...smtp,
+            service: 'gmail',
             auth: {
-                user: smtp.user,
-                pass: smtp.pass,
+                user: process.env.EMAIL_USER,
+                pass: process.env.EMAIL_PASS,
             },
         });
     }

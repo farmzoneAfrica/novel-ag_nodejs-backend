@@ -18,11 +18,16 @@ exports.excludedFields = [
 ];
 const prisma = new client_1.PrismaClient();
 const createAgent = async (input) => {
+    console.log('services 18 \n', input);
     return (await prisma.agent.create({
         data: input,
     }));
 };
 exports.createAgent = createAgent;
+// export const createAgent = async () => {
+//   console.log(12,"register service")
+//   return 
+// };
 const findAgent = async (where, select) => {
     return (await prisma.agent.findFirst({
         where,

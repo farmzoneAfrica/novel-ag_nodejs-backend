@@ -15,10 +15,16 @@ export const excludedFields = [
 const prisma = new PrismaClient();
 
 export const createAgent = async (input: Prisma.AgentCreateInput) => {
+  console.log('services 18 \n', input);
+  
   return (await prisma.agent.create({
     data: input,
   })) as Agent;
 };
+// export const createAgent = async () => {
+//   console.log(12,"register service")
+//   return 
+// };
 
 export const findAgent = async (
   where: Partial<Prisma.AgentCreateInput>,

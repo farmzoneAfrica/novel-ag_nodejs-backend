@@ -1,5 +1,5 @@
 Arguments: 
-  /usr/local/bin/node /usr/local/bin/yarn add -D @types/swagger-autogen
+  /usr/local/bin/node /usr/local/bin/yarn add --dev prisma@latest │
 
 PATH: 
   /usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
@@ -14,17 +14,15 @@ Platform:
   darwin x64
 
 Trace: 
-  Error: https://registry.yarnpkg.com/@types%2fswagger-autogen: Not found
-      at Request.params.callback [as _callback] (/usr/local/lib/node_modules/yarn/lib/cli.js:66145:18)
-      at Request.self.callback (/usr/local/lib/node_modules/yarn/lib/cli.js:140890:22)
-      at Request.emit (node:events:527:28)
-      at Request.<anonymous> (/usr/local/lib/node_modules/yarn/lib/cli.js:141862:10)
-      at Request.emit (node:events:527:28)
-      at IncomingMessage.<anonymous> (/usr/local/lib/node_modules/yarn/lib/cli.js:141784:12)
-      at Object.onceWrapper (node:events:641:28)
-      at IncomingMessage.emit (node:events:539:35)
-      at endReadableNT (node:internal/streams/readable:1345:12)
-      at processTicksAndRejections (node:internal/process/task_queues:83:21)
+  TypeError [ERR_UNESCAPED_CHARACTERS]: https://registry.yarnpkg.com/│: Request path contains unescaped characters
+      at new NodeError (node:internal/errors:372:5)
+      at new ClientRequest (node:_http_client:160:13)
+      at Object.request (node:https:353:10)
+      at Request.module.exports.Request.start (/usr/local/lib/node_modules/yarn/lib/cli.js:141452:32)
+      at Request.module.exports.Request.end (/usr/local/lib/node_modules/yarn/lib/cli.js:142211:10)
+      at end (/usr/local/lib/node_modules/yarn/lib/cli.js:141265:14)
+      at Immediate.<anonymous> (/usr/local/lib/node_modules/yarn/lib/cli.js:141279:7)
+      at processImmediate (node:internal/timers:466:21)
 
 npm manifest: 
   {
@@ -34,13 +32,13 @@ npm manifest:
     "main": "index.js",
     "scripts": {
       "start": "node dist/index.js",
-      "dev": "nodemon tsc -w node dist/index.js",
+      "dev": "nodemon dist/index.js",
       "compile": "tsc",
       "compile:w": "tsc -w",
       "swagger": "node swagger.js",
       "test": "echo \"Error: no test specified\" && exit 1",
       "eslint:fix": "eslint --fix",
-      "db:migrate": "npx prisma migrate dev --name agent-entity --create-only && yarn prisma generate",
+      "migrate": "npx prisma migrate dev --name agent-entity --create-only && yarn prisma generate",
       "db:push": "npx prisma db push",
       "swagger-def": "swagger-jsdoc-generator conf.json",
       "deploy:test": "",

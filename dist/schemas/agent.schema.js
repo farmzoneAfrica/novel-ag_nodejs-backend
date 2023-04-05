@@ -12,9 +12,7 @@ exports.registerAgentSchema = (0, zod_1.object)({
         firstName: (0, zod_1.string)({
             required_error: 'firstName is required',
         }),
-        lastName: (0, zod_1.string)({
-            required_error: 'lastName is required',
-        }),
+        lastName: (0, zod_1.string)().optional(),
         phone: (0, zod_1.string)({
             required_error: 'phone number is required',
         }),

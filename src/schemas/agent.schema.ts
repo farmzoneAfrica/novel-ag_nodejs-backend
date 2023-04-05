@@ -10,9 +10,7 @@ export const registerAgentSchema = object({
     firstName: string({
       required_error: 'firstName is required',
     }),
-    lastName: string({
-      required_error: 'lastName is required',
-    }),
+    lastName: string().optional(),
     phone: string({
       required_error: 'phone number is required',
     }),

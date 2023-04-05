@@ -5,20 +5,21 @@ import morgan from 'morgan';
 import validateEnv from './utils/validateEnv';
 import { PrismaClient } from '@prisma/client';
 import AppError from './utils/appError';
-import prisma from './utils/prismaClient';
+// import prisma from './utils/prismaClient';
 import createError from 'http-errors';
 import cookieParser from 'cookie-parser';
-import logger from 'morgan';
+// import logger from 'morgan';
 import cors from 'cors';
 import swaggerUi from 'swagger-ui-express';
 import swaggerFile from './swagger-output.json';
 
 import agentRouter from "./routes/agent.routes";
-import authRouter from "./routes/agent.routes";
+import authRouter from "./routes/auth.routes";
 
 validateEnv()
 
 const app = express();
+const prisma = new PrismaClient();
 
 async function bootstrap() {
   app.set('view engine', 'pug');
@@ -31,18 +32,18 @@ async function bootstrap() {
       credentials: true,
   }));
   
-   if (process.env.NODE_ENV === 'development') app.use(morgan('dev'));
-  // app.use(logger('dev'));
+  if (process.env.NODE_ENV === 'development') app.use(morgan('dev'));
+  
   app.use(express.urlencoded({ extended: false }));
 
   app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile))
-  app.use('/api/agents', agentRouter);
-  app.use('/api/auths', authRouter);
+  app.use('/api/agent', agentRouter);
+  app.use('/api/auth', authRouter);
 
   app.get('/', (req, res) => {
     res.send('Hello World!');
   });
-  // Testing
+
   app.get('/api/healthchecker', (_, res: Response) => {
     res.status(200).json({
       status: 'success',
@@ -50,12 +51,10 @@ async function bootstrap() {
     });
   });
 
-  // UNHANDLED ROUTES
   app.all('*', (req: Request, res: Response, next: NextFunction) => {
     next(new AppError(404, `Route ${req.originalUrl} not found`));
   });
 
-  // GLOBAL ERROR HANDLER
   app.use((err: AppError, req: Request, res: Response, next: NextFunction) => {
     err.status = err.status || 'error';
     err.statusCode = err.statusCode || 500;
@@ -82,7 +81,7 @@ async function bootstrap() {
   });
 
   const PORT = process.env.PORT;
-
+console.clear()
   app.listen(PORT, () => {
     console.log(`Server listening on port ${PORT}.`);
   });

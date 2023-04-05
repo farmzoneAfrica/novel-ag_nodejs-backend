@@ -21,13 +21,14 @@ import AppError from '../utils/appError';
 import redisClient from '../utils/connectRedis';
 import { signJwt, verifyJwt } from '../utils/jwt';
 import Email from '../utils/email';
+import { date } from 'zod';
 
 const cookiesOptions: CookieOptions = {
   httpOnly: true,
   sameSite: 'lax',
 };
 
-if (process.env.NODE_ENV === 'production') cookiesOptions.secure = true;
+// if (process.env.NODE_ENV === 'production') cookiesOptions.secure = true;
 
 const accessTokenCookieOptions: CookieOptions = {
   ...cookiesOptions,
@@ -50,6 +51,7 @@ export const registerAgentHandler = async (
   res: Response,
   next: NextFunction
 ) => {
+  console.log("53 register handler")
   try {
     const hashedPassword = await bcrypt.hash(req.body.password, 12);
 
@@ -69,12 +71,15 @@ export const registerAgentHandler = async (
         password: hashedPassword,
         verificationCode,
     });
+console.log('74 \n');
 
     const redirectUrl = `${config.get<string>(
       'origin'
     )}/verifyemail/${verifyCode}`;
     try {
       await new Email(agent, redirectUrl).sendVerificationCode();
+      console.log('81 \n');
+      
       await updateAgent({ id: agent.id }, { verificationCode });
 
       res.status(201).json({
@@ -83,6 +88,7 @@ export const registerAgentHandler = async (
           'An email with a verification code has been sent to your email',
       });
     } catch (error) {
+      // console.log(error);
       await updateAgent({ id: agent.id }, { verificationCode: null });
       return res.status(500).json({
         status: 'error',
@@ -90,6 +96,8 @@ export const registerAgentHandler = async (
       });
     }
   } catch (err: any) {
+    console.log(err);
+    
     if (err instanceof Prisma.PrismaClientKnownRequestError) {
       if (err.code === 'P2002') {
         return res.status(409).json({
@@ -363,9 +371,8 @@ export const resetPasswordHandler = async (
 
     const user = await findAgent({
       passwordResetToken,
-      passwordResetAt: {
-        gt: new Date(),
-      },
+      passwordResetAt: Date.now().toString(),
+      
     });
 
     if (!user) {

@@ -1,4 +1,5 @@
-import express from 'express';
+// import express from 'express';
+import express, { NextFunction, Request, Response, response } from 'express';
 import {
   forgotPasswordHandler,
   loginAgentHandler,
@@ -22,6 +23,9 @@ import {
 const router = express.Router();
 
 router.post('/register', validate(registerAgentSchema), registerAgentHandler);
+// router.post('/register', (res, req) => {
+//   return response.json({msg: "register route working"})
+// });
 
 router.post('/login', validate(loginAgentSchema), loginAgentHandler);
 

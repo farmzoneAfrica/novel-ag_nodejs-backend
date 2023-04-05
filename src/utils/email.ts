@@ -4,12 +4,10 @@ import pug from 'pug';
 import { convert } from 'html-to-text';
 import { Prisma } from '@prisma/client';
 
-const smtp = config.get<{
-  host: string;
-  port: number;
-  user: string;
-  pass: string;
-}>('smtp');
+// const smtp = config.get<{
+//   user: string;
+//   pass: string;
+// }>('smtp');
 
 export default class Email {
   #firstName: string;
@@ -18,7 +16,7 @@ export default class Email {
   constructor(private agent: Prisma.AgentCreateInput, private url: string) {
     this.#firstName = agent.firstName.split(' ')[0];
     this.#to = agent.email;
-    this.#from = `Codevo <admin@admin.com>`;
+    this.#from = `Novel-AG <dev.farmzoneafrica@gmail.com`;
   }
 
   private newTransport() {
@@ -26,10 +24,10 @@ export default class Email {
     // }
 
     return nodemailer.createTransport({
-      ...smtp,
+       service: 'gmail',
       auth: {
-        user: smtp.user,
-        pass: smtp.pass,
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
       },
     });
   }

@@ -33,7 +33,7 @@
         }
       }
     },
-    "/me": {
+    "/api/agent/me": {
       "get": {
         "description": "",
         "parameters": [
@@ -50,7 +50,7 @@
         }
       }
     },
-    "/register": {
+    "/api/auth/register": {
       "post": {
         "description": "",
         "parameters": [
@@ -101,7 +101,7 @@
         }
       }
     },
-    "/login": {
+    "/api/auth/login": {
       "post": {
         "description": "",
         "parameters": [
@@ -131,7 +131,7 @@
         }
       }
     },
-    "/refresh": {
+    "/api/auth/refresh": {
       "get": {
         "description": "",
         "parameters": [],
@@ -142,7 +142,7 @@
         }
       }
     },
-    "/verifyemail/{verificationCode}": {
+    "/api/auth/verifyemail/{verificationCode}": {
       "get": {
         "description": "",
         "parameters": [
@@ -166,7 +166,7 @@
         }
       }
     },
-    "/logout": {
+    "/api/auth/logout": {
       "get": {
         "description": "",
         "parameters": [
@@ -183,7 +183,7 @@
         }
       }
     },
-    "/forgotpassword": {
+    "/api/auth/forgotpassword": {
       "post": {
         "description": "",
         "parameters": [
@@ -216,7 +216,7 @@
         }
       }
     },
-    "/resetpassword/{resetToken}": {
+    "/api/auth/resetpassword/{resetToken}": {
       "patch": {
         "description": "",
         "parameters": [
