@@ -51,7 +51,6 @@ export const registerAgentHandler = async (
   res: Response,
   next: NextFunction
 ) => {
-  console.log("53 register handler")
   try {
     const hashedPassword = await bcrypt.hash(req.body.password, 12);
 
@@ -71,24 +70,18 @@ export const registerAgentHandler = async (
         password: hashedPassword,
         verificationCode,
     });
-console.log('74 \n');
 
-    const redirectUrl = `${config.get<string>(
-      'origin'
-    )}/verifyemail/${verifyCode}`;
+    const redirectUrl = `/verifyemail/${verifyCode}`;
     try {
-      await new Email(agent, redirectUrl).sendVerificationCode();
-      console.log('81 \n');
-      
+      await new Email(agent, redirectUrl).sendVerificationCode();      
       await updateAgent({ id: agent.id }, { verificationCode });
-
       res.status(201).json({
         status: 'success',
         message:
           'An email with a verification code has been sent to your email',
       });
     } catch (error) {
-      // console.log(error);
+      console.log(error);
       await updateAgent({ id: agent.id }, { verificationCode: null });
       return res.status(500).json({
         status: 'error',

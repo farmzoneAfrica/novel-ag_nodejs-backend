@@ -3,12 +3,6 @@ import config from 'config';
 import pug from 'pug';
 import { convert } from 'html-to-text';
 import { Prisma } from '@prisma/client';
-
-// const smtp = config.get<{
-//   user: string;
-//   pass: string;
-// }>('smtp');
-
 export default class Email {
   #firstName: string;
   #to: string;

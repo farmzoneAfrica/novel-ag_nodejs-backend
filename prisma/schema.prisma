@@ -36,6 +36,7 @@ model Agent {
 
   @@unique([email, verificationCode, passwordResetToken])
   @@index([email, verificationCode, passwordResetToken])
+
 }
 
 enum RoleEnumType {

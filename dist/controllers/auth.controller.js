@@ -29,7 +29,6 @@ const refreshTokenCookieOptions = {
     maxAge: config_1.default.get('refreshTokenExpiresIn') * 60 * 1000,
 };
 const registerAgentHandler = async (req, res, next) => {
-    console.log("53 register handler");
     try {
         const hashedPassword = await bcryptjs_1.default.hash(req.body.password, 12);
         const verifyCode = crypto_1.default.randomBytes(32).toString('hex');
@@ -47,11 +46,9 @@ const registerAgentHandler = async (req, res, next) => {
             password: hashedPassword,
             verificationCode,
         });
-        console.log('74 \n');
-        const redirectUrl = `${config_1.default.get('origin')}/verifyemail/${verifyCode}`;
+        const redirectUrl = `/verifyemail/${verifyCode}`;
         try {
             await new email_1.default(agent, redirectUrl).sendVerificationCode();
-            console.log('81 \n');
             await (0, agent_service_1.updateAgent)({ id: agent.id }, { verificationCode });
             res.status(201).json({
                 status: 'success',
@@ -59,7 +56,7 @@ const registerAgentHandler = async (req, res, next) => {
             });
         }
         catch (error) {
-            // console.log(error);
+            console.log(error);
             await (0, agent_service_1.updateAgent)({ id: agent.id }, { verificationCode: null });
             return res.status(500).json({
                 status: 'error',

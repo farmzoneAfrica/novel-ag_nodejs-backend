@@ -16,7 +16,7 @@ Content-Type: application/json
   "firstName": "usha",
   "lastName": "shir",
   "address": "Chief Agbara close",
-  "phone": "081655932275",
+  "phone": "0816559322715",
   "avatar": "NA",
   "email": "ushahembashir1@gmail.com"
 }

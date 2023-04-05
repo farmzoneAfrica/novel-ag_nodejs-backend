@@ -18,10 +18,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const nodemailer_1 = __importDefault(require("nodemailer"));
 const pug_1 = __importDefault(require("pug"));
 const html_to_text_1 = require("html-to-text");
-// const smtp = config.get<{
-//   user: string;
-//   pass: string;
-// }>('smtp');
 class Email {
     constructor(agent, url) {
         this.agent = agent;
