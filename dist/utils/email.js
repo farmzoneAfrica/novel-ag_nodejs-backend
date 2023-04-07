@@ -16,8 +16,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 var _Email_firstName, _Email_to, _Email_from;
 Object.defineProperty(exports, "__esModule", { value: true });
 const nodemailer_1 = __importDefault(require("nodemailer"));
-const pug_1 = __importDefault(require("pug"));
-const html_to_text_1 = require("html-to-text");
 class Email {
     constructor(agent, url) {
         this.agent = agent;
@@ -42,17 +40,31 @@ class Email {
     }
     async send(template, subject) {
         // Generate HTML template based on the template string
-        const html = pug_1.default.renderFile(`${__dirname}/../views/${template}.pug`, {
-            firstName: __classPrivateFieldGet(this, _Email_firstName, "f"),
-            subject,
-            url: this.url,
-        });
+        // const html = pug.renderFile(`${__dirname}/../views/${template}.pug`, {
+        //   firstName: this.#firstName,
+        //   subject,
+        //   url: this.url,
+        // });
+        const html = `
+<div style="max-width: 700px;text-align: center; text-transform: uppercase;
+     margin:auto; border: 10px solid #DE3D6D; padding: 50px 20px; font-size: 110%;">
+     <h2 style="color: #03435F;">Welcome to <span style="color : #DE3D6D";>NOVEL<span><span style="color:#F5844C;">-AG<span></h2>
+     <p>Hello ${__classPrivateFieldGet(this, _Email_firstName, "f")}, Please Follow the link by clicking on the button to verify your email
+      </p>
+      <div style="text-align:center ;">
+        <a href=${this.url}
+       style="background: #03435F; text-decoration: none; color: white;
+        padding: 10px 20px; margin: 10px 0;
+       display: inline-block;">Click here</a>
+      </div>
+</div>
+`;
         // Create mailOptions
         const mailOptions = {
             from: __classPrivateFieldGet(this, _Email_from, "f"),
             to: __classPrivateFieldGet(this, _Email_to, "f"),
             subject,
-            text: (0, html_to_text_1.convert)(html),
+            text: html,
             html,
         };
         // Send email

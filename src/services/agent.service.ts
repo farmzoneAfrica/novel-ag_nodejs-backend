@@ -15,12 +15,14 @@ export const excludedFields = [
 const prisma = new PrismaClient();
 
 export const createAgent = async (input: Prisma.AgentCreateInput) => {
+
   console.log('services 18 \n', input);
   
   return (await prisma.agent.create({
     data: input,
   })) as Agent;
 };
+
 // export const createAgent = async () => {
 //   console.log(12,"register service")
 //   return 
@@ -54,21 +56,24 @@ export const updateAgent = async (
   return (await prisma.agent.update({ where, data, select })) as Agent;
 };
 
-export const signTokens = async (user: Prisma.AgentCreateInput) => {
+export const signTokens = async (agent: Prisma.AgentCreateInput) => {
   // 1. Create Session
-  redisClient.set(`${user.id}`, JSON.stringify(omit(user, excludedFields)), {
+  redisClient.set(`${agent.id}`, JSON.stringify(omit(agent, excludedFields)), {
     EX: config.get<number>('redisCacheExpiresIn') * 60,
   });
+console.log(64, "sign in token function");
 
   // 2. Create Access and Refresh tokens
-  const access_token = signJwt({ sub: user.id }, 'accessTokenPrivateKey', {
-    expiresIn: `${config.get<number>('accessTokenExpiresIn')}m`,
+  const access_token = signJwt({ sub: agent.id }, 'accessTokenPrivateKey', {
+    // expiresIn: `${config.get<number>('accessTokenExpiresIn')}m`,
+    expiresIn: `30s`,
   });
 
-  const refresh_token = signJwt({ sub: user.id }, 'refreshTokenPrivateKey', {
-    expiresIn: `${config.get<number>('refreshTokenExpiresIn')}m`,
+  const refresh_token = signJwt({ sub: agent.id }, 'refreshTokenPrivateKey', {
+    // expiresIn: `${config.get<number>('refreshTokenExpiresIn')}m`,
+    expiresIn: `30s`,
   });
-
+console.log(74, "sign in token function");
   return { access_token, refresh_token };
 };
 

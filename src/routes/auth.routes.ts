@@ -21,6 +21,7 @@ import {
 } from '../schemas/agent.schema';
 
 const router = express.Router();
+let base ='/api/agent'
 
 router.post('/register', validate(registerAgentSchema), registerAgentHandler);
 // router.post('/register', (res, req) => {

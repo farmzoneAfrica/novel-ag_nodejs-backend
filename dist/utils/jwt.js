@@ -5,18 +5,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.verifyJwt = exports.signJwt = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const config_1 = __importDefault(require("config"));
+const fs_1 = __importDefault(require("fs"));
 const signJwt = (payload, keyName, options) => {
-    const privateKey = Buffer.from(config_1.default.get(keyName), 'base64').toString('ascii');
+    const privateKey = fs_1.default.readFileSync('private_key.pem');
     return jsonwebtoken_1.default.sign(payload, privateKey, {
-        ...(options && options),
+        ...options,
         algorithm: 'RS256',
     });
 };
 exports.signJwt = signJwt;
 const verifyJwt = (token, keyName) => {
     try {
-        const publicKey = Buffer.from(config_1.default.get(keyName), 'base64').toString('ascii');
+        const publicKey = fs_1.default.readFileSync('public_key.pem');
         const decoded = jsonwebtoken_1.default.verify(token, publicKey);
         return decoded;
     }

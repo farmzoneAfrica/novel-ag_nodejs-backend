@@ -11,6 +11,7 @@ const requireUser_1 = require("../middleware/requireUser");
 const validate_1 = require("../middleware/validate");
 const agent_schema_1 = require("../schemas/agent.schema");
 const router = express_1.default.Router();
+let base = '/api/agent';
 router.post('/register', (0, validate_1.validate)(agent_schema_1.registerAgentSchema), auth_controller_1.registerAgentHandler);
 // router.post('/register', (res, req) => {
 //   return response.json({msg: "register route working"})

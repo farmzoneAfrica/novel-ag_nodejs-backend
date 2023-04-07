@@ -46,7 +46,7 @@ const registerAgentHandler = async (req, res, next) => {
             password: hashedPassword,
             verificationCode,
         });
-        const redirectUrl = `/verifyemail/${verifyCode}`;
+        const redirectUrl = `http://localhost:3000/api/auth/verifyemail/${verifyCode}`;
         try {
             await new email_1.default(agent, redirectUrl).sendVerificationCode();
             await (0, agent_service_1.updateAgent)({ id: agent.id }, { verificationCode });
@@ -56,7 +56,6 @@ const registerAgentHandler = async (req, res, next) => {
             });
         }
         catch (error) {
-            console.log(error);
             await (0, agent_service_1.updateAgent)({ id: agent.id }, { verificationCode: null });
             return res.status(500).json({
                 status: 'error',
@@ -65,7 +64,6 @@ const registerAgentHandler = async (req, res, next) => {
         }
     }
     catch (err) {
-        console.log(err);
         if (err instanceof client_1.Prisma.PrismaClientKnownRequestError) {
             if (err.code === 'P2002') {
                 return res.status(409).json({
@@ -81,19 +79,18 @@ exports.registerAgentHandler = registerAgentHandler;
 const loginAgentHandler = async (req, res, next) => {
     try {
         const { email, password } = req.body;
-        const user = await (0, agent_service_1.findUniqueAgent)({ email: email.toLowerCase() }, { id: true, email: true, verified: true, password: true });
-        if (!user) {
+        const agent = await (0, agent_service_1.findUniqueAgent)({ email: email.toLowerCase() }, { id: true, email: true, verified: true, password: true });
+        if (!agent) {
             return next(new appError_1.default(400, 'Invalid email or password'));
         }
-        // Check if user is verified
-        if (!user.verified) {
+        if (!agent.verified) {
             return next(new appError_1.default(401, 'You are not verified, please verify your email to login'));
         }
-        if (!user || !(await bcryptjs_1.default.compare(password, user.password))) {
+        if (!agent || !(await bcryptjs_1.default.compare(password, agent.password))) {
             return next(new appError_1.default(400, 'Invalid email or password'));
         }
         // Sign Tokens
-        const { access_token, refresh_token } = await (0, agent_service_1.signTokens)(user);
+        const { access_token, refresh_token } = await (0, agent_service_1.signTokens)(agent);
         res.cookie('access_token', access_token, accessTokenCookieOptions);
         res.cookie('refresh_token', refresh_token, refreshTokenCookieOptions);
         res.cookie('logged_in', true, {
@@ -106,6 +103,7 @@ const loginAgentHandler = async (req, res, next) => {
         });
     }
     catch (err) {
+        console.log(146, err);
         next(err);
     }
 };

@@ -1,17 +1,14 @@
 import jwt, { SignOptions } from 'jsonwebtoken';
-import config from 'config';
+import fs from 'fs';
 
 export const signJwt = (
   payload: Object,
-  keyName: 'accessTokenPrivateKey' | 'refreshTokenPrivateKey',
+  keyName: 'accessTokenPrivateKey' | 'refreshTokenPrivateKey' ,
   options: SignOptions
 ) => {
-  const privateKey = Buffer.from(
-    config.get<string>(keyName),
-    'base64'
-  ).toString('ascii');
+  const privateKey = fs.readFileSync('private_key.pem');
   return jwt.sign(payload, privateKey, {
-    ...(options && options),
+    ...options,
     algorithm: 'RS256',
   });
 };
@@ -21,14 +18,19 @@ export const verifyJwt = <T>(
   keyName: 'accessTokenPublicKey' | 'refreshTokenPublicKey'
 ): T | null => {
   try {
-    const publicKey = Buffer.from(
-      config.get<string>(keyName),
-      'base64'
-    ).toString('ascii');
+    const publicKey = fs.readFileSync('public_key.pem');
     const decoded = jwt.verify(token, publicKey) as T;
 
     return decoded;
   } catch (error) {
     return null;
   }
-};
+}
+
+
+
+
+
+
+
+

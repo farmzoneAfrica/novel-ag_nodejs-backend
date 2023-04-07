@@ -71,7 +71,7 @@ export const registerAgentHandler = async (
         verificationCode,
     });
 
-    const redirectUrl = `/verifyemail/${verifyCode}`;
+    const redirectUrl = `http://localhost:3000/api/auth/verifyemail/${verifyCode}`;
     try {
       await new Email(agent, redirectUrl).sendVerificationCode();      
       await updateAgent({ id: agent.id }, { verificationCode });
@@ -81,16 +81,13 @@ export const registerAgentHandler = async (
           'An email with a verification code has been sent to your email',
       });
     } catch (error) {
-      console.log(error);
       await updateAgent({ id: agent.id }, { verificationCode: null });
       return res.status(500).json({
         status: 'error',
         message: 'There was an error sending email, please try again',
       });
     }
-  } catch (err: any) {
-    console.log(err);
-    
+  } catch (err: any) {    
     if (err instanceof Prisma.PrismaClientKnownRequestError) {
       if (err.code === 'P2002') {
         return res.status(409).json({
@@ -110,18 +107,14 @@ export const loginAgentHandler = async (
 ) => {
   try {
     const { email, password } = req.body;
-
-    const user = await findUniqueAgent(
+    const agent = await findUniqueAgent(
       { email: email.toLowerCase() },
       { id: true, email: true, verified: true, password: true }
     );
-
-    if (!user) {
+    if (!agent) {
       return next(new AppError(400, 'Invalid email or password'));
     }
-
-    // Check if user is verified
-    if (!user.verified) {
+    if (!agent.verified) {
       return next(
         new AppError(
           401,
@@ -130,12 +123,12 @@ export const loginAgentHandler = async (
       );
     }
 
-    if (!user || !(await bcrypt.compare(password, user.password))) {
+    if (!agent || !(await bcrypt.compare(password, agent.password))) {
       return next(new AppError(400, 'Invalid email or password'));
     }
 
     // Sign Tokens
-    const { access_token, refresh_token } = await signTokens(user);
+    const { access_token, refresh_token } = await signTokens(agent);
     res.cookie('access_token', access_token, accessTokenCookieOptions);
     res.cookie('refresh_token', refresh_token, refreshTokenCookieOptions);
     res.cookie('logged_in', true, {
@@ -148,6 +141,7 @@ export const loginAgentHandler = async (
       access_token,
     });
   } catch (err: any) {
+    console.log(146, err );
     next(err);
   }
 };
