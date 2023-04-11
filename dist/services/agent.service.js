@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.signTokens = exports.updateAgent = exports.findUniqueAgent = exports.findAgent = exports.createAgent = exports.excludedFields = void 0;
+exports.signTokens = exports.updateAgent = exports.findUniqueAgent = exports.findAgent = exports.findAll = exports.createAgent = exports.excludedFields = void 0;
 const client_1 = require("@prisma/client");
 const lodash_1 = require("lodash");
 const config_1 = __importDefault(require("config"));
@@ -27,7 +27,13 @@ exports.createAgent = createAgent;
 //   console.log(12,"register service")
 //   return 
 // };
-const findAgent = async (where, select) => {
+const findAll = async () => {
+    return await prisma.agent.findMany();
+};
+exports.findAll = findAll;
+const findAgent = async (
+// change the type from any to match the desire type
+where, select) => {
     return (await prisma.agent.findFirst({
         where,
         select,

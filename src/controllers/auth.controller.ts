@@ -264,32 +264,30 @@ export const forgotPasswordHandler = async (
   next: NextFunction
 ) => {
   try {
-    // Get the user from the collection
-    const user = await findAgent({ email: req.body.email.toLowerCase() });
+    const agent = await findAgent({ email: req.body.email.toLowerCase() });
     const message =
-      'You will receive a reset email if user with that email exist';
-    if (!user) {
+      'You will receive a reset email if agent with that email exist';
+    if (!agent) {
       return res.status(200).json({
         status: 'success',
         message,
       });
     }
 
-    if (!user.verified) {
+    if (!agent.verified) {
       return res.status(403).json({
         status: 'fail',
         message: 'Account not verified',
       });
     }
 
-    if (user.provider) {
+    if (agent.provider) {
       return res.status(403).json({
         status: 'fail',
         message:
           'We found your account. It looks like you registered with a social auth account. Try signing in with social auth.',
       });
     }
-
     const resetToken = crypto.randomBytes(32).toString('hex');
     const passwordResetToken = crypto
       .createHash('sha256')
@@ -297,7 +295,7 @@ export const forgotPasswordHandler = async (
       .digest('hex');
 
     await updateAgent(
-      { id: user.id },
+      { id: agent.id },
       {
         passwordResetToken,
         passwordResetAt: new Date(Date.now() + 10 * 60 * 1000),
@@ -306,8 +304,8 @@ export const forgotPasswordHandler = async (
     );
 
     try {
-      const url = `${config.get<string>('origin')}/resetpassword/${resetToken}`;
-      await new Email(user, url).sendPasswordResetToken();
+      const url = `http://localhost:3000/resetpassword/${resetToken}`;
+      await new Email(agent, url).sendPasswordResetToken();
 
       res.status(200).json({
         status: 'success',
@@ -315,7 +313,7 @@ export const forgotPasswordHandler = async (
       });
     } catch (err: any) {
       await updateAgent(
-        { id: user.id },
+        { id: agent.id },
         { passwordResetToken: null, passwordResetAt: null },
         {}
       );
@@ -332,7 +330,7 @@ export const forgotPasswordHandler = async (
 export const resetPasswordHandler = async (
   req: Request<
     ResetPasswordInput['params'],
-    Record<string, never>,
+    Record <string, never>,
     ResetPasswordInput['body']
   >,
   res: Response,

@@ -193,22 +193,21 @@ const verifyEmailHandler = async (req, res, next) => {
 exports.verifyEmailHandler = verifyEmailHandler;
 const forgotPasswordHandler = async (req, res, next) => {
     try {
-        // Get the user from the collection
-        const user = await (0, agent_service_1.findAgent)({ email: req.body.email.toLowerCase() });
-        const message = 'You will receive a reset email if user with that email exist';
-        if (!user) {
+        const agent = await (0, agent_service_1.findAgent)({ email: req.body.email.toLowerCase() });
+        const message = 'You will receive a reset email if agent with that email exist';
+        if (!agent) {
             return res.status(200).json({
                 status: 'success',
                 message,
             });
         }
-        if (!user.verified) {
+        if (!agent.verified) {
             return res.status(403).json({
                 status: 'fail',
                 message: 'Account not verified',
             });
         }
-        if (user.provider) {
+        if (agent.provider) {
             return res.status(403).json({
                 status: 'fail',
                 message: 'We found your account. It looks like you registered with a social auth account. Try signing in with social auth.',
@@ -219,20 +218,20 @@ const forgotPasswordHandler = async (req, res, next) => {
             .createHash('sha256')
             .update(resetToken)
             .digest('hex');
-        await (0, agent_service_1.updateAgent)({ id: user.id }, {
+        await (0, agent_service_1.updateAgent)({ id: agent.id }, {
             passwordResetToken,
             passwordResetAt: new Date(Date.now() + 10 * 60 * 1000),
         }, { email: true });
         try {
-            const url = `${config_1.default.get('origin')}/resetpassword/${resetToken}`;
-            await new email_1.default(user, url).sendPasswordResetToken();
+            const url = `http://localhost:3000/resetpassword/${resetToken}`;
+            await new email_1.default(agent, url).sendPasswordResetToken();
             res.status(200).json({
                 status: 'success',
                 message,
             });
         }
         catch (err) {
-            await (0, agent_service_1.updateAgent)({ id: user.id }, { passwordResetToken: null, passwordResetAt: null }, {});
+            await (0, agent_service_1.updateAgent)({ id: agent.id }, { passwordResetToken: null, passwordResetAt: null }, {});
             return res.status(500).json({
                 status: 'error',
                 message: 'There was an error sending email',

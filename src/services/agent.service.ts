@@ -25,8 +25,13 @@ export const createAgent = async (input: Prisma.AgentCreateInput) => {
 //   return 
 // };
 
+export const findAll = async () => {
+  return await prisma.agent.findMany();
+};
+
 export const findAgent = async (
-  where: Partial<Prisma.AgentCreateInput>,
+  // change the type from any to match the desire type
+  where: Partial<any>,
   select?: Prisma.AgentSelect
 ) => {
   return (await prisma.agent.findFirst({
