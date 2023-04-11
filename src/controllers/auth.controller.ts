@@ -71,7 +71,7 @@ export const registerAgentHandler = async (
         verificationCode,
     });
 
-    const redirectUrl = `http://localhost:3000/api/auth/verifyemail/${verifyCode}`;
+    const redirectUrl = `https://novel-ag-node-v1.onrender.com/api-docs/api/auth/verifyemail/${verifyCode}`;
     try {
       await new Email(agent, redirectUrl).sendVerificationCode();      
       await updateAgent({ id: agent.id }, { verificationCode });
@@ -87,7 +87,8 @@ export const registerAgentHandler = async (
         message: 'There was an error sending email, please try again',
       });
     }
-  } catch (err: any) {    
+  } catch (err: any) { 
+    // console.log(91, err)   
     if (err instanceof Prisma.PrismaClientKnownRequestError) {
       if (err.code === 'P2002') {
         return res.status(409).json({
@@ -141,7 +142,7 @@ export const loginAgentHandler = async (
       access_token,
     });
   } catch (err: any) {
-    console.log(146, err );
+    // console.log(145, err );
     next(err);
   }
 };
@@ -159,49 +160,37 @@ export const refreshAccessTokenHandler = async (
     if (!refresh_token) {
       return next(new AppError(403, message));
     }
-
-    // Validate refresh token
     const decoded = verifyJwt<{ sub: string }>(
       refresh_token,
       'refreshTokenPublicKey'
     );
-
     if (!decoded) {
       return next(new AppError(403, message));
     }
-
-    // Check if user has a valid session
     const session = await redisClient.get(decoded.sub);
-
     if (!session) {
       return next(new AppError(403, message));
     }
-
-    // Check if user still exist
     const user = await findUniqueAgent({ id: JSON.parse(session).id });
-
     if (!user) {
       return next(new AppError(403, message));
     }
-
-    // Sign new access token
     const access_token = signJwt({ sub: user.id }, 'accessTokenPrivateKey', {
       expiresIn: `${config.get<number>('accessTokenExpiresIn')}m`,
     });
 
-    // 4. Add Cookies
     res.cookie('access_token', access_token, accessTokenCookieOptions);
     res.cookie('logged_in', true, {
       ...accessTokenCookieOptions,
       httpOnly: false,
     });
 
-    // 5. Send response
     res.status(200).json({
       status: 'success',
       access_token,
     });
   } catch (err: any) {
+    // console.log(err);
     next(err);
   }
 };

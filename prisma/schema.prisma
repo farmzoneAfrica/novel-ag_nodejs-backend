@@ -12,7 +12,6 @@ datasource db {
 
 model Agent {
   @@map(name: "agents")
-
   id    String     @id @default(uuid())
   email String  @unique
   phone String @unique
@@ -37,6 +36,9 @@ model Agent {
   @@unique([email, verificationCode, passwordResetToken])
   @@index([email, verificationCode, passwordResetToken])
 
+  prosperityHub ProsperityHub[]
+  warhouse Warehouse[]
+
 }
 
 enum RoleEnumType {
@@ -46,10 +48,11 @@ enum RoleEnumType {
 model ProsperityHub {
   @@map(name: "prosperity-hubs")
   id        String     @id @default(uuid())
-  title     String
-  content   String?
-  published Boolean @default(false)
-  authorId  String
+  name     String
+  address   String?
+  remarks   String?
+  agent Agent    @relation(fields: [agentId], references: [id]) 
+  agentId String
 
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt @default(now())
@@ -57,10 +60,11 @@ model ProsperityHub {
 model Warehouse {
   @@map(name: "warehouses")
   id        String     @id @default(uuid())
-  title     String
-  content   String?
-  published Boolean @default(false)
-  authorId  String
+  name     String
+  address     String
+  remarks     String?
+  agent Agent    @relation(fields: [agentId], references: [id]) 
+  agentId String
 
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt @default(now())

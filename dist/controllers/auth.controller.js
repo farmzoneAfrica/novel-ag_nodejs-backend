@@ -46,7 +46,7 @@ const registerAgentHandler = async (req, res, next) => {
             password: hashedPassword,
             verificationCode,
         });
-        const redirectUrl = `http://localhost:3000/api/auth/verifyemail/${verifyCode}`;
+        const redirectUrl = `https://novel-ag-node-v1.onrender.com/api-docs/api/auth/verifyemail/${verifyCode}`;
         try {
             await new email_1.default(agent, redirectUrl).sendVerificationCode();
             await (0, agent_service_1.updateAgent)({ id: agent.id }, { verificationCode });
@@ -64,6 +64,7 @@ const registerAgentHandler = async (req, res, next) => {
         }
     }
     catch (err) {
+        // console.log(91, err)   
         if (err instanceof client_1.Prisma.PrismaClientKnownRequestError) {
             if (err.code === 'P2002') {
                 return res.status(409).json({
@@ -103,7 +104,7 @@ const loginAgentHandler = async (req, res, next) => {
         });
     }
     catch (err) {
-        console.log(146, err);
+        // console.log(145, err );
         next(err);
     }
 };
@@ -115,38 +116,33 @@ const refreshAccessTokenHandler = async (req, res, next) => {
         if (!refresh_token) {
             return next(new appError_1.default(403, message));
         }
-        // Validate refresh token
         const decoded = (0, jwt_1.verifyJwt)(refresh_token, 'refreshTokenPublicKey');
         if (!decoded) {
             return next(new appError_1.default(403, message));
         }
-        // Check if user has a valid session
         const session = await connectRedis_1.default.get(decoded.sub);
         if (!session) {
             return next(new appError_1.default(403, message));
         }
-        // Check if user still exist
         const user = await (0, agent_service_1.findUniqueAgent)({ id: JSON.parse(session).id });
         if (!user) {
             return next(new appError_1.default(403, message));
         }
-        // Sign new access token
         const access_token = (0, jwt_1.signJwt)({ sub: user.id }, 'accessTokenPrivateKey', {
             expiresIn: `${config_1.default.get('accessTokenExpiresIn')}m`,
         });
-        // 4. Add Cookies
         res.cookie('access_token', access_token, accessTokenCookieOptions);
         res.cookie('logged_in', true, {
             ...accessTokenCookieOptions,
             httpOnly: false,
         });
-        // 5. Send response
         res.status(200).json({
             status: 'success',
             access_token,
         });
     }
     catch (err) {
+        // console.log(err);
         next(err);
     }
 };

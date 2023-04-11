@@ -14,10 +14,7 @@ export const excludedFields = [
 
 const prisma = new PrismaClient();
 
-export const createAgent = async (input: Prisma.AgentCreateInput) => {
-
-  console.log('services 18 \n', input);
-  
+export const createAgent = async (input: Prisma.AgentCreateInput) => {  
   return (await prisma.agent.create({
     data: input,
   })) as Agent;
