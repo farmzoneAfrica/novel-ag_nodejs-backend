@@ -18,6 +18,8 @@ exports.registerAgentSchema = (0, zod_1.object)({
         }),
         address: (0, zod_1.string)().optional(),
         avatar: (0, zod_1.string)().optional(),
+        prosperityHub: (0, zod_1.string)().optional(),
+        warehouse: (0, zod_1.string)().optional(),
         email: (0, zod_1.string)({
             required_error: 'Email address is required',
         }).email('Invalid email address'),

@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { findAll } from '../services/agent.service'
+import { findAll, findUniqueAgent } from '../services/agent.service'
 
 export const getMeHandler = async (
   req: Request,
@@ -27,7 +27,7 @@ export const getAgentsHandler = async (
   next: NextFunction
 ) => {
   try {
-    // const agent = res.locals.agent;
+    // called findAll function from services
     const agents = await findAll()
     res.status(200).status(200).json({
       status: 'success',

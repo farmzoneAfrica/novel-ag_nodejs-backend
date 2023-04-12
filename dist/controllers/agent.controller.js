@@ -20,7 +20,7 @@ exports.getMeHandler = getMeHandler;
 // get all agents 
 const getAgentsHandler = async (req, res, next) => {
     try {
-        // const agent = res.locals.agent;
+        // called findAll function from services
         const agents = await (0, agent_service_1.findAll)();
         res.status(200).status(200).json({
             status: 'success',

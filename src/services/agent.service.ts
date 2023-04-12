@@ -20,18 +20,12 @@ export const createAgent = async (input: Prisma.AgentCreateInput) => {
   })) as Agent;
 };
 
-// export const createAgent = async () => {
-//   console.log(12,"register service")
-//   return 
-// };
-
 export const findAll = async () => {
   return await prisma.agent.findMany();
 };
 
 export const findAgent = async (
-  // change the type from any to match the desire type
-  where: Partial<any>,
+  where: Partial<Prisma.AgentWhereInput>,
   select?: Prisma.AgentSelect
 ) => {
   return (await prisma.agent.findFirst({
@@ -66,12 +60,12 @@ export const signTokens = async (agent: Prisma.AgentCreateInput) => {
 console.log(64, "sign in token function");
 
   // 2. Create Access and Refresh tokens
-  const access_token = signJwt({ sub: agent.id }, 'accessTokenPrivateKey', {
+  const access_token = signJwt({ sub: agent.id }, 'ab1234', {
     // expiresIn: `${config.get<number>('accessTokenExpiresIn')}m`,
     expiresIn: `30s`,
   });
 
-  const refresh_token = signJwt({ sub: agent.id }, 'refreshTokenPrivateKey', {
+  const refresh_token = signJwt({ sub: agent.id }, 'ab1234', {
     // expiresIn: `${config.get<number>('refreshTokenExpiresIn')}m`,
     expiresIn: `30s`,
   });

@@ -23,17 +23,11 @@ const createAgent = async (input) => {
     }));
 };
 exports.createAgent = createAgent;
-// export const createAgent = async () => {
-//   console.log(12,"register service")
-//   return 
-// };
 const findAll = async () => {
     return await prisma.agent.findMany();
 };
 exports.findAll = findAll;
-const findAgent = async (
-// change the type from any to match the desire type
-where, select) => {
+const findAgent = async (where, select) => {
     return (await prisma.agent.findFirst({
         where,
         select,
@@ -58,11 +52,11 @@ const signTokens = async (agent) => {
     });
     console.log(64, "sign in token function");
     // 2. Create Access and Refresh tokens
-    const access_token = (0, jwt_1.signJwt)({ sub: agent.id }, 'accessTokenPrivateKey', {
+    const access_token = (0, jwt_1.signJwt)({ sub: agent.id }, 'ab1234', {
         // expiresIn: `${config.get<number>('accessTokenExpiresIn')}m`,
         expiresIn: `30s`,
     });
-    const refresh_token = (0, jwt_1.signJwt)({ sub: agent.id }, 'refreshTokenPrivateKey', {
+    const refresh_token = (0, jwt_1.signJwt)({ sub: agent.id }, 'ab1234', {
         // expiresIn: `${config.get<number>('refreshTokenExpiresIn')}m`,
         expiresIn: `30s`,
     });

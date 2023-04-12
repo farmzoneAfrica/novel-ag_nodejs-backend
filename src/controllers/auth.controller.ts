@@ -53,7 +53,6 @@ export const registerAgentHandler = async (
 ) => {
   try {
     const hashedPassword = await bcrypt.hash(req.body.password, 12);
-
     const verifyCode = crypto.randomBytes(32).toString('hex');
     const verificationCode = crypto
       .createHash('sha256')
@@ -71,7 +70,7 @@ export const registerAgentHandler = async (
         verificationCode,
     });
 
-    const redirectUrl = `https://novel-ag-node-v1.onrender.com/api-docs/api/auth/verifyemail/${verifyCode}`;
+    const redirectUrl = `http://localhost:3000/api/auth/verifyemail/${verifyCode}`;
     try {
       await new Email(agent, redirectUrl).sendVerificationCode();      
       await updateAgent({ id: agent.id }, { verificationCode });
@@ -88,7 +87,7 @@ export const registerAgentHandler = async (
       });
     }
   } catch (err: any) { 
-    // console.log(91, err)   
+    console.log(91, "email verification fail", err)   
     if (err instanceof Prisma.PrismaClientKnownRequestError) {
       if (err.code === 'P2002') {
         return res.status(409).json({
@@ -162,7 +161,7 @@ export const refreshAccessTokenHandler = async (
     }
     const decoded = verifyJwt<{ sub: string }>(
       refresh_token,
-      'refreshTokenPublicKey'
+      'ab1234'
     );
     if (!decoded) {
       return next(new AppError(403, message));
@@ -175,7 +174,7 @@ export const refreshAccessTokenHandler = async (
     if (!user) {
       return next(new AppError(403, message));
     }
-    const access_token = signJwt({ sub: user.id }, 'accessTokenPrivateKey', {
+    const access_token = signJwt({ sub: user.id }, 'ab1234', {
       expiresIn: `${config.get<number>('accessTokenExpiresIn')}m`,
     });
 

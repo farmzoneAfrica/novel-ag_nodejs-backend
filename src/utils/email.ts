@@ -1,7 +1,4 @@
 import nodemailer from 'nodemailer';
-// import config from 'config';
-// import pug from 'pug';
-// import { convert } from 'html-to-text';
 import { Prisma } from '@prisma/client';
 export default class Email {
   #firstName: string;
@@ -27,13 +24,6 @@ export default class Email {
   }
 
   private async send(template: string, subject: string) {
-    // Generate HTML template based on the template string
-    // const html = pug.renderFile(`${__dirname}/../views/${template}.pug`, {
-    //   firstName: this.#firstName,
-    //   subject,
-    //   url: this.url,
-    // });
-
     const html = `
 <div style="max-width: 700px;text-align: center; text-transform: uppercase;
      margin:auto; border: 10px solid #DE3D6D; padding: 50px 20px; font-size: 110%;">
@@ -49,7 +39,6 @@ export default class Email {
 </div>
 `;
 
-    // Create mailOptions
     const mailOptions = {
       from: this.#from,
       to: this.#to,
@@ -58,7 +47,6 @@ export default class Email {
       html,
     };
 
-    // Send email
     const info = await this.newTransport().sendMail(mailOptions);
     console.log(nodemailer.getTestMessageUrl(info));
   }

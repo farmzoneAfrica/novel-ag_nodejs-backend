@@ -1,0 +1,63 @@
+INSERT INTO Agent (
+        id,
+        email,
+        userName,
+        phone,
+        firstName,
+        lastName,
+        address,
+        password,
+        avatar,
+        isVerified,
+        isAdmin,
+        createdAt,
+        updatedAt,
+        role
+    )
+VALUES (
+        'id:textINSERT INTO Agent (
+        id,
+        email,
+        userName,
+        phone,
+        firstName,
+        lastName,
+        address,
+        password,
+        avatar,
+        isVerified,
+        isAdmin,
+        createdAt,
+        updatedAt,
+        role
+      )
+    VALUES (
+        ' id :text ',
+        ' email :text ',
+        ' userName :text ',
+        ' phone :text ',
+        ' firstName :text ',
+        ' lastName :text ',
+        ' address :text ',
+        ' password :text ',
+        ' avatar :text ',
+        isVerified:boolean,
+        isAdmin:boolean,
+        ' createdAt :timestamp without time zone ',
+        ' updatedAt :timestamp without time zone ',
+        ' role :USER - DEFINED '
+      );',
+        'email:text',
+        'userName:text',
+        'phone:text',
+        'firstName:text',
+        'lastName:text',
+        'address:text',
+        'password:text',
+        'avatar:text',
+        isVerified :boolean,
+        isAdmin :boolean,
+        'createdAt:timestamp without time zone',
+        'updatedAt:timestamp without time zone',
+        'role:USER-DEFINED'
+    );

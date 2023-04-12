@@ -5,26 +5,24 @@ dotenv.config();
 
 export const signJwt = (
   payload: Object,
-  keyName: 'ab1234' | 'ab1234',
+  keyName: 'accessTokenPrivateKey' | 'refreshTokenPrivateKey' ,
   options: SignOptions
 ) => {
-  // const privateKey = fs.readFileSync('private_key.pem').toString('ascii');
-  const privateKey = 'ab1234'
-  console.log("jwt", 10, privateKey);
+    // const privateKey = fs.readFileSync('private_key.pem');
+    const privateKey = process.env.JWT_ACCESS_TOKEN_PRIVATE_KEY as string;
   return jwt.sign(payload, privateKey, {
-    // ...options,
-    // algorithm: 'RS256',
+    ...options,
+    algorithm: 'RS256',
   });
 };
 
 export const verifyJwt = <T>(
   token: string,
-  keyName: 'ab1234' | 'ab1234'
+  keyName: 'accessTokenPublicKey' | 'refreshTokenPublicKey'
 ): T | null => {
   try {
-    // const publicKey = fs.readFileSync('public_key.pem').toString('ascii');
-    const publicKey = 'ab1234'
-    console.log("jwt", 10, publicKey);
+    //   const publicKey = fs.readFileSync('public_key.pem');
+      const publicKey = process.env.JWT_ACCESS_TOKEN_PUBLIC_KEY as string;
     const decoded = jwt.verify(token, publicKey) as T;
 
     return decoded;

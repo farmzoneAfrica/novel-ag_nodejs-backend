@@ -39,12 +39,6 @@ class Email {
         });
     }
     async send(template, subject) {
-        // Generate HTML template based on the template string
-        // const html = pug.renderFile(`${__dirname}/../views/${template}.pug`, {
-        //   firstName: this.#firstName,
-        //   subject,
-        //   url: this.url,
-        // });
         const html = `
 <div style="max-width: 700px;text-align: center; text-transform: uppercase;
      margin:auto; border: 10px solid #DE3D6D; padding: 50px 20px; font-size: 110%;">
@@ -59,7 +53,6 @@ class Email {
       </div>
 </div>
 `;
-        // Create mailOptions
         const mailOptions = {
             from: __classPrivateFieldGet(this, _Email_from, "f"),
             to: __classPrivateFieldGet(this, _Email_to, "f"),
@@ -67,7 +60,6 @@ class Email {
             text: html,
             html,
         };
-        // Send email
         const info = await this.newTransport().sendMail(mailOptions);
         console.log(nodemailer_1.default.getTestMessageUrl(info));
     }

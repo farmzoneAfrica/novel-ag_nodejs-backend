@@ -46,7 +46,7 @@ const registerAgentHandler = async (req, res, next) => {
             password: hashedPassword,
             verificationCode,
         });
-        const redirectUrl = `https://novel-ag-node-v1.onrender.com/api-docs/api/auth/verifyemail/${verifyCode}`;
+        const redirectUrl = `http://localhost:3000/api/auth/verifyemail/${verifyCode}`;
         try {
             await new email_1.default(agent, redirectUrl).sendVerificationCode();
             await (0, agent_service_1.updateAgent)({ id: agent.id }, { verificationCode });
@@ -64,7 +64,7 @@ const registerAgentHandler = async (req, res, next) => {
         }
     }
     catch (err) {
-        // console.log(91, err)   
+        console.log(91, "email verification fail", err);
         if (err instanceof client_1.Prisma.PrismaClientKnownRequestError) {
             if (err.code === 'P2002') {
                 return res.status(409).json({
@@ -116,7 +116,7 @@ const refreshAccessTokenHandler = async (req, res, next) => {
         if (!refresh_token) {
             return next(new appError_1.default(403, message));
         }
-        const decoded = (0, jwt_1.verifyJwt)(refresh_token, 'refreshTokenPublicKey');
+        const decoded = (0, jwt_1.verifyJwt)(refresh_token, 'ab1234');
         if (!decoded) {
             return next(new appError_1.default(403, message));
         }
@@ -128,7 +128,7 @@ const refreshAccessTokenHandler = async (req, res, next) => {
         if (!user) {
             return next(new appError_1.default(403, message));
         }
-        const access_token = (0, jwt_1.signJwt)({ sub: user.id }, 'accessTokenPrivateKey', {
+        const access_token = (0, jwt_1.signJwt)({ sub: user.id }, 'ab1234', {
             expiresIn: `${config_1.default.get('accessTokenExpiresIn')}m`,
         });
         res.cookie('access_token', access_token, accessTokenCookieOptions);
