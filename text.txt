@@ -1,1 +1,10 @@
 Hi I'm text
+
+- forgot pw - email
+- reset password - email and pw
+- link the prosperity hub
+- link warebouse
+
+- agent crud
+- warehouse crud
+- prosperityHub crud

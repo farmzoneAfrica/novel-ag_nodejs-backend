@@ -23,7 +23,8 @@ const deserializeUser = async (req, res, next) => {
             return next(new appError_1.default(401, 'You are not logged in'));
         }
         // Validate the access token
-        const decoded = (0, jwt_1.verifyJwt)(access_token, 'accessTokenPublicKey');
+        const decoded = (0, jwt_1.verifyJwt)(access_token, 'ab1234');
+        console.log(decoded);
         if (!decoded) {
             return next(new appError_1.default(401, `Invalid token or user doesn't exist`));
         }
@@ -42,6 +43,7 @@ const deserializeUser = async (req, res, next) => {
         next();
     }
     catch (err) {
+        console.log(58, "serialize", err);
         next(err);
     }
 };

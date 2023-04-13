@@ -53,7 +53,6 @@ export const registerAgentHandler = async (
 ) => {
   try {
     const hashedPassword = await bcrypt.hash(req.body.password, 12);
-
     const verifyCode = crypto.randomBytes(32).toString('hex');
     const verificationCode = crypto
       .createHash('sha256')
@@ -71,7 +70,7 @@ export const registerAgentHandler = async (
         verificationCode,
     });
 
-    const redirectUrl = `/verifyemail/${verifyCode}`;
+    const redirectUrl = `http://localhost:3000/api/auth/verifyemail/${verifyCode}`;
     try {
       await new Email(agent, redirectUrl).sendVerificationCode();      
       await updateAgent({ id: agent.id }, { verificationCode });
@@ -81,16 +80,14 @@ export const registerAgentHandler = async (
           'An email with a verification code has been sent to your email',
       });
     } catch (error) {
-      console.log(error);
       await updateAgent({ id: agent.id }, { verificationCode: null });
       return res.status(500).json({
         status: 'error',
         message: 'There was an error sending email, please try again',
       });
     }
-  } catch (err: any) {
-    console.log(err);
-    
+  } catch (err: any) { 
+    console.log(91, "email verification fail", err)   
     if (err instanceof Prisma.PrismaClientKnownRequestError) {
       if (err.code === 'P2002') {
         return res.status(409).json({
@@ -110,18 +107,14 @@ export const loginAgentHandler = async (
 ) => {
   try {
     const { email, password } = req.body;
-
-    const user = await findUniqueAgent(
+    const agent = await findUniqueAgent(
       { email: email.toLowerCase() },
       { id: true, email: true, verified: true, password: true }
     );
-
-    if (!user) {
+    if (!agent) {
       return next(new AppError(400, 'Invalid email or password'));
     }
-
-    // Check if user is verified
-    if (!user.verified) {
+    if (!agent.verified) {
       return next(
         new AppError(
           401,
@@ -130,12 +123,12 @@ export const loginAgentHandler = async (
       );
     }
 
-    if (!user || !(await bcrypt.compare(password, user.password))) {
+    if (!agent || !(await bcrypt.compare(password, agent.password))) {
       return next(new AppError(400, 'Invalid email or password'));
     }
 
     // Sign Tokens
-    const { access_token, refresh_token } = await signTokens(user);
+    const { access_token, refresh_token } = await signTokens(agent);
     res.cookie('access_token', access_token, accessTokenCookieOptions);
     res.cookie('refresh_token', refresh_token, refreshTokenCookieOptions);
     res.cookie('logged_in', true, {
@@ -148,6 +141,7 @@ export const loginAgentHandler = async (
       access_token,
     });
   } catch (err: any) {
+    // console.log(145, err );
     next(err);
   }
 };
@@ -165,49 +159,37 @@ export const refreshAccessTokenHandler = async (
     if (!refresh_token) {
       return next(new AppError(403, message));
     }
-
-    // Validate refresh token
     const decoded = verifyJwt<{ sub: string }>(
       refresh_token,
-      'refreshTokenPublicKey'
+      'ab1234'
     );
-
     if (!decoded) {
       return next(new AppError(403, message));
     }
-
-    // Check if user has a valid session
     const session = await redisClient.get(decoded.sub);
-
     if (!session) {
       return next(new AppError(403, message));
     }
-
-    // Check if user still exist
     const user = await findUniqueAgent({ id: JSON.parse(session).id });
-
     if (!user) {
       return next(new AppError(403, message));
     }
-
-    // Sign new access token
-    const access_token = signJwt({ sub: user.id }, 'accessTokenPrivateKey', {
+    const access_token = signJwt({ sub: user.id }, 'ab1234', {
       expiresIn: `${config.get<number>('accessTokenExpiresIn')}m`,
     });
 
-    // 4. Add Cookies
     res.cookie('access_token', access_token, accessTokenCookieOptions);
     res.cookie('logged_in', true, {
       ...accessTokenCookieOptions,
       httpOnly: false,
     });
 
-    // 5. Send response
     res.status(200).json({
       status: 'success',
       access_token,
     });
   } catch (err: any) {
+    // console.log(err);
     next(err);
   }
 };
@@ -281,32 +263,30 @@ export const forgotPasswordHandler = async (
   next: NextFunction
 ) => {
   try {
-    // Get the user from the collection
-    const user = await findAgent({ email: req.body.email.toLowerCase() });
+    const agent = await findAgent({ email: req.body.email.toLowerCase() });
     const message =
-      'You will receive a reset email if user with that email exist';
-    if (!user) {
+      'You will receive a reset email if agent with that email exist';
+    if (!agent) {
       return res.status(200).json({
         status: 'success',
         message,
       });
     }
 
-    if (!user.verified) {
+    if (!agent.verified) {
       return res.status(403).json({
         status: 'fail',
         message: 'Account not verified',
       });
     }
 
-    if (user.provider) {
+    if (agent.provider) {
       return res.status(403).json({
         status: 'fail',
         message:
           'We found your account. It looks like you registered with a social auth account. Try signing in with social auth.',
       });
     }
-
     const resetToken = crypto.randomBytes(32).toString('hex');
     const passwordResetToken = crypto
       .createHash('sha256')
@@ -314,7 +294,7 @@ export const forgotPasswordHandler = async (
       .digest('hex');
 
     await updateAgent(
-      { id: user.id },
+      { id: agent.id },
       {
         passwordResetToken,
         passwordResetAt: new Date(Date.now() + 10 * 60 * 1000),
@@ -323,8 +303,8 @@ export const forgotPasswordHandler = async (
     );
 
     try {
-      const url = `${config.get<string>('origin')}/resetpassword/${resetToken}`;
-      await new Email(user, url).sendPasswordResetToken();
+      const url = `http://localhost:3000/resetpassword/${resetToken}`;
+      await new Email(agent, url).sendPasswordResetToken();
 
       res.status(200).json({
         status: 'success',
@@ -332,7 +312,7 @@ export const forgotPasswordHandler = async (
       });
     } catch (err: any) {
       await updateAgent(
-        { id: user.id },
+        { id: agent.id },
         { passwordResetToken: null, passwordResetAt: null },
         {}
       );
@@ -349,7 +329,7 @@ export const forgotPasswordHandler = async (
 export const resetPasswordHandler = async (
   req: Request<
     ResetPasswordInput['params'],
-    Record<string, never>,
+    Record <string, never>,
     ResetPasswordInput['body']
   >,
   res: Response,

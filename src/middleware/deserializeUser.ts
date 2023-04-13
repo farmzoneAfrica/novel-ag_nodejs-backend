@@ -21,6 +21,8 @@ export const deserializeUser = async (
     } else if (req.cookies.access_token) {
       access_token = req.cookies.access_token;
     }
+    
+    
 
     if (!access_token) {
       return next(new AppError(401, 'You are not logged in'));
@@ -29,8 +31,10 @@ export const deserializeUser = async (
     // Validate the access token
     const decoded = verifyJwt<{ sub: string }>(
       access_token,
-      'accessTokenPublicKey'
+      'ab1234'
     );
+    console.log(decoded);
+
 
     if (!decoded) {
       return next(new AppError(401, `Invalid token or user doesn't exist`));
@@ -55,6 +59,7 @@ export const deserializeUser = async (
 
     next();
   } catch (err: any) {
+    console.log(58, "serialize", err);
     next(err);
   }
 };

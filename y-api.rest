@@ -25,6 +25,14 @@ Content-Type: application/json
 GET http://localhost:4300/user/verify/340124c2-72bd-41cd-97d1-fa12f993cec6
 # Content-Type: application/json
 
+### login user
+POST http://localhost:3000/api/auth/login
+Content-Type: application/json
+{
+    "email": "adwaith.macarthur@doojazz.com",
+    "password": "usha0816"
+}
+
 # {
 #     "password":"Abayomi",
 #     "email":"Abayomi@test.com"

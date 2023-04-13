@@ -28,7 +28,9 @@
 ## IMPORTANT COMMANDS
 - Run `yarn dev` to start server on `localhost 5000`
 - Run `yarn compile` to compile typescript
--  Run `npx prisma migrate dev --name init` after updating prisma model 
+- Run `npx prisma migrate dev --name init` after updating prisma model 
+- Run ` emailengine --dbs.redis="redis://127.0.0.1:6379/0"` to start email template engine. 
+
 
 ## Useful links
 - [Architectural flow design](https://www.figma.com/file/hE7ScAVxcm89YdVl4KChFH/NOVEL-AG---Architectural-Flow-(Copy)?node-id=107%3A906&t=aFli1Iz6SZQkxSmF-0)
