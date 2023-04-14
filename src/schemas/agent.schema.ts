@@ -96,6 +96,12 @@ export const resetPasswordSchema = object({
   }),
 });
 
+export const getSingleAgentSchema = object({
+  params: object({
+    id: string()
+  })
+})
+
 export type RegisterAgentInput = Omit<
   TypeOf<typeof registerAgentSchema>['body'],
   'confirmPassword'
@@ -106,5 +112,6 @@ export type VerifyEmailInput = TypeOf<typeof verifyEmailSchema>['params'];
 export type UpdateUserInput = TypeOf<typeof updateAgentSchema>['body'];
 export type ForgotPasswordInput = TypeOf<typeof forgotPasswordSchema>['body'];
 export type ResetPasswordInput = TypeOf<typeof resetPasswordSchema>;
+export type GetSingleAgentInput = TypeOf<typeof getSingleAgentSchema>['params'];
 
 

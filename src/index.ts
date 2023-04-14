@@ -13,8 +13,11 @@ import cors from 'cors';
 import swaggerUi from 'swagger-ui-express';
 import swaggerFile from './swagger-output.json';
 
+// routers
 import agentRouter from "./routes/agent.routes";
 import authRouter from "./routes/auth.routes";
+import prosperityHubRouter from "./routes/prosperityHub.routes";
+import warehouseRouter from "./routes/warehouse.routes";
 
 validateEnv()
 
@@ -39,6 +42,8 @@ async function bootstrap() {
   app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile))
   app.use('/api/agent', agentRouter);
   app.use('/api/auth', authRouter);
+  app.use('/api/prosperityHub', prosperityHubRouter);
+  app.use('/api/warehouse', warehouseRouter);
 
   app.get('/', (req, res) => {
     res.send('Hello World!');

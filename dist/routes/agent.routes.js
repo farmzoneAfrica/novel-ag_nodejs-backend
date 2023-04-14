@@ -8,7 +8,7 @@ const agent_controller_1 = require("../controllers/agent.controller");
 const router = express_1.default.Router();
 // router.use(deserializeUser, requireUser);
 router.get('/', agent_controller_1.getAgentsHandler);
+router.get('/:id', agent_controller_1.getAgentHandler);
 router.get('/me', agent_controller_1.getMeHandler);
-// router.get('/:id', getAgentHandler);
 exports.default = router;
 //# sourceMappingURL=agent.routes.js.map

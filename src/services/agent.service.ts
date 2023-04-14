@@ -34,6 +34,16 @@ export const findAgent = async (
   })) as Agent;
 };
 
+export const findById = async (
+  where: string | any,
+  select?: Prisma.AgentSelect
+) => {
+  await prisma.agent.findUnique({
+    where,
+    select
+  })
+};
+
 export const findUniqueAgent = async (
   where: Prisma.AgentWhereUniqueInput,
   select?: Prisma.AgentSelect
@@ -53,20 +63,15 @@ export const updateAgent = async (
 };
 
 export const signTokens = async (agent: Prisma.AgentCreateInput) => {
-  // 1. Create Session
   redisClient.set(`${agent.id}`, JSON.stringify(omit(agent, excludedFields)), {
     EX: config.get<number>('redisCacheExpiresIn') * 60,
   });
-console.log(64, "sign in token function");
 
-  // 2. Create Access and Refresh tokens
   const access_token = signJwt({ sub: agent.id }, 'ab1234', {
-    // expiresIn: `${config.get<number>('accessTokenExpiresIn')}m`,
     expiresIn: `30s`,
   });
 
   const refresh_token = signJwt({ sub: agent.id }, 'ab1234', {
-    // expiresIn: `${config.get<number>('refreshTokenExpiresIn')}m`,
     expiresIn: `30s`,
   });
 console.log(74, "sign in token function");

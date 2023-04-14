@@ -20,4 +20,4 @@ router.get('/logout', deserializeUser_1.deserializeUser, requireUser_1.requireUs
 router.post('/forgotpassword', (0, validate_1.validate)(agent_schema_1.forgotPasswordSchema), auth_controller_1.forgotPasswordHandler);
 router.patch('/resetpassword/:resetToken', (0, validate_1.validate)(agent_schema_1.resetPasswordSchema), auth_controller_1.resetPasswordHandler);
 exports.default = router;
-//# sourceMappingURL=auth.routes.js.map
+//# sourceMappingURL=warehous.routes.js.map

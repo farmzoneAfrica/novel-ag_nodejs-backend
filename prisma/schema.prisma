@@ -46,7 +46,7 @@ enum RoleEnumType {
   ADMIN
 }
 model ProsperityHub {
-  @@map(name: "prosperity-hubs")
+  @@map(name: "prosperityHubs")
   id        String     @id @default(uuid())
   name     String
   address   String?
