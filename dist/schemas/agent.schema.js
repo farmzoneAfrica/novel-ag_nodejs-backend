@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.resetPasswordSchema = exports.forgotPasswordSchema = exports.updateAgentSchema = exports.verifyEmailSchema = exports.loginAgentSchema = exports.registerAgentSchema = void 0;
+exports.getSingleAgentSchema = exports.resetPasswordSchema = exports.forgotPasswordSchema = exports.updateAgentSchema = exports.verifyEmailSchema = exports.loginAgentSchema = exports.registerAgentSchema = void 0;
 const zod_1 = require("zod");
 var RoleEnumType;
 (function (RoleEnumType) {
@@ -91,5 +91,10 @@ exports.resetPasswordSchema = (0, zod_1.object)({
         message: 'Passwords do not match',
         path: ['confirmPassword'],
     }),
+});
+exports.getSingleAgentSchema = (0, zod_1.object)({
+    params: (0, zod_1.object)({
+        id: (0, zod_1.string)()
+    })
 });
 //# sourceMappingURL=agent.schema.js.map

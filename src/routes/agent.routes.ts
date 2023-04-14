@@ -1,7 +1,8 @@
 import express from 'express';
 import {
     getMeHandler,
-    getAgentsHandler
+    getAgentsHandler,
+    getAgentHandler
 } from '../controllers/agent.controller';
 import { deserializeUser } from '../middleware/deserializeUser';
 import { requireUser } from '../middleware/requireUser';
@@ -13,9 +14,8 @@ const router = express.Router();
 
 router.get('/', getAgentsHandler);
 
+router.get('/:id', getAgentHandler);
+
 router.get('/me', getMeHandler);
-
-
-// router.get('/:id', getAgentHandler);
 
 export default router;

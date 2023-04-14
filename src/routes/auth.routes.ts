@@ -24,12 +24,7 @@ const router = express.Router();
 let base ='/api/agent'
 
 router.post('/register', validate(registerAgentSchema), registerAgentHandler);
-// router.post('/register', (res, req) => {
-//   return response.json({msg: "register route working"})
-// });
-
 router.post('/login', validate(loginAgentSchema), loginAgentHandler);
-
 router.get('/refresh', refreshAccessTokenHandler);
 
 router.get(
