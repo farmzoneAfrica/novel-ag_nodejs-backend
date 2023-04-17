@@ -9,15 +9,17 @@ const appError_1 = __importDefault(require("../utils/appError"));
 const prismaClient_1 = __importDefault(require("../utils/prismaClient"));
 const createWarehouseHandler = async (req, res, next) => {
     try {
+        const agentId = req.user.sub;
         const warehouse = await (0, warehouse_service_1.createWarehouse)({
             name: req.body.name,
             address: req.body.address,
             remarks: req.body.remarks,
-            agent: {
-                create: undefined,
-                connectOrCreate: undefined,
-                connect: undefined
-            }
+            agentId: agentId
+        });
+        console.log(30, warehouse);
+        return res.status(201).json({
+            status: "Sucess",
+            warehouse
         });
     }
     catch (err) {

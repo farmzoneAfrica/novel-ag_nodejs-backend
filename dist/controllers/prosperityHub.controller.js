@@ -9,19 +9,21 @@ const appError_1 = __importDefault(require("../utils/appError"));
 const prismaClient_1 = __importDefault(require("../utils/prismaClient"));
 const createProsperityHubHandler = async (req, res, next) => {
     try {
-        const warehouse = await (0, prosperityHub_service_1.createProsperityHub)({
+        const agentId = req.user.sub;
+        const prosperityHub = await (0, prosperityHub_service_1.createProsperityHub)({
             name: req.body.name,
             address: req.body.address,
             remarks: req.body.remarks,
-            agent: {
-                create: undefined,
-                connectOrCreate: undefined,
-                connect: undefined
-            }
+            agentId: agentId
+        });
+        console.log(prosperityHub);
+        return res.status(201).json({
+            status: "success",
+            prosperityHub
         });
     }
     catch (err) {
-        console.log(91, "email verification fail", err);
+        console.log(37, err);
         next(err);
     }
 };

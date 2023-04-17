@@ -9,22 +9,25 @@ import {
   
 } from '../controllers/prosperityHub.controller';
 
-import { deserializeUser } from '../middleware/deserializeUser';
-import { requireUser } from '../middleware/requireUser';
-import { validate } from '../middleware/validate';
 import {
   createProsperityHubSchema,
   updateProsperityHubSchema,
 } from '../schemas/prosperityHub.schema';
+import { validate } from '../middleware/validate';
 
-const router = express.Router();
+import { deserializeUser } from '../middleware/deserializeUser';
+import { requireUser } from '../middleware/requireUser';
 
-let base ='/api/prosperityHub'
+const prosperityHubrouter = express.Router();
 
-router.post('/create', validate(createProsperityHubSchema), createProsperityHubHandler);
-router.patch('/update', validate(updateProsperityHubSchema), updateProsperityHubHandler);
-router.get('/', viewProsperityHubsHandler);
-router.get('/:id', viewProsperityHubHandler);
-router.get('/delete', deleteProsperityHubHandler);
+// the base variable is for purposes of swagger compilation, 
+// it should always be an empty string but api/agent when auto compiling swagger
+const base = ""
 
-export default router;
+prosperityHubrouter.post(base+'/create', deserializeUser, requireUser, validate(createProsperityHubSchema), createProsperityHubHandler);
+prosperityHubrouter.patch(base+'/update', deserializeUser, validate(updateProsperityHubSchema), updateProsperityHubHandler);
+prosperityHubrouter.get(base+'/', deserializeUser, viewProsperityHubsHandler);
+prosperityHubrouter.get(base+'/:id', deserializeUser, viewProsperityHubHandler);
+prosperityHubrouter.get(base+'/delete', deserializeUser, deleteProsperityHubHandler);
+
+export default prosperityHubrouter;

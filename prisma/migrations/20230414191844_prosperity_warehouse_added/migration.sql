@@ -1,25 +1,5 @@
-/*
-  Warnings:
-
-  - You are about to drop the `Agent` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `ProsperityHub` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `Warehouse` table. If the table is not empty, all the data it contains will be lost.
-
-*/
--- DropForeignKey
-ALTER TABLE "ProsperityHub" DROP CONSTRAINT "ProsperityHub_agentId_fkey";
-
--- DropForeignKey
-ALTER TABLE "Warehouse" DROP CONSTRAINT "Warehouse_agentId_fkey";
-
--- DropTable
-DROP TABLE "Agent";
-
--- DropTable
-DROP TABLE "ProsperityHub";
-
--- DropTable
-DROP TABLE "Warehouse";
+-- CreateEnum
+CREATE TYPE "RoleEnumType" AS ENUM ('AGENT', 'ADMIN');
 
 -- CreateTable
 CREATE TABLE "agents" (
@@ -44,7 +24,7 @@ CREATE TABLE "agents" (
 );
 
 -- CreateTable
-CREATE TABLE "prosperity-hubs" (
+CREATE TABLE "prosperityHubs" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "address" TEXT,
@@ -53,7 +33,7 @@ CREATE TABLE "prosperity-hubs" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    CONSTRAINT "prosperity-hubs_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "prosperityHubs_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -85,7 +65,7 @@ CREATE INDEX "agents_email_verificationCode_passwordResetToken_idx" ON "agents"(
 CREATE UNIQUE INDEX "agents_email_verificationCode_passwordResetToken_key" ON "agents"("email", "verificationCode", "passwordResetToken");
 
 -- AddForeignKey
-ALTER TABLE "prosperity-hubs" ADD CONSTRAINT "prosperity-hubs_agentId_fkey" FOREIGN KEY ("agentId") REFERENCES "agents"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "prosperityHubs" ADD CONSTRAINT "prosperityHubs_agentId_fkey" FOREIGN KEY ("agentId") REFERENCES "agents"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "warehouses" ADD CONSTRAINT "warehouses_agentId_fkey" FOREIGN KEY ("agentId") REFERENCES "agents"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

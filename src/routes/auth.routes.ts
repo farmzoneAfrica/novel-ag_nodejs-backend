@@ -20,31 +20,18 @@ import {
   verifyEmailSchema,
 } from '../schemas/agent.schema';
 
-const router = express.Router();
-let base ='/api/agent'
+const authRouter = express.Router();
 
-router.post('/register', validate(registerAgentSchema), registerAgentHandler);
-router.post('/login', validate(loginAgentSchema), loginAgentHandler);
-router.get('/refresh', refreshAccessTokenHandler);
+// the base variable is for purposes of swagger compilation, 
+// it should always be an empty string but api/agent when auto compiling swagger
+const base = ""
 
-router.get(
-  '/verifyemail/:verificationCode',
-  validate(verifyEmailSchema),
-  verifyEmailHandler
-);
+authRouter.post(base+'/register', validate(registerAgentSchema), registerAgentHandler);
+authRouter.post(base+'/login', validate(loginAgentSchema), loginAgentHandler);
+authRouter.get(base+'/refresh', refreshAccessTokenHandler);
+authRouter.get( base+'/verifyemail/:verificationCode', validate(verifyEmailSchema), verifyEmailHandler );
+authRouter.get( base+'/logout', deserializeUser, requireUser, logoutAgentHandler );
+authRouter.post( base+'/forgotpassword',validate(forgotPasswordSchema), forgotPasswordHandler );
+authRouter.patch( base+'/resetpassword/:resetToken', validate(resetPasswordSchema), resetPasswordHandler );
 
-router.get('/logout', deserializeUser, requireUser, logoutAgentHandler);
-
-router.post(
-  '/forgotpassword',
-  validate(forgotPasswordSchema),
-  forgotPasswordHandler
-);
-
-router.patch(
-  '/resetpassword/:resetToken',
-  validate(resetPasswordSchema),
-  resetPasswordHandler
-);
-
-export default router;
+export default authRouter;

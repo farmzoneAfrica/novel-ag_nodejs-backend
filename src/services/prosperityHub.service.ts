@@ -1,10 +1,10 @@
 import { PrismaClient, Prisma, Agent, ProsperityHub } from '@prisma/client';
-// import config from 'config';
-// import redisClient from '../utils/connectRedis';
+import config from 'config';
+import redisClient from '../utils/connectRedis';
 
 const prisma = new PrismaClient();
 
-export const createProsperityHub = async (input: Prisma.ProsperityHubCreateInput) => {  
+export const createProsperityHub = async (input: Prisma.ProsperityHubCreateInput | any) => {  
   return (await prisma.prosperityHub.create({
     data: input,
   })) as ProsperityHub;

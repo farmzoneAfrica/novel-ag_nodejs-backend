@@ -15,22 +15,23 @@ import {
 import prisma from '../utils/prismaClient';
 
 export const createWarehouseHandler = async (
-  req: Request<{}, {}, CreateWarehouseInput>,
+  req: Request<{}, {}, CreateWarehouseInput> | any,
   res: Response,
   next: NextFunction
 ) => {
   try {
+    const agentId = req.user.sub
     const warehouse = await createWarehouse({
       name: req.body.name,
       address: req.body.address,
       remarks: req.body.remarks,
-      agent: {
-        create: undefined,
-        connectOrCreate: undefined,
-        connect: undefined
-      }
+      agentId: agentId
     });
- 
+    console.log(30, warehouse)
+    return res.status(201).json({
+      status: "Sucess",
+      warehouse
+    })
   } catch (err: any) { 
     console.log(91, "email verification fail", err)   
     next(err);
