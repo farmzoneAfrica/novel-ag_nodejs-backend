@@ -42,7 +42,6 @@ exports.getAgentsHandler = getAgentsHandler;
 const getAgentHandler = async (req, res, next) => {
     try {
         const { id } = req.params;
-        console.log(id);
         const agent = await prismaClient_1.default.agent.findUnique({
             where: { id },
             select: {

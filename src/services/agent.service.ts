@@ -22,7 +22,7 @@ export const createAgent = async (input: Prisma.AgentCreateInput) => {
 
 export const findAll = async () => {
   return await prisma.agent.findMany();
-};
+}
 
 export const findAgent = async (
   where: Partial<Prisma.AgentWhereInput>,

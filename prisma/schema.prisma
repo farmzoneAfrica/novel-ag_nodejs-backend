@@ -51,7 +51,7 @@ model ProsperityHub {
   name     String
   address   String?
   remarks   String?
-  agent Agent    @relation(fields: [agentId], references: [id]) 
+  agent   Agent   @relation(fields: [agentId], onDelete: Cascade, references: [id])
   agentId String
 
   createdAt     DateTime @default(now())
@@ -63,7 +63,7 @@ model Warehouse {
   name     String
   address     String
   remarks     String?
-  agent Agent    @relation(fields: [agentId], references: [id]) 
+  agent   Agent   @relation(fields: [agentId], onDelete: Cascade, references: [id])
   agentId String
 
   createdAt     DateTime @default(now())

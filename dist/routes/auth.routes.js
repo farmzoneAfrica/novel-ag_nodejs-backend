@@ -10,14 +10,16 @@ const deserializeUser_1 = require("../middleware/deserializeUser");
 const requireUser_1 = require("../middleware/requireUser");
 const validate_1 = require("../middleware/validate");
 const agent_schema_1 = require("../schemas/agent.schema");
-const router = express_1.default.Router();
-let base = '/api/agent';
-router.post('/register', (0, validate_1.validate)(agent_schema_1.registerAgentSchema), auth_controller_1.registerAgentHandler);
-router.post('/login', (0, validate_1.validate)(agent_schema_1.loginAgentSchema), auth_controller_1.loginAgentHandler);
-router.get('/refresh', auth_controller_1.refreshAccessTokenHandler);
-router.get('/verifyemail/:verificationCode', (0, validate_1.validate)(agent_schema_1.verifyEmailSchema), auth_controller_1.verifyEmailHandler);
-router.get('/logout', deserializeUser_1.deserializeUser, requireUser_1.requireUser, auth_controller_1.logoutAgentHandler);
-router.post('/forgotpassword', (0, validate_1.validate)(agent_schema_1.forgotPasswordSchema), auth_controller_1.forgotPasswordHandler);
-router.patch('/resetpassword/:resetToken', (0, validate_1.validate)(agent_schema_1.resetPasswordSchema), auth_controller_1.resetPasswordHandler);
-exports.default = router;
+const authRouter = express_1.default.Router();
+// the base variable is for purposes of swagger compilation, 
+// it should always be an empty string but api/agent when auto compiling swagger
+const base = "";
+authRouter.post(base + '/register', (0, validate_1.validate)(agent_schema_1.registerAgentSchema), auth_controller_1.registerAgentHandler);
+authRouter.post(base + '/login', (0, validate_1.validate)(agent_schema_1.loginAgentSchema), auth_controller_1.loginAgentHandler);
+authRouter.get(base + '/refresh', auth_controller_1.refreshAccessTokenHandler);
+authRouter.get(base + '/verifyemail/:verificationCode', (0, validate_1.validate)(agent_schema_1.verifyEmailSchema), auth_controller_1.verifyEmailHandler);
+authRouter.get(base + '/logout', deserializeUser_1.deserializeUser, requireUser_1.requireUser, auth_controller_1.logoutAgentHandler);
+authRouter.post(base + '/forgotpassword', (0, validate_1.validate)(agent_schema_1.forgotPasswordSchema), auth_controller_1.forgotPasswordHandler);
+authRouter.patch(base + '/resetpassword/:resetToken', (0, validate_1.validate)(agent_schema_1.resetPasswordSchema), auth_controller_1.resetPasswordHandler);
+exports.default = authRouter;
 //# sourceMappingURL=auth.routes.js.map

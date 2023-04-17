@@ -25,9 +25,11 @@
 - ORM - [Prisma](http://prisma.io/)
 
 
-## IMPORTANT COMMANDS
+## PRISMA COMMANDS
 - Run `yarn dev` to start server on `localhost 5000`
 - Run `yarn compile` to compile typescript
+- Run `npx prisma` to initiate prisma
+- Run `yarn i --save-dev prisma@dev` and  `npm i @prisma/client@dev` to update prisma client versions.
 - Run `npx prisma migrate dev --name init` after updating prisma model 
 - Run ` emailengine --dbs.redis="redis://127.0.0.1:6379/0"` to start email template engine. 
 

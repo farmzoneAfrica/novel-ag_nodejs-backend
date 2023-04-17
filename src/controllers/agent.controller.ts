@@ -55,8 +55,6 @@ export const getAgentHandler = async (
 ) => {
   try {
     const { id } = req.params;
-    console.log(id);
-    
     const agent = await prisma.agent.findUnique({
       where: { id },
       select: {
@@ -67,7 +65,7 @@ export const getAgentHandler = async (
         prosperityHub: true,
         warhouse: true
       }
-})
+  })
      if (!agent) {
       return next(new AppError(401, 'Agent does not exist'));
     }

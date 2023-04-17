@@ -4,7 +4,7 @@ import redisClient from '../utils/connectRedis';
 
 const prisma = new PrismaClient();
 
-export const createWarehouse = async (input: Prisma.WarehouseCreateInput) => {  
+export const createWarehouse = async (input: Prisma.WarehouseCreateInput | any) => {  
   return (await prisma.warehouse.create({
     data: input,
   })) as Warehouse;

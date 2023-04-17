@@ -15,26 +15,29 @@ import {
   UpdateProsperityHubInput
 } from "../schemas/prosperityHub.schema"
 import prisma from '../utils/prismaClient';
+import agentRouter from '../routes/agent.routes';
+import { userInfo } from 'os';
 
 export const createProsperityHubHandler = async (
-  req: Request<{}, {}, CreateProsperityHubInput>,
+  req: Request<{}, {}, CreateProsperityHubInput> | any,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const warehouse = await createProsperityHub({
+    const agentId = req.user.sub
+    const prosperityHub = await createProsperityHub({
       name: req.body.name,
       address: req.body.address,
       remarks: req.body.remarks,
-      agent: {
-        create: undefined,
-        connectOrCreate: undefined,
-        connect: undefined
-      }
+      agentId: agentId
     });
- 
+ console.log(prosperityHub);
+    return res.status(201).json({
+      status: "success",
+      prosperityHub
+    })
   } catch (err: any) { 
-    console.log(91, "email verification fail", err)   
+    console.log(37, err)   
     next(err);
   }
 };

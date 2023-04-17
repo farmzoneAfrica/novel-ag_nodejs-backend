@@ -7,15 +7,14 @@ import {
 import { deserializeUser } from '../middleware/deserializeUser';
 import { requireUser } from '../middleware/requireUser';
 
-const router = express.Router();
+const agentRouter = express.Router();
 
+// agentRouter.use(deserializeUser, requireUser);
+// the base variable is for purposes of swagger compilation, 
+// it should always be an empty string but api/agent when auto compiling swagger
+const base = ""
+agentRouter.get('/', getAgentsHandler);
+agentRouter.get(base+'/:id', deserializeUser, requireUser, getAgentHandler);
+agentRouter.get('/me', deserializeUser, getMeHandler);
 
-// router.use(deserializeUser, requireUser);
-
-router.get('/', getAgentsHandler);
-
-router.get('/:id', getAgentHandler);
-
-router.get('/me', getMeHandler);
-
-export default router;
+export default agentRouter;
