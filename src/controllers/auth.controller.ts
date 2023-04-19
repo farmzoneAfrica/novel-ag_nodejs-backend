@@ -69,8 +69,11 @@ export const registerAgentHandler = async (
         password: hashedPassword,
         verificationCode,
     });
+    // const baseUrlLocal = process.env.BASE_URL_LOCAL;
+    // const baseUrlHeroku = process.env.BASE_URL_HEROKU;
+    const baseUrlRender = process.env.BASE_URL_RENDER;
 
-    const redirectUrl = `http://localhost:3000/api/auth/verifyemail/${verifyCode}`;
+    const redirectUrl = `${baseUrlRender}/api/auth/verifyemail/${verifyCode}`;
     try {
       await new Email(agent, redirectUrl).sendVerificationCode();      
       await updateAgent({ id: agent.id }, { verificationCode });

@@ -8,3 +8,27 @@ Hi I'm text
 - agent crud
 - warehouse crud
 - prosperityHub crud
+
+npm WARN lifecycle The node binary used for scripts is /home/novellmr/nodevenv/v1/10/bin/node but npm is using /opt/alt/alt-nodejs10/root/usr/bin/node itself. Use the `--scripts-prepend-node-path` option to include the path for the node binary npm was executed with.┌─┐│   …│└┘npm WARN notsup Unsupported engine for prisma@4.13.0: wanted: {"node":">=14.17"} (current: {"node":"10.24.1","npm":"6.14.12"})npm WARN notsup Not compatible with your version of node/npm: prisma@4.13.0npm WARN optional SKIPPING OPTIONAL DEPENDENCY: fsevents@~2.3.2 (node_modules/chokidar/node_modules/fsevents):npm WARN notsup SKIPPING OPTIONAL DEPENDENCY: Unsupported platform for fsevents@2.3.2: wanted {"os":"darwin","arch":"any"} (current: {"os":"linux","arch":"x64"})npm WARN eslint-config-esnext@4.1.0 requires a peer of eslint@^6.0.0 but none is installed. You must install peer dependencies yourself.npm WARN eslint-config-node@4.1.0 requires a peer of eslint@^6.0.0 but none is installed. You must install peer dependencies yourself.npm WARN novel-ag-backend_node@1.0.0 No repository field.npm ERR! code ELIFECYCLEnpm ERR! errno 1npm ERR! prisma@4.13.0 preinstall: `node scripts/preinstall-entry.js`npm ERR! Exit status 1npm ERR! npm ERR! Failed at the prisma@4.13.0 preinstall script.npm ERR! This is probably not a problem with npm. There is likely additional logging output above.npm ERR! A complete log of this run can be found in:npm ERR!     /home/novellmr/.npm/_logs/2023-04-18T20_20_30_245Z-debug.log 
+
+
+
+/home/novellmr/nodevenv/v1/10/bin/node
+/opt/alt/alt-nodejs10/root/usr/bin/node
+
+- fix memory bug for prisma installation
+
+Server IP:	198.54.120.117
+Username:	nawinqej
+SSH port:	21098
+
+user - nawinqej
+ip address - 198.54.120.117
+
+ssh nawinqej@198.54.120.117
+
+ssh [username]@[ip-address] -p 
+
+ssh -p 21098 nawinqej@198.54.120.117
+
+root@198.54.120.117 password:nqLG31hKYaSM
