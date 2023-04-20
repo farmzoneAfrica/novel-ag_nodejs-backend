@@ -8,16 +8,16 @@ const express_1 = __importDefault(require("express"));
 const prosperityHub_controller_1 = require("../controllers/prosperityHub.controller");
 const prosperityHub_schema_1 = require("../schemas/prosperityHub.schema");
 const validate_1 = require("../middleware/validate");
-const deserializeUser_1 = require("../middleware/deserializeUser");
+const auth_1 = require("../middleware/auth");
 const requireUser_1 = require("../middleware/requireUser");
 const prosperityHubrouter = express_1.default.Router();
 // the base variable is for purposes of swagger compilation, 
 // it should always be an empty string but api/agent when auto compiling swagger
 const base = "";
-prosperityHubrouter.post(base + '/create', deserializeUser_1.deserializeUser, requireUser_1.requireUser, (0, validate_1.validate)(prosperityHub_schema_1.createProsperityHubSchema), prosperityHub_controller_1.createProsperityHubHandler);
-prosperityHubrouter.patch(base + '/update', deserializeUser_1.deserializeUser, (0, validate_1.validate)(prosperityHub_schema_1.updateProsperityHubSchema), prosperityHub_controller_1.updateProsperityHubHandler);
-prosperityHubrouter.get(base + '/', deserializeUser_1.deserializeUser, prosperityHub_controller_1.viewProsperityHubsHandler);
-prosperityHubrouter.get(base + '/:id', deserializeUser_1.deserializeUser, prosperityHub_controller_1.viewProsperityHubHandler);
-prosperityHubrouter.get(base + '/delete', deserializeUser_1.deserializeUser, prosperityHub_controller_1.deleteProsperityHubHandler);
+prosperityHubrouter.post(base + '/create', auth_1.auth, requireUser_1.requireUser, (0, validate_1.validate)(prosperityHub_schema_1.createProsperityHubSchema), prosperityHub_controller_1.createProsperityHubHandler);
+prosperityHubrouter.patch(base + '/update', auth_1.auth, (0, validate_1.validate)(prosperityHub_schema_1.updateProsperityHubSchema), prosperityHub_controller_1.updateProsperityHubHandler);
+prosperityHubrouter.get(base + '/', auth_1.auth, prosperityHub_controller_1.viewProsperityHubsHandler);
+prosperityHubrouter.get(base + '/:id', auth_1.auth, prosperityHub_controller_1.viewProsperityHubHandler);
+prosperityHubrouter.get(base + '/delete', auth_1.auth, auth_1.adminAuth, prosperityHub_controller_1.deleteProsperityHubHandler);
 exports.default = prosperityHubrouter;
 //# sourceMappingURL=prosperityHub.routes.js.map

@@ -8,7 +8,6 @@ const appError_1 = __importDefault(require("../utils/appError"));
 const requireUser = (req, res, next) => {
     try {
         const user = res.locals.user;
-        console.log(user);
         if (!user) {
             return next(new appError_1.default(400, `Session has expired or user doesn't exist`));
         }

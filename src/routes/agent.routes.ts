@@ -2,9 +2,13 @@ import express from 'express';
 import {
     getMeHandler,
     getAgentsHandler,
-    getAgentHandler
+    getAgentHandler,
+    getAgentsByPageHandler
 } from '../controllers/agent.controller';
-import { deserializeUser } from '../middleware/deserializeUser';
+import {
+    auth,
+    adminAuth
+} from '../middleware/auth';
 import { requireUser } from '../middleware/requireUser';
 
 const agentRouter = express.Router();
@@ -13,8 +17,9 @@ const agentRouter = express.Router();
 // the base variable is for purposes of swagger compilation, 
 // it should always be an empty string but api/agent when auto compiling swagger
 const base = ""
-agentRouter.get('/', getAgentsHandler);
-agentRouter.get(base+'/:id', deserializeUser, requireUser, getAgentHandler);
-agentRouter.get('/me', deserializeUser, getMeHandler);
+agentRouter.get('/', auth, getAgentsHandler);
+agentRouter.get('/:pageNo', getAgentsByPageHandler);
+agentRouter.get(base+'/:id', auth, requireUser, adminAuth, getAgentHandler);
+agentRouter.get('/me', auth, getMeHandler);
 
 export default agentRouter;

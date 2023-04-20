@@ -13,7 +13,8 @@ export const registerAgentSchema = object({
     lastName: string().optional(),
     phone: string({
       required_error: 'phone number is required',
-    }),
+    }).min(7, 'Number must be more than 6 characters')
+      .max(15, 'Password must be less than 15 characters'),
     address: string().optional(),
     avatar: string().optional(),
     prosperityHub: string().optional(),

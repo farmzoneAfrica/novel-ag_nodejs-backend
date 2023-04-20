@@ -46,16 +46,17 @@ const registerAgentHandler = async (req, res, next) => {
             password: hashedPassword,
             verificationCode,
         });
-        // const baseUrlLocal = process.env.BASE_URL_LOCAL;
-        // const baseUrlHeroku = process.env.BASE_URL_HEROKU;
-        const baseUrlRender = process.env.BASE_URL_RENDER;
-        const redirectUrl = `${baseUrlRender}/api/auth/verifyemail/${verifyCode}`;
+        const baseUrl = process.env.BASE_URL;
+        // const baseUrl = process.env.BASE_URL_HEROKU;
+        // const baseUrl = process.env.BASE_URL_RENDER;
+        const redirectUrl = `${baseUrl}/api/auth/verifyemail/${verifyCode}`;
         try {
             await new email_1.default(agent, redirectUrl).sendVerificationCode();
             await (0, agent_service_1.updateAgent)({ id: agent.id }, { verificationCode });
             res.status(201).json({
                 status: 'success',
                 message: 'An email with a verification code has been sent to your email',
+                agent
             });
         }
         catch (error) {

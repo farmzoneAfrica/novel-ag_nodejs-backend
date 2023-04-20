@@ -44,3 +44,4 @@ forgot password GET
 
 ## KNOWLEGE BASE
 - [Basic Structure](https://codevoweb.com/crud-api-node-prisma-postgresql-reset-password/#:~:text=To%20reset%20the%20password%2C%20the,token%20to%20the%20user's%20email.)
+- [Postgre course](https://www.youtube.com/watch?v=qw--VYLpxG4&t=14295s)

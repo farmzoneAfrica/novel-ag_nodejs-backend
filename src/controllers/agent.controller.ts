@@ -1,6 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
 import {
   findAll,
+  findAllByPages,
+  findById,
   findUniqueAgent
 } from '../services/agent.service'
 import AppError from '../utils/appError';
@@ -47,6 +49,26 @@ export const getAgentsHandler = async (
   }
 };
 
+// get all agents by page
+export const getAgentsByPageHandler = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { pageNo } = req.params as any;
+    const agents = await findAllByPages(pageNo * 10, 10)
+    res.status(200).status(200).json({
+      status: 'success',
+      data: {
+        agents,
+      },
+    });
+  } catch (err: any) {
+    next(err);
+  }
+};
+
 // get single agent
 export const getAgentHandler = async (
   req: Response | any,
@@ -55,6 +77,8 @@ export const getAgentHandler = async (
 ) => {
   try {
     const { id } = req.params;
+    // console.log(id);
+
     const agent = await prisma.agent.findUnique({
       where: { id },
       select: {
@@ -62,14 +86,13 @@ export const getAgentHandler = async (
         firstName: true,
         lastName: true,
         avatar: true,
-        prosperityHub: true,
-        warhouse: true
+      
       }
-  })
+})
      if (!agent) {
       return next(new AppError(401, 'Agent does not exist'));
     }
-    return res.status(200).status(200).json({
+    return res.status(200).json({
       status: 'success',
       data: {
         agent,
@@ -80,6 +103,3 @@ export const getAgentHandler = async (
     next(err);
   }
 };
-
-
-

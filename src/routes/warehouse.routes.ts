@@ -13,7 +13,10 @@ import {
   updateWarehouseSchema,
 } from '../schemas/warehouse.schema';
 
-import { deserializeUser } from '../middleware/deserializeUser';
+import {
+  auth,
+  adminAuth
+} from '../middleware/auth';
 import { requireUser } from '../middleware/requireUser';
 import { validate } from '../middleware/validate';
 
@@ -24,10 +27,10 @@ const warehouseRouter = express.Router();
 // it should always be an empty string but api/agent when auto compiling swagger
 const base = ""
 
-warehouseRouter.post(base+'/create', deserializeUser, requireUser, validate(createWarehouseSchema), createWarehouseHandler);
-warehouseRouter.patch(base+'/update', deserializeUser, requireUser, validate(updateWarehouseSchema), updateWarehouseHandler);
-warehouseRouter.get(base+'/', deserializeUser, viewWarehousesHandler);
-warehouseRouter.get(base+'/:id', deserializeUser, viewWarehouseHandler);
-warehouseRouter.get(base+'/delete', deserializeUser, deleteWarehouseHandler);
+warehouseRouter.post(base+'/create', auth, requireUser, validate(createWarehouseSchema), createWarehouseHandler);
+warehouseRouter.patch(base+'/update', auth, requireUser, validate(updateWarehouseSchema), updateWarehouseHandler);
+warehouseRouter.get(base+'/', auth, viewWarehousesHandler);
+warehouseRouter.get(base+'/:id', auth, viewWarehouseHandler);
+warehouseRouter.get(base+'/delete', auth, adminAuth, deleteWarehouseHandler);
 
 export default warehouseRouter;

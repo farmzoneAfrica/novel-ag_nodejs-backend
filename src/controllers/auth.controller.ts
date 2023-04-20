@@ -69,11 +69,12 @@ export const registerAgentHandler = async (
         password: hashedPassword,
         verificationCode,
     });
-    // const baseUrlLocal = process.env.BASE_URL_LOCAL;
-    // const baseUrlHeroku = process.env.BASE_URL_HEROKU;
-    const baseUrlRender = process.env.BASE_URL_RENDER;
 
-    const redirectUrl = `${baseUrlRender}/api/auth/verifyemail/${verifyCode}`;
+    const baseUrl = process.env.BASE_URL;
+    // const baseUrl = process.env.BASE_URL_HEROKU;
+    // const baseUrl = process.env.BASE_URL_RENDER;
+
+    const redirectUrl = `${baseUrl}/api/auth/verifyemail/${verifyCode}`;
     try {
       await new Email(agent, redirectUrl).sendVerificationCode();      
       await updateAgent({ id: agent.id }, { verificationCode });
@@ -81,6 +82,7 @@ export const registerAgentHandler = async (
         status: 'success',
         message:
           'An email with a verification code has been sent to your email',
+        agent
       });
     } catch (error) {
       await updateAgent({ id: agent.id }, { verificationCode: null });
