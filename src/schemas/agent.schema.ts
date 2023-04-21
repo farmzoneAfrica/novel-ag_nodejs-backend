@@ -13,7 +13,8 @@ export const registerAgentSchema = object({
     lastName: string().optional(),
     phone: string({
       required_error: 'phone number is required',
-    }),
+    }).min(7, 'Number must be more than 6 characters')
+      .max(15, 'Password must be less than 15 characters'),
     address: string().optional(),
     avatar: string().optional(),
     prosperityHub: string().optional(),
@@ -57,11 +58,10 @@ export const updateAgentSchema = object({
   body: object({
     firstName: string({}),
     lastName: string({}),
-    email: string({}).email('Invalid email address'),
     password: string({})
       .min(8, 'Password must be more than 8 characters')
-      .max(32, 'Password must be less than 32 characters'),
-    confirmPassword: string({}),
+      .max(32, 'Password must be less than 32 characters').optional(),
+    confirmPassword: string({}).optional(),
     role: z.optional(z.nativeEnum(RoleEnumType)),
   })
     .partial()
@@ -109,7 +109,7 @@ export type RegisterAgentInput = Omit<
 
 export type LoginAgentInput = TypeOf<typeof loginAgentSchema>['body'];
 export type VerifyEmailInput = TypeOf<typeof verifyEmailSchema>['params'];
-export type UpdateUserInput = TypeOf<typeof updateAgentSchema>['body'];
+export type UpdateAgentInput = TypeOf<typeof updateAgentSchema>['body'];
 export type ForgotPasswordInput = TypeOf<typeof forgotPasswordSchema>['body'];
 export type ResetPasswordInput = TypeOf<typeof resetPasswordSchema>;
 export type GetSingleAgentInput = TypeOf<typeof getSingleAgentSchema>['params'];

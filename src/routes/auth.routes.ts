@@ -9,7 +9,7 @@ import {
   resetPasswordHandler,
   verifyEmailHandler,
 } from '../controllers/auth.controller';
-import { deserializeUser } from '../middleware/deserializeUser';
+import { auth, adminAuth } from '../middleware/auth';
 import { requireUser } from '../middleware/requireUser';
 import { validate } from '../middleware/validate';
 import {
@@ -17,7 +17,7 @@ import {
   loginAgentSchema,
   registerAgentSchema,
   resetPasswordSchema,
-  verifyEmailSchema,
+  verifyEmailSchema
 } from '../schemas/agent.schema';
 
 const authRouter = express.Router();
@@ -30,7 +30,7 @@ authRouter.post(base+'/register', validate(registerAgentSchema), registerAgentHa
 authRouter.post(base+'/login', validate(loginAgentSchema), loginAgentHandler);
 authRouter.get(base+'/refresh', refreshAccessTokenHandler);
 authRouter.get( base+'/verifyemail/:verificationCode', validate(verifyEmailSchema), verifyEmailHandler );
-authRouter.get( base+'/logout', deserializeUser, requireUser, logoutAgentHandler );
+authRouter.get( base+'/logout', auth, requireUser, logoutAgentHandler );
 authRouter.post( base+'/forgotpassword',validate(forgotPasswordSchema), forgotPasswordHandler );
 authRouter.patch( base+'/resetpassword/:resetToken', validate(resetPasswordSchema), resetPasswordHandler );
 

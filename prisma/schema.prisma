@@ -19,6 +19,8 @@ model Agent {
   lastName  String?
   address String ?
   avatar String ?
+  gender String ? @default("")
+  maritalStatus String ? @default("")
   verified Boolean? @default(false) 
 
   password String 

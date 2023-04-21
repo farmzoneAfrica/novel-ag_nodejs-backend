@@ -33,10 +33,16 @@
         }
       }
     },
-    "/me": {
+    "/api/agent/": {
       "get": {
         "description": "",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -44,7 +50,118 @@
         }
       }
     },
-    "/api/agent/register": {
+    "/api/agent/{pageNo}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "pageNo",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/agent/{id}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/me": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/agent/update/{id}": {
+      "patch": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "firstName": {
+                  "example": "any"
+                },
+                "lastName": {
+                  "example": "any"
+                },
+                "address": {
+                  "example": "any"
+                },
+                "phone": {
+                  "example": "any"
+                },
+                "avatar": {
+                  "example": "any"
+                },
+                "password": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/api/auth/register": {
       "post": {
         "description": "",
         "parameters": [
@@ -95,7 +212,7 @@
         }
       }
     },
-    "/api/agent/login": {
+    "/api/auth/login": {
       "post": {
         "description": "",
         "parameters": [
@@ -125,7 +242,7 @@
         }
       }
     },
-    "/api/agent/refresh": {
+    "/api/auth/refresh": {
       "get": {
         "description": "",
         "parameters": [],
@@ -136,7 +253,7 @@
         }
       }
     },
-    "/api/agent/verifyemail/{verificationCode}": {
+    "/api/auth/verifyemail/{verificationCode}": {
       "get": {
         "description": "",
         "parameters": [
@@ -160,7 +277,7 @@
         }
       }
     },
-    "/api/agent/logout": {
+    "/api/auth/logout": {
       "get": {
         "description": "",
         "parameters": [
@@ -177,7 +294,7 @@
         }
       }
     },
-    "/api/agent/forgotpassword": {
+    "/api/auth/forgotpassword": {
       "post": {
         "description": "",
         "parameters": [
@@ -210,7 +327,7 @@
         }
       }
     },
-    "/api/agent/resetpassword/{resetToken}": {
+    "/api/auth/resetpassword/{resetToken}": {
       "patch": {
         "description": "",
         "parameters": [
@@ -251,6 +368,11 @@
         "description": "",
         "parameters": [
           {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
             "name": "body",
             "in": "body",
             "schema": {
@@ -270,6 +392,9 @@
           }
         ],
         "responses": {
+          "201": {
+            "description": "Created"
+          },
           "400": {
             "description": "Bad Request"
           }
@@ -279,7 +404,13 @@
     "/api/prosperityHub/update": {
       "patch": {
         "description": "",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -293,7 +424,13 @@
     "/api/prosperityHub/": {
       "get": {
         "description": "",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -310,6 +447,11 @@
             "in": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
           }
         ],
         "responses": {
@@ -322,7 +464,13 @@
     "/api/prosperityHub/delete": {
       "get": {
         "description": "",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -537,6 +685,11 @@
         "description": "",
         "parameters": [
           {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
             "name": "body",
             "in": "body",
             "schema": {
@@ -556,6 +709,9 @@
           }
         ],
         "responses": {
+          "201": {
+            "description": "Created"
+          },
           "400": {
             "description": "Bad Request"
           }
@@ -565,7 +721,13 @@
     "/api/warehouse/update": {
       "patch": {
         "description": "",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -579,7 +741,13 @@
     "/api/warehouse/": {
       "get": {
         "description": "",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -596,6 +764,11 @@
             "in": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
           }
         ],
         "responses": {
@@ -608,7 +781,13 @@
     "/api/warehouse/delete": {
       "get": {
         "description": "",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"

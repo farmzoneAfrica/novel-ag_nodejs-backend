@@ -10,14 +10,11 @@ const morgan_1 = __importDefault(require("morgan"));
 const validateEnv_1 = __importDefault(require("./utils/validateEnv"));
 const client_1 = require("@prisma/client");
 const appError_1 = __importDefault(require("./utils/appError"));
-// import prisma from './utils/prismaClient';
 const http_errors_1 = __importDefault(require("http-errors"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
-// import logger from 'morgan';
 const cors_1 = __importDefault(require("cors"));
 const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
 const swagger_output_json_1 = __importDefault(require("./swagger-output.json"));
-// routers
 const agent_routes_1 = __importDefault(require("./routes/agent.routes"));
 const auth_routes_1 = __importDefault(require("./routes/auth.routes"));
 const prosperityHub_routes_1 = __importDefault(require("./routes/prosperityHub.routes"));

@@ -3,6 +3,7 @@ import { omit } from 'lodash';
 import config from 'config';
 import redisClient from '../utils/connectRedis';
 import { signJwt } from '../utils/jwt';
+import { number } from 'zod';
 
 export const excludedFields = [
   "password",
@@ -24,6 +25,16 @@ export const findAll = async () => {
   return await prisma.agent.findMany();
 }
 
+export const pagination = async (
+  skip: number, 
+  take: number
+) => {
+  return await prisma.agent.findMany({
+    skip,
+    take
+  });
+}
+
 export const findAgent = async (
   where: Partial<Prisma.AgentWhereInput>,
   select?: Prisma.AgentSelect
@@ -35,13 +46,11 @@ export const findAgent = async (
 };
 
 export const findById = async (
-  where: string | any,
-  select?: Prisma.AgentSelect
+  where: Prisma.AgentWhereUniqueInput,
 ) => {
-  await prisma.agent.findUnique({
-    where,
-    select
-  })
+  return (await prisma.agent.findUnique({
+    where
+  }))
 };
 
 export const findUniqueAgent = async (
@@ -77,4 +86,8 @@ export const signTokens = async (agent: Prisma.AgentCreateInput) => {
 console.log(74, "sign in token function");
   return { access_token, refresh_token };
 };
+
+export const deleteAgent = async (id: string) => {
+  return await prisma.agent.delete({where:{id}});
+}
 

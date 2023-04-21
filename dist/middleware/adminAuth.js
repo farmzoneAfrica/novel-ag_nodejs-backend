@@ -3,13 +3,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deserializeUser = void 0;
+exports.adminAuth = void 0;
 const lodash_1 = require("lodash");
 const agent_service_1 = require("../services/agent.service");
 const appError_1 = __importDefault(require("../utils/appError"));
 const connectRedis_1 = __importDefault(require("../utils/connectRedis"));
 const jwt_1 = require("../utils/jwt");
-const deserializeUser = async (req, res, next) => {
+const adminAuth = async (req, res, next) => {
     try {
         let access_token;
         if (req.headers.authorization &&
@@ -31,6 +31,9 @@ const deserializeUser = async (req, res, next) => {
             return next(new appError_1.default(401, `Invalid token or session has expired`));
         }
         const user = await (0, agent_service_1.findUniqueAgent)({ id: JSON.parse(session).id });
+        console.log(user);
+        if (user.role !== "ADMIN")
+            return next(new appError_1.default(401, "Fobbitten route, you are not an admin"));
         if (!user) {
             return next(new appError_1.default(401, `Invalid token or session has expired`));
         }
@@ -42,5 +45,5 @@ const deserializeUser = async (req, res, next) => {
         next(err);
     }
 };
-exports.deserializeUser = deserializeUser;
-//# sourceMappingURL=deserializeUser.js.map
+exports.adminAuth = adminAuth;
+//# sourceMappingURL=adminAuth.js.map

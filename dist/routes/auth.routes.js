@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // import express from 'express';
 const express_1 = __importDefault(require("express"));
 const auth_controller_1 = require("../controllers/auth.controller");
-const deserializeUser_1 = require("../middleware/deserializeUser");
+const auth_1 = require("../middleware/auth");
 const requireUser_1 = require("../middleware/requireUser");
 const validate_1 = require("../middleware/validate");
 const agent_schema_1 = require("../schemas/agent.schema");
@@ -18,7 +18,7 @@ authRouter.post(base + '/register', (0, validate_1.validate)(agent_schema_1.regi
 authRouter.post(base + '/login', (0, validate_1.validate)(agent_schema_1.loginAgentSchema), auth_controller_1.loginAgentHandler);
 authRouter.get(base + '/refresh', auth_controller_1.refreshAccessTokenHandler);
 authRouter.get(base + '/verifyemail/:verificationCode', (0, validate_1.validate)(agent_schema_1.verifyEmailSchema), auth_controller_1.verifyEmailHandler);
-authRouter.get(base + '/logout', deserializeUser_1.deserializeUser, requireUser_1.requireUser, auth_controller_1.logoutAgentHandler);
+authRouter.get(base + '/logout', auth_1.auth, requireUser_1.requireUser, auth_controller_1.logoutAgentHandler);
 authRouter.post(base + '/forgotpassword', (0, validate_1.validate)(agent_schema_1.forgotPasswordSchema), auth_controller_1.forgotPasswordHandler);
 authRouter.patch(base + '/resetpassword/:resetToken', (0, validate_1.validate)(agent_schema_1.resetPasswordSchema), auth_controller_1.resetPasswordHandler);
 exports.default = authRouter;

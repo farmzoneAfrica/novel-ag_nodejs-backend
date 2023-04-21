@@ -70,7 +70,9 @@ export const registerAgentHandler = async (
         verificationCode,
     });
 
-    const redirectUrl = `http://localhost:3000/api/auth/verifyemail/${verifyCode}`;
+    const baseUrl = process.env.BASE_URL;
+
+    const redirectUrl = `${baseUrl}/api/auth/verifyemail/${verifyCode}`;
     try {
       await new Email(agent, redirectUrl).sendVerificationCode();      
       await updateAgent({ id: agent.id }, { verificationCode });
@@ -78,6 +80,7 @@ export const registerAgentHandler = async (
         status: 'success',
         message:
           'An email with a verification code has been sent to your email',
+        agent
       });
     } catch (error) {
       await updateAgent({ id: agent.id }, { verificationCode: null });
@@ -122,7 +125,6 @@ export const loginAgentHandler = async (
         )
       );
     }
-
     if (!agent || !(await bcrypt.compare(password, agent.password))) {
       return next(new AppError(400, 'Invalid email or password'));
     }
@@ -303,7 +305,8 @@ export const forgotPasswordHandler = async (
     );
 
     try {
-      const url = `http://localhost:3000/resetpassword/${resetToken}`;
+      const baseUrl = process.env.BASE_URL;
+      const url = `${baseUrl}/resetpassword/${resetToken}`;
       await new Email(agent, url).sendPasswordResetToken();
 
       res.status(200).json({

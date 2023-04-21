@@ -15,7 +15,7 @@ import {
 } from '../schemas/prosperityHub.schema';
 import { validate } from '../middleware/validate';
 
-import { deserializeUser } from '../middleware/deserializeUser';
+import { auth, adminAuth } from '../middleware/auth';
 import { requireUser } from '../middleware/requireUser';
 
 const prosperityHubrouter = express.Router();
@@ -24,10 +24,10 @@ const prosperityHubrouter = express.Router();
 // it should always be an empty string but api/agent when auto compiling swagger
 const base = ""
 
-prosperityHubrouter.post(base+'/create', deserializeUser, requireUser, validate(createProsperityHubSchema), createProsperityHubHandler);
-prosperityHubrouter.patch(base+'/update', deserializeUser, validate(updateProsperityHubSchema), updateProsperityHubHandler);
-prosperityHubrouter.get(base+'/', deserializeUser, viewProsperityHubsHandler);
-prosperityHubrouter.get(base+'/:id', deserializeUser, viewProsperityHubHandler);
-prosperityHubrouter.get(base+'/delete', deserializeUser, deleteProsperityHubHandler);
+prosperityHubrouter.post(base+'/create', auth, requireUser, validate(createProsperityHubSchema), createProsperityHubHandler);
+prosperityHubrouter.patch(base+'/update', auth, validate(updateProsperityHubSchema), updateProsperityHubHandler);
+prosperityHubrouter.get(base+'/', auth, viewProsperityHubsHandler);
+prosperityHubrouter.get(base+'/:id', auth, viewProsperityHubHandler);
+prosperityHubrouter.get(base+'/delete', auth, adminAuth, deleteProsperityHubHandler);
 
 export default prosperityHubrouter;

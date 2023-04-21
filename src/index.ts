@@ -5,15 +5,14 @@ import morgan from 'morgan';
 import validateEnv from './utils/validateEnv';
 import { PrismaClient } from '@prisma/client';
 import AppError from './utils/appError';
-// import prisma from './utils/prismaClient';
+
 import createError from 'http-errors';
 import cookieParser from 'cookie-parser';
-// import logger from 'morgan';
+
 import cors from 'cors';
 import swaggerUi from 'swagger-ui-express';
 import swaggerFile from './swagger-output.json';
 
-// routers
 import agentRouter from "./routes/agent.routes";
 import authRouter from "./routes/auth.routes";
 import prosperityHubRouter from "./routes/prosperityHub.routes";

@@ -15,7 +15,8 @@ exports.registerAgentSchema = (0, zod_1.object)({
         lastName: (0, zod_1.string)().optional(),
         phone: (0, zod_1.string)({
             required_error: 'phone number is required',
-        }),
+        }).min(7, 'Number must be more than 6 characters')
+            .max(15, 'Password must be less than 15 characters'),
         address: (0, zod_1.string)().optional(),
         avatar: (0, zod_1.string)().optional(),
         prosperityHub: (0, zod_1.string)().optional(),
@@ -56,11 +57,10 @@ exports.updateAgentSchema = (0, zod_1.object)({
     body: (0, zod_1.object)({
         firstName: (0, zod_1.string)({}),
         lastName: (0, zod_1.string)({}),
-        email: (0, zod_1.string)({}).email('Invalid email address'),
         password: (0, zod_1.string)({})
             .min(8, 'Password must be more than 8 characters')
-            .max(32, 'Password must be less than 32 characters'),
-        confirmPassword: (0, zod_1.string)({}),
+            .max(32, 'Password must be less than 32 characters').optional(),
+        confirmPassword: (0, zod_1.string)({}).optional(),
         role: zod_1.z.optional(zod_1.z.nativeEnum(RoleEnumType)),
     })
         .partial()

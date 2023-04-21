@@ -46,13 +46,15 @@ const registerAgentHandler = async (req, res, next) => {
             password: hashedPassword,
             verificationCode,
         });
-        const redirectUrl = `http://localhost:3000/api/auth/verifyemail/${verifyCode}`;
+        const baseUrl = process.env.BASE_URL;
+        const redirectUrl = `${baseUrl}/api/auth/verifyemail/${verifyCode}`;
         try {
             await new email_1.default(agent, redirectUrl).sendVerificationCode();
             await (0, agent_service_1.updateAgent)({ id: agent.id }, { verificationCode });
             res.status(201).json({
                 status: 'success',
                 message: 'An email with a verification code has been sent to your email',
+                agent
             });
         }
         catch (error) {
@@ -223,7 +225,8 @@ const forgotPasswordHandler = async (req, res, next) => {
             passwordResetAt: new Date(Date.now() + 10 * 60 * 1000),
         }, { email: true });
         try {
-            const url = `http://localhost:3000/resetpassword/${resetToken}`;
+            const baseUrl = process.env.BASE_URL;
+            const url = `${baseUrl}/resetpassword/${resetToken}`;
             await new email_1.default(agent, url).sendPasswordResetToken();
             res.status(200).json({
                 status: 'success',
