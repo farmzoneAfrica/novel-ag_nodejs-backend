@@ -17,7 +17,7 @@ import {
   loginAgentSchema,
   registerAgentSchema,
   resetPasswordSchema,
-  verifyEmailSchema,
+  verifyEmailSchema
 } from '../schemas/agent.schema';
 
 const authRouter = express.Router();

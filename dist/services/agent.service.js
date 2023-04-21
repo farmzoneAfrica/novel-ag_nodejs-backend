@@ -41,11 +41,10 @@ const findAgent = async (where, select) => {
     }));
 };
 exports.findAgent = findAgent;
-const findById = async (where, select) => {
-    await prisma.agent.findUnique({
-        where,
-        select
-    });
+const findById = async (where) => {
+    return (await prisma.agent.findUnique({
+        where
+    }));
 };
 exports.findById = findById;
 const findUniqueAgent = async (where, select) => {

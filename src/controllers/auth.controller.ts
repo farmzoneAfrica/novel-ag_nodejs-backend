@@ -71,8 +71,6 @@ export const registerAgentHandler = async (
     });
 
     const baseUrl = process.env.BASE_URL;
-    // const baseUrl = process.env.BASE_URL_HEROKU;
-    // const baseUrl = process.env.BASE_URL_RENDER;
 
     const redirectUrl = `${baseUrl}/api/auth/verifyemail/${verifyCode}`;
     try {
@@ -127,7 +125,6 @@ export const loginAgentHandler = async (
         )
       );
     }
-
     if (!agent || !(await bcrypt.compare(password, agent.password))) {
       return next(new AppError(400, 'Invalid email or password'));
     }

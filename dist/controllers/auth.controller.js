@@ -47,8 +47,6 @@ const registerAgentHandler = async (req, res, next) => {
             verificationCode,
         });
         const baseUrl = process.env.BASE_URL;
-        // const baseUrl = process.env.BASE_URL_HEROKU;
-        // const baseUrl = process.env.BASE_URL_RENDER;
         const redirectUrl = `${baseUrl}/api/auth/verifyemail/${verifyCode}`;
         try {
             await new email_1.default(agent, redirectUrl).sendVerificationCode();

@@ -3,7 +3,8 @@ import {
   findAll,
   findAllByPages,
   findById,
-  findUniqueAgent
+  findUniqueAgent,
+  updateAgent
 } from '../services/agent.service'
 import AppError from '../utils/appError';
 import {
@@ -77,8 +78,7 @@ export const getAgentHandler = async (
 ) => {
   try {
     const { id } = req.params;
-    // console.log(id);
-
+    // prisma showing up bug for warehouse and prosperityHubs 
     const agent = await prisma.agent.findUnique({
       where: { id },
       select: {
@@ -88,7 +88,59 @@ export const getAgentHandler = async (
         avatar: true,
       
       }
-})
+    })
+     if (!agent) {
+      return next(new AppError(401, 'Agent does not exist'));
+    }
+    return res.status(200).json({
+      status: 'success',
+      data: {
+        agent,
+      },
+    });
+  } catch (err: any) {
+    console.log(76, err);
+    next(err);
+  }
+};
+
+
+// update agent
+export const updateAgentHandler = async (
+  req: Response | any,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { id } = req.params;
+
+    const findAgent = await findById({id: id});
+
+    console.log(findAgent);
+    if (!findAgent) 
+      return next(new AppError(401, 'Agent not found in database'));
+  
+    const body:Array<string> = (Object.keys(req.body));
+
+     const data = {
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        address: req.body.address,
+        phone: req.body.phone,
+        avatar: req.body.avatar,
+        password: req.body.password,
+     }
+    
+    const keys:Array<string> = Object.keys(data);
+    
+    if (keys.includes(body.toString()) === false){
+      return next(new AppError(401, 'Wrong input value'));
+    }
+
+    const agent = await updateAgent(
+      { id: id },
+      data,
+    )
      if (!agent) {
       return next(new AppError(401, 'Agent does not exist'));
     }

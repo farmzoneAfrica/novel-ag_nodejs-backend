@@ -46,17 +46,15 @@ export const findAgent = async (
 };
 
 export const findById = async (
-  where: string | any,
-  select?: Prisma.AgentSelect
+  where: Prisma.AgentWhereUniqueInput,
 ) => {
-  await prisma.agent.findUnique({
-    where,
-    select
-  })
+  return (await prisma.agent.findUnique({
+    where
+  }))
 };
 
 export const findUniqueAgent = async (
-  where: Prisma.AgentWhereUniqueInput | any,
+  where: Prisma.AgentWhereUniqueInput,
   select?: Prisma.AgentSelect
 ) => {
   return (await prisma.agent.findUnique({

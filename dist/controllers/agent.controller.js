@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAgentHandler = exports.getAgentsByPageHandler = exports.getAgentsHandler = exports.getMeHandler = void 0;
+exports.updateAgentHandler = exports.getAgentHandler = exports.getAgentsByPageHandler = exports.getAgentsHandler = exports.getMeHandler = void 0;
 const agent_service_1 = require("../services/agent.service");
 const appError_1 = __importDefault(require("../utils/appError"));
 const prismaClient_1 = __importDefault(require("../utils/prismaClient"));
@@ -59,7 +59,7 @@ exports.getAgentsByPageHandler = getAgentsByPageHandler;
 const getAgentHandler = async (req, res, next) => {
     try {
         const { id } = req.params;
-        // console.log(id);
+        // prisma showing up bug for warehouse and prosperityHubs 
         const agent = await prismaClient_1.default.agent.findUnique({
             where: { id },
             select: {
@@ -85,4 +85,42 @@ const getAgentHandler = async (req, res, next) => {
     }
 };
 exports.getAgentHandler = getAgentHandler;
+// update agent
+const updateAgentHandler = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const findAgent = await (0, agent_service_1.findById)({ id: id });
+        console.log(findAgent);
+        if (!findAgent)
+            return next(new appError_1.default(401, 'Agent not found in database'));
+        const body = (Object.keys(req.body));
+        const data = {
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            address: req.body.address,
+            phone: req.body.phone,
+            avatar: req.body.avatar,
+            password: req.body.password,
+        };
+        const keys = Object.keys(data);
+        if (keys.includes(body.toString()) === false) {
+            return next(new appError_1.default(401, 'Wrong input value'));
+        }
+        const agent = await (0, agent_service_1.updateAgent)({ id: id }, data);
+        if (!agent) {
+            return next(new appError_1.default(401, 'Agent does not exist'));
+        }
+        return res.status(200).json({
+            status: 'success',
+            data: {
+                agent,
+            },
+        });
+    }
+    catch (err) {
+        console.log(76, err);
+        next(err);
+    }
+};
+exports.updateAgentHandler = updateAgentHandler;
 //# sourceMappingURL=agent.controller.js.map

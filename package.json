@@ -9,7 +9,7 @@
     "dev": "nodemon dist/index.js",
     "compile": "tsc",
     "compile:w": "tsc -w",
-    "swagger": "node swagger.t",
+    "swagger": "node swagger.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
     "eslint:fix": "eslint --fix",
     "prisma": "prisma generate",
