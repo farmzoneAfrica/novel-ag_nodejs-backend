@@ -16,5 +16,6 @@ agentRouter.get(base + '/:pageNo', agent_controller_1.getAgentsByPageHandler);
 agentRouter.get(base + '/:id', auth_1.auth, requireUser_1.requireUser, auth_1.adminAuth, agent_controller_1.getAgentHandler);
 agentRouter.get('/me', auth_1.auth, agent_controller_1.getMeHandler);
 agentRouter.patch(base + '/update/:id', (0, validate_1.validate)(agent_schema_1.updateAgentSchema), auth_1.auth, agent_controller_1.updateAgentHandler);
+agentRouter.delete(base + '/delete/:id', auth_1.auth, agent_controller_1.deleteAgentHandler);
 exports.default = agentRouter;
 //# sourceMappingURL=agent.routes.js.map

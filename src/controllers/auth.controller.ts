@@ -305,7 +305,8 @@ export const forgotPasswordHandler = async (
     );
 
     try {
-      const url = `http://localhost:3000/resetpassword/${resetToken}`;
+      const baseUrl = process.env.BASE_URL;
+      const url = `${baseUrl}/resetpassword/${resetToken}`;
       await new Email(agent, url).sendPasswordResetToken();
 
       res.status(200).json({

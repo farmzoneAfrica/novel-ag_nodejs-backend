@@ -25,7 +25,7 @@ export const findAll = async () => {
   return await prisma.agent.findMany();
 }
 
-export const findAllByPages = async (
+export const pagination = async (
   skip: number, 
   take: number
 ) => {
@@ -86,4 +86,8 @@ export const signTokens = async (agent: Prisma.AgentCreateInput) => {
 console.log(74, "sign in token function");
   return { access_token, refresh_token };
 };
+
+export const deleteAgent = async (id: string) => {
+  return await prisma.agent.delete({where:{id}});
+}
 

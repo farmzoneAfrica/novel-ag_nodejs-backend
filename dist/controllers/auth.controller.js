@@ -225,7 +225,8 @@ const forgotPasswordHandler = async (req, res, next) => {
             passwordResetAt: new Date(Date.now() + 10 * 60 * 1000),
         }, { email: true });
         try {
-            const url = `http://localhost:3000/resetpassword/${resetToken}`;
+            const baseUrl = process.env.BASE_URL;
+            const url = `${baseUrl}/resetpassword/${resetToken}`;
             await new email_1.default(agent, url).sendPasswordResetToken();
             res.status(200).json({
                 status: 'success',

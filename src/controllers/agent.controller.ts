@@ -1,15 +1,12 @@
 import { NextFunction, Request, Response } from 'express';
 import {
   findAll,
-  findAllByPages,
+  pagination,
   findById,
-  findUniqueAgent,
-  updateAgent
+  updateAgent,
+  deleteAgent
 } from '../services/agent.service'
 import AppError from '../utils/appError';
-import {
-  GetSingleAgentInput
-} from "../schemas/agent.schema"
 import prisma from '../utils/prismaClient';
 
 export const getMeHandler = async (
@@ -58,7 +55,7 @@ export const getAgentsByPageHandler = async (
 ) => {
   try {
     const { pageNo } = req.params as any;
-    const agents = await findAllByPages(pageNo * 10, 10)
+    const agents = await pagination(pageNo * 10, 10)
     res.status(200).status(200).json({
       status: 'success',
       data: {
@@ -152,6 +149,32 @@ export const updateAgentHandler = async (
     });
   } catch (err: any) {
     console.log(76, err);
+    next(err);
+  }
+};
+
+// delete agent
+export const deleteAgentHandler = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { id } = req.params;
+    const findAgent = await findById({id: id});
+
+    console.log(findAgent);
+    if (!findAgent) 
+      return next(new AppError(401, 'Agent not found in database'));
+    
+    const agent = await deleteAgent(id)
+    res.status(200).status(200).json({
+      status: 'success',
+      data: {
+        agent,
+      },
+    });
+  } catch (err: any) {
     next(err);
   }
 };

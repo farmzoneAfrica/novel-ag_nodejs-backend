@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateAgentHandler = exports.getAgentHandler = exports.getAgentsByPageHandler = exports.getAgentsHandler = exports.getMeHandler = void 0;
+exports.deleteAgentHandler = exports.updateAgentHandler = exports.getAgentHandler = exports.getAgentsByPageHandler = exports.getAgentsHandler = exports.getMeHandler = void 0;
 const agent_service_1 = require("../services/agent.service");
 const appError_1 = __importDefault(require("../utils/appError"));
 const prismaClient_1 = __importDefault(require("../utils/prismaClient"));
@@ -42,7 +42,7 @@ exports.getAgentsHandler = getAgentsHandler;
 const getAgentsByPageHandler = async (req, res, next) => {
     try {
         const { pageNo } = req.params;
-        const agents = await (0, agent_service_1.findAllByPages)(pageNo * 10, 10);
+        const agents = await (0, agent_service_1.pagination)(pageNo * 10, 10);
         res.status(200).status(200).json({
             status: 'success',
             data: {
@@ -123,4 +123,25 @@ const updateAgentHandler = async (req, res, next) => {
     }
 };
 exports.updateAgentHandler = updateAgentHandler;
+// delete agent
+const deleteAgentHandler = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const findAgent = await (0, agent_service_1.findById)({ id: id });
+        console.log(findAgent);
+        if (!findAgent)
+            return next(new appError_1.default(401, 'Agent not found in database'));
+        const agent = await (0, agent_service_1.deleteAgent)(id);
+        res.status(200).status(200).json({
+            status: 'success',
+            data: {
+                agent,
+            },
+        });
+    }
+    catch (err) {
+        next(err);
+    }
+};
+exports.deleteAgentHandler = deleteAgentHandler;
 //# sourceMappingURL=agent.controller.js.map

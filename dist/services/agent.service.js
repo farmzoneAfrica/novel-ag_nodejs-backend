@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.signTokens = exports.updateAgent = exports.findUniqueAgent = exports.findById = exports.findAgent = exports.findAllByPages = exports.findAll = exports.createAgent = exports.excludedFields = void 0;
+exports.deleteAgent = exports.signTokens = exports.updateAgent = exports.findUniqueAgent = exports.findById = exports.findAgent = exports.pagination = exports.findAll = exports.createAgent = exports.excludedFields = void 0;
 const client_1 = require("@prisma/client");
 const lodash_1 = require("lodash");
 const config_1 = __importDefault(require("config"));
@@ -27,13 +27,13 @@ const findAll = async () => {
     return await prisma.agent.findMany();
 };
 exports.findAll = findAll;
-const findAllByPages = async (skip, take) => {
+const pagination = async (skip, take) => {
     return await prisma.agent.findMany({
         skip,
         take
     });
 };
-exports.findAllByPages = findAllByPages;
+exports.pagination = pagination;
 const findAgent = async (where, select) => {
     return (await prisma.agent.findFirst({
         where,
@@ -72,4 +72,8 @@ const signTokens = async (agent) => {
     return { access_token, refresh_token };
 };
 exports.signTokens = signTokens;
+const deleteAgent = async (id) => {
+    return await prisma.agent.delete({ where: { id } });
+};
+exports.deleteAgent = deleteAgent;
 //# sourceMappingURL=agent.service.js.map

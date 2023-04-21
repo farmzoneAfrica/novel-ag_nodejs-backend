@@ -5,7 +5,8 @@ import {
     getAgentsHandler,
     getAgentHandler,
     getAgentsByPageHandler,
-    updateAgentHandler
+    updateAgentHandler,
+    deleteAgentHandler
 } from '../controllers/agent.controller';
 import {
     auth,
@@ -26,5 +27,6 @@ agentRouter.get(base+'/:pageNo', getAgentsByPageHandler);
 agentRouter.get(base+'/:id', auth, requireUser, adminAuth, getAgentHandler);
 agentRouter.get('/me', auth, getMeHandler);
 agentRouter.patch(base+'/update/:id', validate(updateAgentSchema), auth, updateAgentHandler );
+agentRouter.delete(base+'/delete/:id', auth, deleteAgentHandler );
 
 export default agentRouter;
