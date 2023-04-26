@@ -18,6 +18,6 @@ prosperityHubrouter.post(base + '/create', auth_1.auth, requireUser_1.requireUse
 prosperityHubrouter.patch(base + '/update', auth_1.auth, (0, validate_1.validate)(prosperityHub_schema_1.updateProsperityHubSchema), prosperityHub_controller_1.updateProsperityHubHandler);
 prosperityHubrouter.get(base + '/', auth_1.auth, prosperityHub_controller_1.viewProsperityHubsHandler);
 prosperityHubrouter.get(base + '/:id', auth_1.auth, prosperityHub_controller_1.viewProsperityHubHandler);
-prosperityHubrouter.get(base + '/delete', auth_1.auth, auth_1.adminAuth, prosperityHub_controller_1.deleteProsperityHubHandler);
+prosperityHubrouter.delete(base + '/delete', auth_1.auth, auth_1.adminAuth, prosperityHub_controller_1.deleteProsperityHubHandler);
 exports.default = prosperityHubrouter;
 //# sourceMappingURL=prosperityHub.routes.js.map

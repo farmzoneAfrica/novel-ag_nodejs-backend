@@ -28,6 +28,6 @@ prosperityHubrouter.post(base+'/create', auth, requireUser, validate(createProsp
 prosperityHubrouter.patch(base+'/update', auth, validate(updateProsperityHubSchema), updateProsperityHubHandler);
 prosperityHubrouter.get(base+'/', auth, viewProsperityHubsHandler);
 prosperityHubrouter.get(base+'/:id', auth, viewProsperityHubHandler);
-prosperityHubrouter.get(base+'/delete', auth, adminAuth, deleteProsperityHubHandler);
+prosperityHubrouter.delete(base+'/delete', auth, adminAuth, deleteProsperityHubHandler);
 
 export default prosperityHubrouter;

@@ -17,8 +17,6 @@ export const registerAgentSchema = object({
       .max(15, 'Password must be less than 15 characters'),
     address: string().optional(),
     avatar: string().optional(),
-    prosperityHub: string().optional(),
-    warehouse: string().optional(),
     email: string({
       required_error: 'Email address is required',
     }).email('Invalid email address'),

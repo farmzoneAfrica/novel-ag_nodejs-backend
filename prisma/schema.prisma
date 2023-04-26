@@ -19,8 +19,7 @@ model Agent {
   lastName  String?
   address String ?
   avatar String ?
-  gender String ? @default("")
-  maritalStatus String ? @default("")
+  maritalStatus String ? @default("NA")
   verified Boolean? @default(false) 
 
   password String 
@@ -35,12 +34,11 @@ model Agent {
   passwordResetToken String?
   passwordResetAt DateTime?
 
-  @@unique([email, verificationCode, passwordResetToken])
-  @@index([email, verificationCode, passwordResetToken])
-
   prosperityHub ProsperityHub[]
   warhouse Warehouse[]
 
+  @@unique([email, verificationCode, passwordResetToken])
+  @@index([email, verificationCode, passwordResetToken])
 }
 
 enum RoleEnumType {

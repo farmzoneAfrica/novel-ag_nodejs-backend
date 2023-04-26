@@ -7,26 +7,6 @@ import {
   deleteAgent
 } from '../services/agent.service'
 import AppError from '../utils/appError';
-import prisma from '../utils/prismaClient';
-
-export const getMeHandler = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const agent = res.locals.agent;
-
-    res.status(200).status(200).json({
-      status: 'success',
-      data: {
-        agent,
-      },
-    });
-  } catch (err: any) {
-    next(err);
-  }
-};
 
 // get all agents 
 export const getAgentsHandler = async (
@@ -74,18 +54,12 @@ export const getAgentHandler = async (
   next: NextFunction
 ) => {
   try {
+    console.log(82);
+    
     const { id } = req.params;
-    // prisma showing up bug for warehouse and prosperityHubs 
-    const agent = await prisma.agent.findUnique({
-      where: { id },
-      select: {
-        id: true,
-        firstName: true,
-        lastName: true,
-        avatar: true,
-      
-      }
-    })
+    console.log(id);
+    
+    const agent = await findById({ id: id })
      if (!agent) {
       return next(new AppError(401, 'Agent does not exist'));
     }
@@ -100,7 +74,6 @@ export const getAgentHandler = async (
     next(err);
   }
 };
-
 
 // update agent
 export const updateAgentHandler = async (
@@ -162,7 +135,6 @@ export const deleteAgentHandler = async (
   try {
     const { id } = req.params;
     const findAgent = await findById({id: id});
-
     console.log(findAgent);
     if (!findAgent) 
       return next(new AppError(401, 'Agent not found in database'));
