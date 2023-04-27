@@ -3,7 +3,7 @@ import {
   createProsperityHub,
   getAllProsperityHubs,
   findProsperityHub,
-  findProsperityHubById,
+  findById,
   findUniqueProsperityHub,
   updateProsperityHub,
   deleteProsperityHub,
@@ -14,7 +14,6 @@ import {
   CreateProsperityHubInput,
   UpdateProsperityHubInput
 } from "../schemas/prosperityHub.schema"
-import prisma from '../utils/prismaClient';
 import agentRouter from '../routes/agent.routes';
 import { userInfo } from 'os';
 
@@ -43,55 +42,36 @@ export const createProsperityHubHandler = async (
 };
 
 
-export const viewProsperityHubsHandler = async (
+export const getProsperityHubsHandler = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const agents = await getAllProsperityHubs()
+    const prosperityHubs = await getAllProsperityHubs()
       res.status(200).status(200).json({
-        hello: "hello viewProsperityHubsHandler",
       status: 'success',
-      data: {
-        agents,
-      },
+      prosperityHubs
     });
   } catch (err: any) {
     next(err);
   }
 };
 
-// get single agent
-export const viewProsperityHubHandler = async (
+export const getProsperityHubHandler = async (
   req: Response | any,
   res: Response,
   next: NextFunction
 ) => {
   try {
     const { id } = req.params;
-    console.log(id);
-    
-    const agent = await prisma.agent.findUnique({
-      where: { id },
-      select: {
-        id: true,
-        firstName: true,
-        lastName: true,
-        avatar: true,
-        prosperityHub: true,
-        warhouse: true
-      }
-})
-     if (!agent) {
+    const prosperityHub = await findById({ id: id })
+     if (!prosperityHub) {
       return next(new AppError(401, 'Agent does not exist'));
     }
-      return res.status(200).status(200).json({
-        hello: "hello viewProsperityHubHandler",
+      return res.status(200).json({
       status: 'success',
-      data: {
-        agent,
-      },
+      prosperityHub
     });
   } catch (err: any) {
     console.log(76, err);

@@ -42,9 +42,7 @@ exports.getAgentsByPageHandler = getAgentsByPageHandler;
 // get single agent
 const getAgentHandler = async (req, res, next) => {
     try {
-        console.log(82);
         const { id } = req.params;
-        console.log(id);
         const agent = await (0, agent_service_1.findById)({ id: id });
         if (!agent) {
             return next(new appError_1.default(401, 'Agent does not exist'));

@@ -43,7 +43,11 @@ const findAgent = async (where, select) => {
 exports.findAgent = findAgent;
 const findById = async (where) => {
     return (await prisma.agent.findUnique({
-        where
+        where,
+        include: {
+            prosperityHub: true,
+            warhouse: true
+        }
     }));
 };
 exports.findById = findById;

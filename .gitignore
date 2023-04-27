@@ -4,6 +4,7 @@ node_modules
 .env.local
 .env.stagging
 .env.heroku
+.env.cpanel
 
 data.sql
 MOCK_DATA.csv

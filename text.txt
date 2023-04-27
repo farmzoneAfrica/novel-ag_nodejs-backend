@@ -29,6 +29,13 @@ ssh nawinqej@198.54.120.117
 
 ssh [username]@[ip-address] -p 
 
-ssh -p 21098 nawinqej@198.54.120.117
+SSH LOGIN FOR NAWILL.TECH
 
+ssh -p 21098 nawinqej@198.54.120.117
 root@198.54.120.117 password:nqLG31hKYaSM
+
+SSH LOGIN FOR NOVEL-AG
+
+ssh -p 21098 novellmr@66.29.137.24
+root@198.54.120.117 password:MiaFQpxPerQt
+source /home/novellmr/nodevenv/node-api.novel-ag.com/14/bin/activate && cd /home/novellmr/node-api.novel-ag.com

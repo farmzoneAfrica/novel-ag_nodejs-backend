@@ -54,11 +54,7 @@ export const getAgentHandler = async (
   next: NextFunction
 ) => {
   try {
-    console.log(82);
-    
     const { id } = req.params;
-    console.log(id);
-    
     const agent = await findById({ id: id })
      if (!agent) {
       return next(new AppError(401, 'Agent does not exist'));

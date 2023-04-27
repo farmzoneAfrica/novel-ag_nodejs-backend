@@ -3,10 +3,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteProsperityHubHandler = exports.updateProsperityHubHandler = exports.viewProsperityHubHandler = exports.viewProsperityHubsHandler = exports.createProsperityHubHandler = void 0;
+exports.deleteProsperityHubHandler = exports.updateProsperityHubHandler = exports.getProsperityHubHandler = exports.getProsperityHubsHandler = exports.createProsperityHubHandler = void 0;
 const prosperityHub_service_1 = require("../services/prosperityHub.service");
 const appError_1 = __importDefault(require("../utils/appError"));
-const prismaClient_1 = __importDefault(require("../utils/prismaClient"));
 const createProsperityHubHandler = async (req, res, next) => {
     try {
         const agentId = req.user.sub;
@@ -28,47 +27,29 @@ const createProsperityHubHandler = async (req, res, next) => {
     }
 };
 exports.createProsperityHubHandler = createProsperityHubHandler;
-const viewProsperityHubsHandler = async (req, res, next) => {
+const getProsperityHubsHandler = async (req, res, next) => {
     try {
-        const agents = await (0, prosperityHub_service_1.getAllProsperityHubs)();
+        const prosperityHubs = await (0, prosperityHub_service_1.getAllProsperityHubs)();
         res.status(200).status(200).json({
-            hello: "hello viewProsperityHubsHandler",
             status: 'success',
-            data: {
-                agents,
-            },
+            prosperityHubs
         });
     }
     catch (err) {
         next(err);
     }
 };
-exports.viewProsperityHubsHandler = viewProsperityHubsHandler;
-// get single agent
-const viewProsperityHubHandler = async (req, res, next) => {
+exports.getProsperityHubsHandler = getProsperityHubsHandler;
+const getProsperityHubHandler = async (req, res, next) => {
     try {
         const { id } = req.params;
-        console.log(id);
-        const agent = await prismaClient_1.default.agent.findUnique({
-            where: { id },
-            select: {
-                id: true,
-                firstName: true,
-                lastName: true,
-                avatar: true,
-                prosperityHub: true,
-                warhouse: true
-            }
-        });
-        if (!agent) {
+        const prosperityHub = await (0, prosperityHub_service_1.findById)({ id: id });
+        if (!prosperityHub) {
             return next(new appError_1.default(401, 'Agent does not exist'));
         }
-        return res.status(200).status(200).json({
-            hello: "hello viewProsperityHubHandler",
+        return res.status(200).json({
             status: 'success',
-            data: {
-                agent,
-            },
+            prosperityHub
         });
     }
     catch (err) {
@@ -76,7 +57,7 @@ const viewProsperityHubHandler = async (req, res, next) => {
         next(err);
     }
 };
-exports.viewProsperityHubHandler = viewProsperityHubHandler;
+exports.getProsperityHubHandler = getProsperityHubHandler;
 const updateProsperityHubHandler = async (req, res, next) => {
     try {
         const agent = res.locals.agent;

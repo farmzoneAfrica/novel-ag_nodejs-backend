@@ -49,7 +49,11 @@ export const findById = async (
   where: Prisma.AgentWhereUniqueInput,
 ) => {
   return (await prisma.agent.findUnique({
-    where
+    where,
+    include: {
+      prosperityHub: true,
+      warhouse: true
+    }
   }))
 };
 
