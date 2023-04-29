@@ -20,12 +20,12 @@ export const createProsperityHubSchema = object({
 
 export const updateProsperityHubSchema = object({
   body: object({
-    name: string({}),
-    address: string({}),
-    state: string({}),
-    status: boolean({}),
-    localGovt: string({}),
-    remarks: string({})
+    name: string({}).optional(),
+    address: string({}).optional(),
+    state: string({}).optional(),
+    status: boolean({}).optional(),
+    localGovt: string({}).optional(),
+    remarks: string({}).optional()
   })
 });
 

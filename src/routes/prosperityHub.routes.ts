@@ -25,7 +25,7 @@ const base = ""
 prosperityHubrouter.post(base+'/create', auth, requireUser, validate(createProsperityHubSchema), createProsperityHubHandler);
 prosperityHubrouter.get(base+'/get', auth, getProsperityHubsHandler);
 prosperityHubrouter.get(base+'/:id', auth, getProsperityHubHandler);
-prosperityHubrouter.patch(base+'/update/:id', auth, validate(updateProsperityHubSchema), updateProsperityHubHandler);
+prosperityHubrouter.patch(base+'/update/:id', validate(updateProsperityHubSchema), auth, updateProsperityHubHandler );
 prosperityHubrouter.delete(base+'/delete', auth, adminAuth, deleteProsperityHubHandler);
 
 export default prosperityHubrouter;

@@ -23,10 +23,6 @@ validateEnv()
 const app = express();
 const prisma = new PrismaClient();
 
-// async function bootstrap() {
-  app.set('view engine', 'pug');
-  // app.set('views', `${__dirname}/views`);
-
   app.use(express.json({limit: '10kb' }));
   app.use(cookieParser());
   app.use(cors({
@@ -89,12 +85,3 @@ console.clear()
   app.listen(PORT, () => {
     console.log(`Server listening on port ${PORT}.`);
   });
-// }
-
-// bootstrap()
-//   .catch((err) => {
-//     throw err;
-//   })
-//   .finally(async () => {
-//     await prisma.$disconnect();
-//   });

@@ -26,15 +26,6 @@ const findById = async (where) => {
     });
 };
 exports.findById = findById;
-// export const findUniqueProsperityHub = async (
-//   where: Prisma.ProsperityHubWhereUniqueInput,
-//   select?: Prisma.ProsperityHubSelect
-// ) => {
-//   return (await prisma.prosperityHub.findUnique({
-//     where,
-//     select,
-//   })) as ProsperityHub;
-// };
 const updateProsperityHub = async (where, data, select) => {
     return (await prisma.prosperityHub.update({ where, data, select }));
 };

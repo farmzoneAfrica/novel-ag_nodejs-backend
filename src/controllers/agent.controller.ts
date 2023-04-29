@@ -96,10 +96,7 @@ export const updateAgentHandler = async (
   if (dataKeys.includes(body.toString()) === false ) {
     return next(new AppError(401, 'Wrong input value'));
   }
-    const agent = await updateAgent(
-      { id: id },
-      data,
-    )
+  const agent = await updateAgent({ id: id }, data);
      if (!agent) {
       return next(new AppError(401, 'Agent does not exist'));
     }

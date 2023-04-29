@@ -22,9 +22,6 @@ const warehouse_routes_1 = __importDefault(require("./routes/warehouse.routes"))
 (0, validateEnv_1.default)();
 const app = (0, express_1.default)();
 const prisma = new client_1.PrismaClient();
-// async function bootstrap() {
-app.set('view engine', 'pug');
-// app.set('views', `${__dirname}/views`);
 app.use(express_1.default.json({ limit: '10kb' }));
 app.use((0, cookie_parser_1.default)());
 app.use((0, cors_1.default)({
@@ -73,12 +70,4 @@ console.clear();
 app.listen(PORT, () => {
     console.log(`Server listening on port ${PORT}.`);
 });
-// }
-// bootstrap()
-//   .catch((err) => {
-//     throw err;
-//   })
-//   .finally(async () => {
-//     await prisma.$disconnect();
-//   });
 //# sourceMappingURL=index.js.map

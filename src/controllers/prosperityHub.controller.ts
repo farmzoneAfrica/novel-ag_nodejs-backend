@@ -111,12 +111,7 @@ export const updateProsperityHubHandler = async (
   next: NextFunction
 ) => {
   try {
-    const { id } = req.params;
-    console.log(req.body);
-    
-    // const prosperityHub = await findById({id: id});
-    // if (!prosperityHub) 
-    //   return next(new AppError(401, 'Prosperity Hub not found in database'));    
+  const { id } = req.params; 
   const data = {
     name: req.body.name,
     address: req.body.address,
@@ -125,15 +120,10 @@ export const updateProsperityHubHandler = async (
     status: req.body.status,
     remarks: req.body.remarks,
   }
-   const prosperityHub = await updateProsperityHub(
-      { id: id },
-      data
-   )
+    const prosperityHub = await updateProsperityHub({ id: id }, data);
     console.log(prosperityHub);
-    
-     if (!prosperityHub) {
+     if (!prosperityHub) 
       return next(new AppError(401, 'Prosperity Hub does not exist'));
-     }
     
     return res.status(200).json({
       status: 'Success',

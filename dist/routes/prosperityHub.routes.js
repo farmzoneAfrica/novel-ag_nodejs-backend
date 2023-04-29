@@ -15,7 +15,7 @@ const base = "";
 prosperityHubrouter.post(base + '/create', auth_1.auth, requireUser_1.requireUser, (0, validate_1.validate)(prosperityHub_schema_1.createProsperityHubSchema), prosperityHub_controller_1.createProsperityHubHandler);
 prosperityHubrouter.get(base + '/get', auth_1.auth, prosperityHub_controller_1.getProsperityHubsHandler);
 prosperityHubrouter.get(base + '/:id', auth_1.auth, prosperityHub_controller_1.getProsperityHubHandler);
-prosperityHubrouter.patch(base + '/update/:id', auth_1.auth, (0, validate_1.validate)(prosperityHub_schema_1.updateProsperityHubSchema), prosperityHub_controller_1.updateProsperityHubHandler);
+prosperityHubrouter.patch(base + '/update/:id', (0, validate_1.validate)(prosperityHub_schema_1.updateProsperityHubSchema), auth_1.auth, prosperityHub_controller_1.updateProsperityHubHandler);
 prosperityHubrouter.delete(base + '/delete', auth_1.auth, auth_1.adminAuth, prosperityHub_controller_1.deleteProsperityHubHandler);
 exports.default = prosperityHubrouter;
 //# sourceMappingURL=prosperityHub.routes.js.map

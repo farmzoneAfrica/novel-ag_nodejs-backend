@@ -47,7 +47,7 @@ export const updateWarehouse = async (
   data: Prisma.WarehouseUpdateInput,
   select?: Prisma.WarehouseSelect
 ) => {
-  return (await prisma.agent.update({ where, data, select })) as Agent;
+  return (await prisma.agent.update({ where, data, select })) as Warehouse;
 };
 export const deleteWarehouse = async (
   where: Partial<Prisma.WarehouseWhereUniqueInput>,
