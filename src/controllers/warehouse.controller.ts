@@ -139,18 +139,17 @@ export const deleteWarehouseHandler = async (
   next: NextFunction
 ) => {
   try {
-    const agent = res.locals.agent;
-
-      res.status(200).status(200).json({
-        hello: "hello deleteWarehouseHandler",
+    const { id } = req.params;
+    const warehouse = await findById({id: id});
+    if (!warehouse) 
+      return next(new AppError(401, 'Err! Warehouse not found'));
+    
+    const response = await deleteWarehouse(id)
+    return res.status(200).json({
       status: 'success',
-      data: {
-        agent,
-      },
+      response
     });
   } catch (err: any) {
     next(err);
   }
 };
-
-

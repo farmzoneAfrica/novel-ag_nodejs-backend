@@ -5,7 +5,6 @@ import {
   findById,
   updateProsperityHub,
   deleteProsperityHub,
-  
 } from '../services/prosperityHub.service';
 
 import { 
@@ -20,8 +19,8 @@ import {
 } from "../schemas/prosperityHub.schema";
 
 import { Prisma } from '@prisma/client';
-import agentRouter from '../routes/agent.routes';
-import { userInfo } from 'os';
+// import agentRouter from '../routes/agent.routes';
+// import { userInfo } from 'os';
 
 export const createProsperityHubHandler = async (
   req: Request<{}, {}, CreateProsperityHubInput> | any,
@@ -139,14 +138,15 @@ export const deleteProsperityHubHandler = async (
   next: NextFunction
 ) => {
   try {
-    const agent = res.locals.agent;
-
-      res.status(200).status(200).json({
-        hello: "hello deleteProsperityHubHandler",
+    const { id } = req.params;
+    const prosperityHub = await findById({id: id});
+    if (!prosperityHub) 
+      return next(new AppError(401, 'Prosperity Hub not found in database'));
+    
+    const response = await deleteProsperityHub(id)
+    return res.status(200).json({
       status: 'success',
-      data: {
-        agent,
-      },
+      response
     });
   } catch (err: any) {
     next(err);

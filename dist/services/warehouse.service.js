@@ -37,8 +37,8 @@ const updateWarehouse = async (where, data, select) => {
     return (await prisma.warehouse.update({ where, data, select }));
 };
 exports.updateWarehouse = updateWarehouse;
-const deleteWarehouse = async (where, select) => {
-    return (await prisma.warehouse.delete({ where, select }));
+const deleteWarehouse = async (id) => {
+    return await prisma.warehouse.delete({ where: { id } });
 };
 exports.deleteWarehouse = deleteWarehouse;
 //# sourceMappingURL=warehouse.service.js.map

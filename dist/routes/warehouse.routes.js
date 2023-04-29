@@ -16,6 +16,7 @@ warehouseRouter.post(base + '/create', auth_1.auth, requireUser_1.requireUser, (
 warehouseRouter.get(base + '/get', auth_1.auth, warehouse_controller_1.getWarehousesHandler);
 warehouseRouter.get(base + '/get/:id', auth_1.auth, warehouse_controller_1.getWarehouseHandler);
 warehouseRouter.patch(base + '/update/:id', (0, validate_1.validate)(warehouse_schema_1.updateWarehouseSchema), auth_1.auth, warehouse_controller_1.updateWarehouseHandler);
-warehouseRouter.get(base + '/delete/:id', auth_1.auth, auth_1.adminAuth, warehouse_controller_1.deleteWarehouseHandler);
+// warehouseRouter.delete(base+'/delete/:id', auth, adminAuth, deleteWarehouseHandler);
+warehouseRouter.delete(base + '/delete/:id', auth_1.auth, warehouse_controller_1.deleteWarehouseHandler);
 exports.default = warehouseRouter;
 //# sourceMappingURL=warehouse.routes.js.map

@@ -1,6 +1,4 @@
 import { PrismaClient, Prisma, Agent, Warehouse } from '@prisma/client';
-import config from 'config';
-import redisClient from '../utils/connectRedis';
 
 const prisma = new PrismaClient();
 
@@ -49,11 +47,9 @@ export const updateWarehouse = async (
 ) => {
   return (await prisma.warehouse.update({ where, data, select })) as Warehouse;
 };
-export const deleteWarehouse = async (
-  where: Partial<Prisma.WarehouseWhereUniqueInput>,
-  select?: Prisma.WarehouseSelect 
-) => {
-  return (await prisma.warehouse.delete({ where, select })) as Warehouse;
-};
+
+export const deleteWarehouse = async (id: string) => {
+  return await prisma.warehouse.delete({where:{id}});
+}
 
 

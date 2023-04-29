@@ -103,7 +103,6 @@ export const signTokens = async (agent: Prisma.AgentCreateInput) => {
   const refresh_token = signJwt({ sub: agent.id }, 'ab1234', {
     expiresIn: `30s`,
   });
-console.log(74, "sign in token function");
   return { access_token, refresh_token };
 };
 

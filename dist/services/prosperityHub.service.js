@@ -30,11 +30,8 @@ const updateProsperityHub = async (where, data, select) => {
     return (await prisma.prosperityHub.update({ where, data, select }));
 };
 exports.updateProsperityHub = updateProsperityHub;
-const deleteProsperityHub = async (where, select) => {
-    return (await prisma.prosperityHub.findUnique({
-        where,
-        select,
-    }));
+const deleteProsperityHub = async (id) => {
+    return await prisma.prosperityHub.delete({ where: { id } });
 };
 exports.deleteProsperityHub = deleteProsperityHub;
 //# sourceMappingURL=prosperityHub.service.js.map

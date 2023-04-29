@@ -8,6 +8,8 @@ const prosperityHub_service_1 = require("../services/prosperityHub.service");
 const common_service_1 = require("../services/common.service");
 const appError_1 = __importDefault(require("../utils/appError"));
 const client_1 = require("@prisma/client");
+// import agentRouter from '../routes/agent.routes';
+// import { userInfo } from 'os';
 const createProsperityHubHandler = async (req, res, next) => {
     try {
         const agentId = req.user.sub;
@@ -104,13 +106,14 @@ const updateProsperityHubHandler = async (req, res, next) => {
 exports.updateProsperityHubHandler = updateProsperityHubHandler;
 const deleteProsperityHubHandler = async (req, res, next) => {
     try {
-        const agent = res.locals.agent;
-        res.status(200).status(200).json({
-            hello: "hello deleteProsperityHubHandler",
+        const { id } = req.params;
+        const prosperityHub = await (0, prosperityHub_service_1.findById)({ id: id });
+        if (!prosperityHub)
+            return next(new appError_1.default(401, 'Prosperity Hub not found in database'));
+        const response = await (0, prosperityHub_service_1.deleteProsperityHub)(id);
+        return res.status(200).json({
             status: 'success',
-            data: {
-                agent,
-            },
+            response
         });
     }
     catch (err) {

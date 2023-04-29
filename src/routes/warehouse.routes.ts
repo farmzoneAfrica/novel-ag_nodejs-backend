@@ -29,6 +29,7 @@ warehouseRouter.post(base+'/create', auth, requireUser, validate(createWarehouse
 warehouseRouter.get(base+'/get', auth, getWarehousesHandler);
 warehouseRouter.get(base+'/get/:id', auth, getWarehouseHandler);
 warehouseRouter.patch(base+'/update/:id', validate(updateWarehouseSchema), auth, updateWarehouseHandler);
-warehouseRouter.get(base+'/delete/:id', auth, adminAuth, deleteWarehouseHandler);
+// warehouseRouter.delete(base+'/delete/:id', auth, adminAuth, deleteWarehouseHandler);
+warehouseRouter.delete(base+'/delete/:id', auth, deleteWarehouseHandler);
 
 export default warehouseRouter;

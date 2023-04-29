@@ -118,17 +118,14 @@ export const deleteAgentHandler = async (
 ) => {
   try {
     const { id } = req.params;
-    const findAgent = await findById({id: id});
-    console.log(findAgent);
-    if (!findAgent) 
+    const agent = await findById({id: id});
+    if (!agent) 
       return next(new AppError(401, 'Agent not found in database'));
     
-    const agent = await deleteAgent(id)
-    res.status(200).status(200).json({
+    const response = await deleteAgent(id)
+    return res.status(200).json({
       status: 'success',
-      data: {
-        agent,
-      },
+      response
     });
   } catch (err: any) {
     next(err);
