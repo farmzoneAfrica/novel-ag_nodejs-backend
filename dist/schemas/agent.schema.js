@@ -7,14 +7,19 @@ var RoleEnumType;
     RoleEnumType["ADMIN"] = "ADMIN";
     RoleEnumType["AGENT"] = "AGENT";
 })(RoleEnumType || (RoleEnumType = {}));
+var GenderEnumType;
+(function (GenderEnumType) {
+    GenderEnumType["Male"] = "Male";
+    GenderEnumType["Female"] = "Female";
+})(GenderEnumType || (GenderEnumType = {}));
 exports.registerAgentSchema = (0, zod_1.object)({
     body: (0, zod_1.object)({
         firstName: (0, zod_1.string)({
             required_error: 'firstName is required',
         }),
         lastName: (0, zod_1.string)().optional(),
-        gender: (0, zod_1.string)().optional(),
         state: (0, zod_1.string)().optional(),
+        gender: (zod_1.z.nativeEnum(GenderEnumType)),
         localGovt: (0, zod_1.string)().optional(),
         maritalStatus: (0, zod_1.string)().optional(),
         phone: (0, zod_1.string)({

@@ -121,7 +121,6 @@ export const updateProsperityHubHandler = async (
     remarks: req.body.remarks,
   }
     const prosperityHub = await updateProsperityHub({ id: id }, data);
-    console.log(prosperityHub);
      if (!prosperityHub) 
       return next(new AppError(401, 'Prosperity Hub does not exist'));
     
@@ -129,9 +128,7 @@ export const updateProsperityHubHandler = async (
       status: 'Success',
       prosperityHub,
     });
-  } catch (err: any) {
-    console.log(err);
-    
+  } catch (err: any) {    
     next(err);
   }
 };

@@ -90,7 +90,6 @@ const updateProsperityHubHandler = async (req, res, next) => {
             remarks: req.body.remarks,
         };
         const prosperityHub = await (0, prosperityHub_service_1.updateProsperityHub)({ id: id }, data);
-        console.log(prosperityHub);
         if (!prosperityHub)
             return next(new appError_1.default(401, 'Prosperity Hub does not exist'));
         return res.status(200).json({
@@ -99,7 +98,6 @@ const updateProsperityHubHandler = async (req, res, next) => {
         });
     }
     catch (err) {
-        console.log(err);
         next(err);
     }
 };

@@ -14,7 +14,7 @@ const getWarehouses = async () => {
 };
 exports.getWarehouses = getWarehouses;
 const getUniqueWarehouse = async (where, select) => {
-    return (await prisma.agent.findFirst({
+    return (await prisma.warehouse.findFirst({
         where,
         select,
     }));
@@ -27,18 +27,18 @@ const findById = async (where) => {
 };
 exports.findById = findById;
 const findUniqueWarehouse = async (where, select) => {
-    return (await prisma.agent.findUnique({
+    return (await prisma.warehouse.findUnique({
         where,
         select,
     }));
 };
 exports.findUniqueWarehouse = findUniqueWarehouse;
 const updateWarehouse = async (where, data, select) => {
-    return (await prisma.agent.update({ where, data, select }));
+    return (await prisma.warehouse.update({ where, data, select }));
 };
 exports.updateWarehouse = updateWarehouse;
 const deleteWarehouse = async (where, select) => {
-    return (await prisma.agent.delete({ where, select }));
+    return (await prisma.warehouse.delete({ where, select }));
 };
 exports.deleteWarehouse = deleteWarehouse;
 //# sourceMappingURL=warehouse.service.js.map

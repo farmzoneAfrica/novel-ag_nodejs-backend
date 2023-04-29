@@ -16,7 +16,8 @@ import {
 
 import AppError from '../utils/appError';
 import {
-  CreateWarehouseInput
+  CreateWarehouseInput,
+  UpdateWarehouseInput
 } from "../schemas/warehouse.schema"
 import prisma from '../utils/prismaClient';
 import { Prisma } from '@prisma/client';
@@ -100,27 +101,34 @@ export const getWarehouseHandler = async (
       },
     });
   } catch (err: any) {
-    console.log(76, err);
     next(err);
   }
 };
 
 export const updateWarehouseHandler = async (
-  req: Request,
+  req: Request < {}, {}, UpdateWarehouseInput > | any,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const agent = res.locals.agent;
-
-      res.status(200).status(200).json({
-        hello: "hello updateWarehouseHandler",
-      status: 'success',
-      data: {
-        agent,
-      },
+  const { id } = req.params; 
+  const data = {
+    name: req.body.name,
+    address: req.body.address,
+    state: req.body.state,
+    localGovt: req.body.localGovt,
+    status: req.body.status,
+    remarks: req.body.remarks,
+  }
+    const warehouse = await updateWarehouse({ id: id }, data);
+     if (!warehouse) 
+      return next(new AppError(401, 'Warehouse does not exist'));
+    
+    return res.status(200).json({
+      status: 'Success',
+      warehouse,
     });
-  } catch (err: any) {
+  } catch (err: any) {    
     next(err);
   }
 };

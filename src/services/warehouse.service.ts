@@ -18,10 +18,10 @@ export const getUniqueWarehouse = async (
   where: Partial<Prisma.WarehouseWhereInput>,
   select?: Prisma.WarehouseSelect
 ) => {
-  return (await prisma.agent.findFirst({
+  return (await prisma.warehouse.findFirst({
     where,
     select,
-  })) as Agent;
+  })) as Warehouse;
 };
 
 export const findById = async (
@@ -36,7 +36,7 @@ export const findUniqueWarehouse = async (
   where: Prisma.WarehouseWhereUniqueInput,
   select?: Prisma.WarehouseSelect
 ) => {
-  return (await prisma.agent.findUnique({
+  return (await prisma.warehouse.findUnique({
     where,
     select,
   })) as Warehouse;
@@ -47,13 +47,13 @@ export const updateWarehouse = async (
   data: Prisma.WarehouseUpdateInput,
   select?: Prisma.WarehouseSelect
 ) => {
-  return (await prisma.agent.update({ where, data, select })) as Warehouse;
+  return (await prisma.warehouse.update({ where, data, select })) as Warehouse;
 };
 export const deleteWarehouse = async (
   where: Partial<Prisma.WarehouseWhereUniqueInput>,
   select?: Prisma.WarehouseSelect 
 ) => {
-  return (await prisma.agent.delete({ where, select })) as Agent;
+  return (await prisma.warehouse.delete({ where, select })) as Warehouse;
 };
 
 

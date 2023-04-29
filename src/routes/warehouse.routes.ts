@@ -27,8 +27,8 @@ const base = ""
 
 warehouseRouter.post(base+'/create', auth, requireUser, validate(createWarehouseSchema), createWarehouseHandler);
 warehouseRouter.get(base+'/get', auth, getWarehousesHandler);
-warehouseRouter.get(base+'/:id', auth, getWarehouseHandler);
-warehouseRouter.patch(base+'/update', auth, requireUser, validate(updateWarehouseSchema), updateWarehouseHandler);
-warehouseRouter.get(base+'/delete', auth, adminAuth, deleteWarehouseHandler);
+warehouseRouter.get(base+'/get/:id', auth, getWarehouseHandler);
+warehouseRouter.patch(base+'/update/:id', validate(updateWarehouseSchema), auth, updateWarehouseHandler);
+warehouseRouter.get(base+'/delete/:id', auth, adminAuth, deleteWarehouseHandler);
 
 export default warehouseRouter;
