@@ -8,8 +8,12 @@ CREATE TABLE "agents" (
     "phone" TEXT NOT NULL,
     "firstName" TEXT NOT NULL,
     "lastName" TEXT,
+    "gender" TEXT NOT NULL DEFAULT '',
     "address" TEXT,
-    "avatar" TEXT,
+    "avatar" TEXT DEFAULT '',
+    "state" TEXT DEFAULT '',
+    "localGovt" TEXT DEFAULT '',
+    "maritalStatus" TEXT DEFAULT '',
     "verified" BOOLEAN DEFAULT false,
     "password" TEXT NOT NULL,
     "role" "RoleEnumType" NOT NULL DEFAULT 'AGENT',
@@ -28,7 +32,10 @@ CREATE TABLE "prosperityHubs" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "address" TEXT,
+    "state" TEXT NOT NULL DEFAULT '',
+    "localGovt" TEXT NOT NULL DEFAULT '',
     "remarks" TEXT,
+    "status" BOOLEAN NOT NULL DEFAULT false,
     "agentId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -40,8 +47,11 @@ CREATE TABLE "prosperityHubs" (
 CREATE TABLE "warehouses" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
+    "state" TEXT NOT NULL DEFAULT '',
+    "localGovt" TEXT NOT NULL DEFAULT '',
     "address" TEXT NOT NULL,
     "remarks" TEXT,
+    "status" BOOLEAN NOT NULL DEFAULT false,
     "agentId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -53,9 +63,6 @@ CREATE TABLE "warehouses" (
 CREATE UNIQUE INDEX "agents_email_key" ON "agents"("email");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "agents_phone_key" ON "agents"("phone");
-
--- CreateIndex
 CREATE UNIQUE INDEX "agents_verificationCode_key" ON "agents"("verificationCode");
 
 -- CreateIndex
@@ -64,8 +71,14 @@ CREATE INDEX "agents_email_verificationCode_passwordResetToken_idx" ON "agents"(
 -- CreateIndex
 CREATE UNIQUE INDEX "agents_email_verificationCode_passwordResetToken_key" ON "agents"("email", "verificationCode", "passwordResetToken");
 
--- AddForeignKey
-ALTER TABLE "prosperityHubs" ADD CONSTRAINT "prosperityHubs_agentId_fkey" FOREIGN KEY ("agentId") REFERENCES "agents"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+-- CreateIndex
+CREATE UNIQUE INDEX "prosperityHubs_name_key" ON "prosperityHubs"("name");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "warehouses_name_key" ON "warehouses"("name");
 
 -- AddForeignKey
-ALTER TABLE "warehouses" ADD CONSTRAINT "warehouses_agentId_fkey" FOREIGN KEY ("agentId") REFERENCES "agents"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "prosperityHubs" ADD CONSTRAINT "prosperityHubs_agentId_fkey" FOREIGN KEY ("agentId") REFERENCES "agents"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "warehouses" ADD CONSTRAINT "warehouses_agentId_fkey" FOREIGN KEY ("agentId") REFERENCES "agents"("id") ON DELETE CASCADE ON UPDATE CASCADE;

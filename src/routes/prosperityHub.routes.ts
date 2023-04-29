@@ -2,8 +2,8 @@
 import express, { NextFunction, Request, Response, response } from 'express';
 import {
   createProsperityHubHandler,
-  viewProsperityHubsHandler,
-  viewProsperityHubHandler,
+  getProsperityHubsHandler,
+  getProsperityHubHandler,
   updateProsperityHubHandler,
   deleteProsperityHubHandler,
   
@@ -20,14 +20,13 @@ import { requireUser } from '../middleware/requireUser';
 
 const prosperityHubrouter = express.Router();
 
-// the base variable is for purposes of swagger compilation, 
-// it should always be an empty string but api/agent when auto compiling swagger
 const base = ""
 
 prosperityHubrouter.post(base+'/create', auth, requireUser, validate(createProsperityHubSchema), createProsperityHubHandler);
 prosperityHubrouter.patch(base+'/update', auth, validate(updateProsperityHubSchema), updateProsperityHubHandler);
-prosperityHubrouter.get(base+'/', auth, viewProsperityHubsHandler);
-prosperityHubrouter.get(base+'/:id', auth, viewProsperityHubHandler);
-prosperityHubrouter.get(base+'/delete', auth, adminAuth, deleteProsperityHubHandler);
+prosperityHubrouter.get(base+'/get', auth, getProsperityHubsHandler);
+prosperityHubrouter.get(base+'/:id', auth, getProsperityHubHandler);
+// prosperityHubrouter.get(base+'/:id', getProsperityHubHandler);
+prosperityHubrouter.delete(base+'/delete', auth, adminAuth, deleteProsperityHubHandler);
 
 export default prosperityHubrouter;

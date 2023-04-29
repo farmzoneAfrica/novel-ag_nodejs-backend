@@ -32,6 +32,15 @@
 - Run `yarn i --save-dev prisma@dev` and  `npm i @prisma/client@dev` to update prisma client versions.
 - Run `npx prisma migrate dev --name init` after updating prisma model 
 - Run ` emailengine --dbs.redis="redis://127.0.0.1:6379/0"` to start email template engine. 
+## POSTGRESQL COMMANDS
+- Run `psql` to start server on `postgresql CLI`
+- Run `psql --help` to get help
+- Run `npx prisma` to initiate prisma
+
+## SSH COMMAND
+- Run `ssh -p 21098 <username>@<ip address>` to start server on `localhost 5000`
+- Enter Cpanel password to access server CLI locally
+- For Cpanel CLI, Run `nsource /home/novellmr/nodevenv/node-api.novel-ag.com/14/bin/activate && cd /home/novellmr/node-api.novel-ag.com` to navigate to root directory
 
 
 ## Useful links

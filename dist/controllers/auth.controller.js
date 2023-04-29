@@ -7,6 +7,7 @@ exports.resetPasswordHandler = exports.forgotPasswordHandler = exports.verifyEma
 const crypto_1 = __importDefault(require("crypto"));
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const agent_service_1 = require("../services/agent.service");
+const common_service_1 = require("../services/common.service");
 const client_1 = require("@prisma/client");
 const config_1 = __importDefault(require("config"));
 const appError_1 = __importDefault(require("../utils/appError"));
@@ -17,7 +18,6 @@ const cookiesOptions = {
     httpOnly: true,
     sameSite: 'lax',
 };
-// if (process.env.NODE_ENV === 'production') cookiesOptions.secure = true;
 const accessTokenCookieOptions = {
     ...cookiesOptions,
     expires: new Date(Date.now() + config_1.default.get('accessTokenExpiresIn') * 60 * 1000),
@@ -42,10 +42,24 @@ const registerAgentHandler = async (req, res, next) => {
             address: req.body.address,
             phone: req.body.phone,
             avatar: req.body.avatar,
+            gender: req.body.gender,
+            state: req.body.state,
+            localGovt: req.body.localGovt,
+            maritalStatus: req.body.maritalStatus,
             email: req.body.email.toLowerCase(),
             password: hashedPassword,
             verificationCode,
         });
+        const inputState = agent.state;
+        const inputLGA = agent.localGovt;
+        const states = await (0, common_service_1.getStates)();
+        const LGAs = await (0, common_service_1.getLGAs)(inputState);
+        if (states.includes(inputState) === false) {
+            return next(new appError_1.default(400, 'Invalid state, please enter a valid state'));
+        }
+        if (LGAs.includes(inputLGA) === false) {
+            return next(new appError_1.default(400, 'Invalid LGA, please enter a valid local government'));
+        }
         const baseUrl = process.env.BASE_URL;
         const redirectUrl = `${baseUrl}/api/auth/verifyemail/${verifyCode}`;
         try {
@@ -66,7 +80,6 @@ const registerAgentHandler = async (req, res, next) => {
         }
     }
     catch (err) {
-        console.log(91, "email verification fail", err);
         if (err instanceof client_1.Prisma.PrismaClientKnownRequestError) {
             if (err.code === 'P2002') {
                 return res.status(409).json({
@@ -106,7 +119,6 @@ const loginAgentHandler = async (req, res, next) => {
         });
     }
     catch (err) {
-        // console.log(145, err );
         next(err);
     }
 };
@@ -177,7 +189,7 @@ const verifyEmailHandler = async (req, res, next) => {
         if (!user) {
             return next(new appError_1.default(401, 'Could not verify email'));
         }
-        res.status(200).json({
+        return res.status(200).json({
             status: 'success',
             message: 'Email verified successfully',
         });
@@ -195,7 +207,11 @@ const verifyEmailHandler = async (req, res, next) => {
 exports.verifyEmailHandler = verifyEmailHandler;
 const forgotPasswordHandler = async (req, res, next) => {
     try {
-        const agent = await (0, agent_service_1.findAgent)({ email: req.body.email.toLowerCase() });
+        // const agent = await findAgent({ email: req.body.email.toLowerCase() });
+        const email = req.body.email.toLowerCase();
+        console.log(email);
+        const agent = await (0, agent_service_1.findAgent1)({ email: email });
+        console.log(agent);
         const message = 'You will receive a reset email if agent with that email exist';
         if (!agent) {
             return res.status(200).json({
@@ -226,9 +242,9 @@ const forgotPasswordHandler = async (req, res, next) => {
         }, { email: true });
         try {
             const baseUrl = process.env.BASE_URL;
-            const url = `${baseUrl}/resetpassword/${resetToken}`;
+            const url = `${baseUrl}/api/auth/resetpassword/${resetToken}`;
             await new email_1.default(agent, url).sendPasswordResetToken();
-            res.status(200).json({
+            return res.status(200).json({
                 status: 'success',
                 message,
             });
@@ -242,6 +258,7 @@ const forgotPasswordHandler = async (req, res, next) => {
         }
     }
     catch (err) {
+        console.log(err);
         next(err);
     }
 };
@@ -264,7 +281,6 @@ const resetPasswordHandler = async (req, res, next) => {
             });
         }
         const hashedPassword = await bcryptjs_1.default.hash(req.body.password, 12);
-        // Change password data
         await (0, agent_service_1.updateAgent)({
             id: user.id,
         }, {

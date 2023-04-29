@@ -11,14 +11,16 @@ export const registerAgentSchema = object({
       required_error: 'firstName is required',
     }),
     lastName: string().optional(),
+    gender: string().optional(),
+    state: string().optional(),
+    localGovt: string().optional(),
+    maritalStatus: string().optional(),
     phone: string({
       required_error: 'phone number is required',
     }).min(7, 'Number must be more than 6 characters')
       .max(15, 'Password must be less than 15 characters'),
     address: string().optional(),
     avatar: string().optional(),
-    prosperityHub: string().optional(),
-    warehouse: string().optional(),
     email: string({
       required_error: 'Email address is required',
     }).email('Invalid email address'),
@@ -58,6 +60,10 @@ export const updateAgentSchema = object({
   body: object({
     firstName: string({}),
     lastName: string({}),
+    gender: string({}),
+    state: string({}),
+    localGovt: string({}),
+    maritalStatus: string({}),
     password: string({})
       .min(8, 'Password must be more than 8 characters')
       .max(32, 'Password must be less than 32 characters').optional(),

@@ -35,21 +35,41 @@ export const pagination = async (
   });
 }
 
+// export const findAgent = async (
+//   where: Partial<Prisma.AgentWhereInput>,
+//   select?: Prisma.AgentSelect
+// ) => {
+//   return (await prisma.agent.findFirst({
+//     where,
+//     select,
+//   })) as Agent;
+// };
+
 export const findAgent = async (
-  where: Partial<Prisma.AgentWhereInput>,
-  select?: Prisma.AgentSelect
+  where: Prisma.AgentCreateInput | any,
 ) => {
-  return (await prisma.agent.findFirst({
-    where,
-    select,
-  })) as Agent;
+  return (await prisma.agent.findUnique({
+    where
+  }))
 };
+
+export const findAgent1 = async(
+  where: Prisma.AgentCreateInput | any,
+) => { 
+  return (await prisma.agent.findUnique({
+    where
+  }))
+}
 
 export const findById = async (
   where: Prisma.AgentWhereUniqueInput,
 ) => {
   return (await prisma.agent.findUnique({
-    where
+    where,
+    include: {
+      prosperityHub: true,
+      warhouse: true
+    }
   }))
 };
 

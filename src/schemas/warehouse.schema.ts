@@ -8,6 +8,12 @@ export const createWarehouseSchema = object({
     address: string({
       required_error: 'Address is required',
     }),
+     state: string({
+      required_error: 'State is required',
+    }),
+    localGovt: string({
+      required_error: 'Address is required',
+    }),
     remarks: string().optional(),
   })
 });
@@ -16,6 +22,8 @@ export const updateWarehouseSchema = object({
   body: object({
     name: string({}),
     address: string({}),
+    state: string({}),
+    localGovt: string({}),
     remarks: string({})
   })
 });

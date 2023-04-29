@@ -5,18 +5,31 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteWarehouseHandler = exports.updateWarehouseHandler = exports.viewWarehouseHandler = exports.viewWarehousesHandler = exports.createWarehouseHandler = void 0;
 const warehouse_service_1 = require("../services/warehouse.service");
+const common_service_1 = require("../services/common.service");
 const appError_1 = __importDefault(require("../utils/appError"));
 const prismaClient_1 = __importDefault(require("../utils/prismaClient"));
+const client_1 = require("@prisma/client");
 const createWarehouseHandler = async (req, res, next) => {
     try {
         const agentId = req.user.sub;
         const warehouse = await (0, warehouse_service_1.createWarehouse)({
             name: req.body.name,
             address: req.body.address,
+            state: req.body.state,
+            localGovt: req.body.localGovt,
             remarks: req.body.remarks,
             agentId: agentId
         });
-        console.log(30, warehouse);
+        const inputState = warehouse.state;
+        const inputLGA = warehouse.localGovt;
+        const states = await (0, common_service_1.getStates)();
+        const LGAs = await (0, common_service_1.getLGAs)(inputState);
+        if (states.includes(inputState) === false) {
+            return next(new appError_1.default(400, 'Invalid state, please enter a valid state'));
+        }
+        if (LGAs.includes(inputLGA) === false) {
+            return next(new appError_1.default(400, 'Invalid LGA, please enter a valid local government'));
+        }
         return res.status(201).json({
             status: "Sucess",
             warehouse
@@ -24,6 +37,14 @@ const createWarehouseHandler = async (req, res, next) => {
     }
     catch (err) {
         console.log(91, "email verification fail", err);
+        if (err instanceof client_1.Prisma.PrismaClientKnownRequestError) {
+            if (err.code === 'P2002') {
+                return res.status(409).json({
+                    status: 'fail',
+                    message: 'Prosperity Hub with a similar name already exist, please use another name',
+                });
+            }
+        }
         next(err);
     }
 };

@@ -24,13 +24,11 @@ export const findProsperityHub = async (
   })) as ProsperityHub;
 };
 
-export const findProsperityHubById = async (
-  where: string | any,
-  select?: Prisma.ProsperityHubSelect
+export const findById = async (
+  where: Prisma.ProsperityHubWhereUniqueInput,
 ) => {
-  await prisma.prosperityHub.findUnique({
-    where,
-    select
+  return await prisma.prosperityHub.findUnique({
+    where
   })
 };
 
