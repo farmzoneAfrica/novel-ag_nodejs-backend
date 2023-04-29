@@ -32,32 +32,16 @@ export const findById = async (
   })
 };
 
-export const findUniqueProsperityHub = async (
-  where: Prisma.ProsperityHubWhereUniqueInput,
-  select?: Prisma.ProsperityHubSelect
-) => {
-  return (await prisma.prosperityHub.findUnique({
-    where,
-    select,
-  })) as ProsperityHub;
-};
-
 export const updateProsperityHub = async (
   where: Partial<Prisma.ProsperityHubWhereUniqueInput>,
   data: Prisma.ProsperityHubUpdateInput,
   select?: Prisma.ProsperityHubSelect
 ) => {
-  return (await prisma.prosperityHub.update({ where, data, select })) as Agent;
+  return (await prisma.prosperityHub.update({ where, data, select })) as ProsperityHub;
 };
 
-export const deleteProsperityHub = async (
-  where: Prisma.ProsperityHubWhereUniqueInput,
-  select?: Prisma.ProsperityHubSelect
-) => {
-  return (await prisma.prosperityHub.findUnique({
-    where,
-    select,
-  })) as ProsperityHub;
-};
+export const deleteProsperityHub = async (id: string) => {
+  return await prisma.prosperityHub.delete({where:{id}});
+}
 
 

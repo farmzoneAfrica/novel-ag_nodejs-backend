@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteProsperityHub = exports.updateProsperityHub = exports.findUniqueProsperityHub = exports.findById = exports.findProsperityHub = exports.getAllProsperityHubs = exports.createProsperityHub = void 0;
+exports.deleteProsperityHub = exports.updateProsperityHub = exports.findById = exports.findProsperityHub = exports.getAllProsperityHubs = exports.createProsperityHub = void 0;
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
 const createProsperityHub = async (input) => {
@@ -26,22 +26,12 @@ const findById = async (where) => {
     });
 };
 exports.findById = findById;
-const findUniqueProsperityHub = async (where, select) => {
-    return (await prisma.prosperityHub.findUnique({
-        where,
-        select,
-    }));
-};
-exports.findUniqueProsperityHub = findUniqueProsperityHub;
 const updateProsperityHub = async (where, data, select) => {
     return (await prisma.prosperityHub.update({ where, data, select }));
 };
 exports.updateProsperityHub = updateProsperityHub;
-const deleteProsperityHub = async (where, select) => {
-    return (await prisma.prosperityHub.findUnique({
-        where,
-        select,
-    }));
+const deleteProsperityHub = async (id) => {
+    return await prisma.prosperityHub.delete({ where: { id } });
 };
 exports.deleteProsperityHub = deleteProsperityHub;
 //# sourceMappingURL=prosperityHub.service.js.map

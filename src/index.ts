@@ -15,17 +15,13 @@ import swaggerFile from './swagger-output.json';
 
 import agentRouter from "./routes/agent.routes";
 import authRouter from "./routes/auth.routes";
-import prosperityHubRouter from "./routes/prosperityHub.routes";
+import prosperityHubRouter from "./routes/prosperity.hub.routes";
 import warehouseRouter from "./routes/warehouse.routes";
 
 validateEnv()
 
 const app = express();
 const prisma = new PrismaClient();
-
-async function bootstrap() {
-  app.set('view engine', 'pug');
-  app.set('views', `${__dirname}/views`);
 
   app.use(express.json({limit: '10kb' }));
   app.use(cookieParser());
@@ -41,7 +37,7 @@ async function bootstrap() {
   app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile))
   app.use('/api/agent', agentRouter);
   app.use('/api/auth', authRouter);
-  app.use('/api/prosperityHub', prosperityHubRouter);
+  app.use('/api/prosperity-hub', prosperityHubRouter);
   app.use('/api/warehouse', warehouseRouter);
 
   app.get('/', (req, res) => {
@@ -88,13 +84,4 @@ async function bootstrap() {
 console.clear()
   app.listen(PORT, () => {
     console.log(`Server listening on port ${PORT}.`);
-  });
-}
-
-bootstrap()
-  .catch((err) => {
-    throw err;
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
   });

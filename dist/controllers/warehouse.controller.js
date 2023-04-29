@@ -3,11 +3,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteWarehouseHandler = exports.updateWarehouseHandler = exports.viewWarehouseHandler = exports.viewWarehousesHandler = exports.createWarehouseHandler = void 0;
+exports.deleteWarehouseHandler = exports.updateWarehouseHandler = exports.getWarehouseHandler = exports.getWarehousesHandler = exports.createWarehouseHandler = void 0;
 const warehouse_service_1 = require("../services/warehouse.service");
 const common_service_1 = require("../services/common.service");
 const appError_1 = __importDefault(require("../utils/appError"));
-const prismaClient_1 = __importDefault(require("../utils/prismaClient"));
 const client_1 = require("@prisma/client");
 const createWarehouseHandler = async (req, res, next) => {
     try {
@@ -36,12 +35,11 @@ const createWarehouseHandler = async (req, res, next) => {
         });
     }
     catch (err) {
-        console.log(91, "email verification fail", err);
         if (err instanceof client_1.Prisma.PrismaClientKnownRequestError) {
             if (err.code === 'P2002') {
                 return res.status(409).json({
                     status: 'fail',
-                    message: 'Prosperity Hub with a similar name already exist, please use another name',
+                    message: 'Warehouse name already exist, please use another name',
                 });
             }
         }
@@ -49,14 +47,13 @@ const createWarehouseHandler = async (req, res, next) => {
     }
 };
 exports.createWarehouseHandler = createWarehouseHandler;
-const viewWarehousesHandler = async (req, res, next) => {
+const getWarehousesHandler = async (req, res, next) => {
     try {
-        const agents = await (0, warehouse_service_1.getWarehouses)();
-        res.status(200).status(200).json({
-            hello: "hello viewWarehousesHandler",
+        const warehouse = await (0, warehouse_service_1.getWarehouses)();
+        return res.status(200).status(200).json({
             status: 'success',
             data: {
-                agents,
+                warehouse,
             },
         });
     }
@@ -64,48 +61,43 @@ const viewWarehousesHandler = async (req, res, next) => {
         next(err);
     }
 };
-exports.viewWarehousesHandler = viewWarehousesHandler;
-// get single agent
-const viewWarehouseHandler = async (req, res, next) => {
+exports.getWarehousesHandler = getWarehousesHandler;
+const getWarehouseHandler = async (req, res, next) => {
     try {
         const { id } = req.params;
-        const agent = await prismaClient_1.default.agent.findUnique({
-            where: { id },
-            select: {
-                id: true,
-                firstName: true,
-                lastName: true,
-                avatar: true,
-                prosperityHub: true,
-                warhouse: true
-            }
-        });
-        if (!agent) {
-            return next(new appError_1.default(401, 'Agent does not exist'));
+        const warehouse = await (0, warehouse_service_1.findById)({ id: id });
+        if (!warehouse) {
+            return next(new appError_1.default(401, 'Warehouse does not exist'));
         }
         return res.status(200).status(200).json({
-            hello: "hello viewWarehouseHandler",
             status: 'success',
             data: {
-                agent,
+                warehouse,
             },
         });
     }
     catch (err) {
-        console.log(76, err);
         next(err);
     }
 };
-exports.viewWarehouseHandler = viewWarehouseHandler;
+exports.getWarehouseHandler = getWarehouseHandler;
 const updateWarehouseHandler = async (req, res, next) => {
     try {
-        const agent = res.locals.agent;
-        res.status(200).status(200).json({
-            hello: "hello updateWarehouseHandler",
-            status: 'success',
-            data: {
-                agent,
-            },
+        const { id } = req.params;
+        const data = {
+            name: req.body.name,
+            address: req.body.address,
+            state: req.body.state,
+            localGovt: req.body.localGovt,
+            status: req.body.status,
+            remarks: req.body.remarks,
+        };
+        const warehouse = await (0, warehouse_service_1.updateWarehouse)({ id: id }, data);
+        if (!warehouse)
+            return next(new appError_1.default(401, 'Warehouse does not exist'));
+        return res.status(200).json({
+            status: 'Success',
+            warehouse,
         });
     }
     catch (err) {
@@ -115,13 +107,14 @@ const updateWarehouseHandler = async (req, res, next) => {
 exports.updateWarehouseHandler = updateWarehouseHandler;
 const deleteWarehouseHandler = async (req, res, next) => {
     try {
-        const agent = res.locals.agent;
-        res.status(200).status(200).json({
-            hello: "hello deleteWarehouseHandler",
+        const { id } = req.params;
+        const warehouse = await (0, warehouse_service_1.findById)({ id: id });
+        if (!warehouse)
+            return next(new appError_1.default(401, 'Err! Warehouse not found'));
+        const response = await (0, warehouse_service_1.deleteWarehouse)(id);
+        return res.status(200).json({
             status: 'success',
-            data: {
-                agent,
-            },
+            response
         });
     }
     catch (err) {

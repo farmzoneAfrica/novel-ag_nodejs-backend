@@ -1,6 +1,4 @@
 import { PrismaClient, Prisma, Agent, Warehouse } from '@prisma/client';
-import config from 'config';
-import redisClient from '../utils/connectRedis';
 
 const prisma = new PrismaClient();
 
@@ -18,19 +16,17 @@ export const getUniqueWarehouse = async (
   where: Partial<Prisma.WarehouseWhereInput>,
   select?: Prisma.WarehouseSelect
 ) => {
-  return (await prisma.agent.findFirst({
+  return (await prisma.warehouse.findFirst({
     where,
     select,
-  })) as Agent;
+  })) as Warehouse;
 };
 
-export const findWarehouseById = async (
-  where: string | any,
-  select?: Prisma.AgentSelect
+export const findById = async (
+   where: Prisma.WarehouseWhereUniqueInput,
 ) => {
-  await prisma.warehouse.findUnique({
-    where,
-    select
+  return await prisma.warehouse.findUnique({
+    where
   })
 };
 
@@ -38,7 +34,7 @@ export const findUniqueWarehouse = async (
   where: Prisma.WarehouseWhereUniqueInput,
   select?: Prisma.WarehouseSelect
 ) => {
-  return (await prisma.agent.findUnique({
+  return (await prisma.warehouse.findUnique({
     where,
     select,
   })) as Warehouse;
@@ -49,13 +45,11 @@ export const updateWarehouse = async (
   data: Prisma.WarehouseUpdateInput,
   select?: Prisma.WarehouseSelect
 ) => {
-  return (await prisma.agent.update({ where, data, select })) as Agent;
+  return (await prisma.warehouse.update({ where, data, select })) as Warehouse;
 };
-export const deleteWarehouse = async (
-  where: Partial<Prisma.WarehouseWhereUniqueInput>,
-  select?: Prisma.WarehouseSelect 
-) => {
-  return (await prisma.agent.delete({ where, select })) as Agent;
-};
+
+export const deleteWarehouse = async (id: string) => {
+  return await prisma.warehouse.delete({where:{id}});
+}
 
 

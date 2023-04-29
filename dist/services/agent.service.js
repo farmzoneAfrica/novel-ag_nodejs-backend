@@ -86,7 +86,6 @@ const signTokens = async (agent) => {
     const refresh_token = (0, jwt_1.signJwt)({ sub: agent.id }, 'ab1234', {
         expiresIn: `30s`,
     });
-    console.log(74, "sign in token function");
     return { access_token, refresh_token };
 };
 exports.signTokens = signTokens;

@@ -5,14 +5,19 @@ enum RoleEnumType {
   AGENT = 'AGENT',
 }
 
+enum GenderEnumType {
+  Male = 'Male',
+  Female = 'Female',
+}
+
 export const registerAgentSchema = object({
   body: object({
     firstName: string({
       required_error: 'firstName is required',
     }),
     lastName: string().optional(),
-    gender: string().optional(),
     state: string().optional(),
+    gender: (z.nativeEnum(GenderEnumType)),
     localGovt: string().optional(),
     maritalStatus: string().optional(),
     phone: string({

@@ -20,13 +20,12 @@ import { requireUser } from '../middleware/requireUser';
 
 const prosperityHubrouter = express.Router();
 
-const base = ""
+const base = "/api/prosperity-hub"
 
-prosperityHubrouter.post(base+'/create', auth, requireUser, validate(createProsperityHubSchema), createProsperityHubHandler);
-prosperityHubrouter.patch(base+'/update', auth, validate(updateProsperityHubSchema), updateProsperityHubHandler);
+prosperityHubrouter.post(base+'/create', validate(createProsperityHubSchema), auth, requireUser, createProsperityHubHandler);
 prosperityHubrouter.get(base+'/get', auth, getProsperityHubsHandler);
-prosperityHubrouter.get(base+'/:id', auth, getProsperityHubHandler);
-// prosperityHubrouter.get(base+'/:id', getProsperityHubHandler);
-prosperityHubrouter.delete(base+'/delete', auth, adminAuth, deleteProsperityHubHandler);
+prosperityHubrouter.get(base+'/get/:id', auth, getProsperityHubHandler);
+prosperityHubrouter.patch(base+'/update/:id', validate(updateProsperityHubSchema), auth, updateProsperityHubHandler );
+prosperityHubrouter.delete(base+'/delete/:id', auth, adminAuth, deleteProsperityHubHandler);
 
 export default prosperityHubrouter;

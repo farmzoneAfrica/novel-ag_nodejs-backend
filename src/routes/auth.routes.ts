@@ -22,9 +22,7 @@ import {
 
 const authRouter = express.Router();
 
-// the base variable is for purposes of swagger compilation, 
-// it should always be an empty string but api/agent when auto compiling swagger
-const base = ""
+const base = "/api/auth"
 
 authRouter.post(base+'/register', validate(registerAgentSchema), registerAgentHandler);
 authRouter.post(base+'/login', validate(loginAgentSchema), loginAgentHandler);

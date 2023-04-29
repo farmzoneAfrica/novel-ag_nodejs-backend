@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import {
     createWarehouse,
     getWarehouses,
-    findWarehouseById,
+    findById,
     getUniqueWarehouse,
     updateWarehouse,
     deleteWarehouse,
@@ -16,7 +16,8 @@ import {
 
 import AppError from '../utils/appError';
 import {
-  CreateWarehouseInput
+  CreateWarehouseInput,
+  UpdateWarehouseInput
 } from "../schemas/warehouse.schema"
 import prisma from '../utils/prismaClient';
 import { Prisma } from '@prisma/client';
@@ -52,12 +53,11 @@ export const createWarehouseHandler = async (
       warehouse
     })
   } catch (err: any) { 
-    console.log(91, "email verification fail", err)
       if (err instanceof Prisma.PrismaClientKnownRequestError) {
       if (err.code === 'P2002') {
         return res.status(409).json({
           status: 'fail',
-          message: 'Prosperity Hub with a similar name already exist, please use another name',
+          message: 'Warehouse name already exist, please use another name',
         });
       }
     }
@@ -65,18 +65,17 @@ export const createWarehouseHandler = async (
   }
 };
 
-export const viewWarehousesHandler = async (
+export const getWarehousesHandler = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const agents = await getWarehouses()
-      res.status(200).status(200).json({
-        hello: "hello viewWarehousesHandler",
+    const warehouse = await getWarehouses()
+      return res.status(200).status(200).json({
       status: 'success',
       data: {
-        agents,
+        warehouse,
       },
     });
   } catch (err: any) {
@@ -84,57 +83,52 @@ export const viewWarehousesHandler = async (
   }
 };
 
-// get single agent
-export const viewWarehouseHandler = async (
+export const getWarehouseHandler = async (
   req: Response | any,
   res: Response,
   next: NextFunction
 ) => {
   try {
     const { id } = req.params;
-    const agent = await prisma.agent.findUnique({
-      where: { id },
-      select: {
-        id: true,
-        firstName: true,
-        lastName: true,
-        avatar: true,
-        prosperityHub: true,
-        warhouse: true
-      }
-})
-     if (!agent) {
-      return next(new AppError(401, 'Agent does not exist'));
+    const warehouse = await findById({ id: id})
+     if (!warehouse) {
+      return next(new AppError(401, 'Warehouse does not exist'));
     }
       return res.status(200).status(200).json({
-        hello: "hello viewWarehouseHandler",
       status: 'success',
       data: {
-        agent,
+        warehouse,
       },
     });
   } catch (err: any) {
-    console.log(76, err);
     next(err);
   }
 };
 
 export const updateWarehouseHandler = async (
-  req: Request,
+  req: Request < {}, {}, UpdateWarehouseInput > | any,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const agent = res.locals.agent;
-
-      res.status(200).status(200).json({
-        hello: "hello updateWarehouseHandler",
-      status: 'success',
-      data: {
-        agent,
-      },
+  const { id } = req.params; 
+  const data = {
+    name: req.body.name,
+    address: req.body.address,
+    state: req.body.state,
+    localGovt: req.body.localGovt,
+    status: req.body.status,
+    remarks: req.body.remarks,
+  }
+    const warehouse = await updateWarehouse({ id: id }, data);
+     if (!warehouse) 
+      return next(new AppError(401, 'Warehouse does not exist'));
+    
+    return res.status(200).json({
+      status: 'Success',
+      warehouse,
     });
-  } catch (err: any) {
+  } catch (err: any) {    
     next(err);
   }
 };
@@ -145,18 +139,17 @@ export const deleteWarehouseHandler = async (
   next: NextFunction
 ) => {
   try {
-    const agent = res.locals.agent;
-
-      res.status(200).status(200).json({
-        hello: "hello deleteWarehouseHandler",
+    const { id } = req.params;
+    const warehouse = await findById({id: id});
+    if (!warehouse) 
+      return next(new AppError(401, 'Err! Warehouse not found'));
+    
+    const response = await deleteWarehouse(id)
+    return res.status(200).json({
       status: 'success',
-      data: {
-        agent,
-      },
+      response
     });
   } catch (err: any) {
     next(err);
   }
 };
-
-
