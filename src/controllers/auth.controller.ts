@@ -8,13 +8,22 @@ import {
   ResetPasswordInput,
   VerifyEmailInput,
 } from '../schemas/agent.schema';
+
 import {
   createAgent,
   findUniqueAgent,
   findAgent,
+  findAgent1,
+  findById,
   signTokens,
   updateAgent,
 } from '../services/agent.service';
+
+import { 
+  getStates,
+  getLGAs
+} from '../services/common.service';
+ 
 import { Prisma } from '@prisma/client';
 import config from 'config';
 import AppError from '../utils/appError';
@@ -27,8 +36,6 @@ const cookiesOptions: CookieOptions = {
   httpOnly: true,
   sameSite: 'lax',
 };
-
-// if (process.env.NODE_ENV === 'production') cookiesOptions.secure = true;
 
 const accessTokenCookieOptions: CookieOptions = {
   ...cookiesOptions,
@@ -52,6 +59,7 @@ export const registerAgentHandler = async (
   next: NextFunction
 ) => {
   try {
+    
     const hashedPassword = await bcrypt.hash(req.body.password, 12);
     const verifyCode = crypto.randomBytes(32).toString('hex');
     const verificationCode = crypto
@@ -65,14 +73,29 @@ export const registerAgentHandler = async (
         address: req.body.address,
         phone: req.body.phone,
         avatar: req.body.avatar,
+        gender: req.body.gender,
+        state: req.body.state,
+        localGovt: req.body.localGovt,
+        maritalStatus: req.body.maritalStatus,
         email: req.body.email.toLowerCase(),
         password: hashedPassword,
         verificationCode,
     });
 
-    const baseUrl = process.env.BASE_URL;
+    const inputState = agent.state;
+    const inputLGA = agent.localGovt;
+    const states = await getStates();
+    const LGAs = await getLGAs(inputState);
+    if ( states.includes(inputState) === false ) {
+      return next(new AppError(400, 'Invalid state, please enter a valid state'));
+    }
+    if ( LGAs.includes(inputLGA) === false ) {
+      return next(new AppError(400, 'Invalid LGA, please enter a valid local government'));
+    }
 
+    const baseUrl = process.env.BASE_URL;
     const redirectUrl = `${baseUrl}/api/auth/verifyemail/${verifyCode}`;
+
     try {
       await new Email(agent, redirectUrl).sendVerificationCode();      
       await updateAgent({ id: agent.id }, { verificationCode });
@@ -89,8 +112,7 @@ export const registerAgentHandler = async (
         message: 'There was an error sending email, please try again',
       });
     }
-  } catch (err: any) { 
-    console.log(91, "email verification fail", err)   
+  } catch (err: any) {   
     if (err instanceof Prisma.PrismaClientKnownRequestError) {
       if (err.code === 'P2002') {
         return res.status(409).json({
@@ -143,7 +165,6 @@ export const loginAgentHandler = async (
       access_token,
     });
   } catch (err: any) {
-    // console.log(145, err );
     next(err);
   }
 };
@@ -240,7 +261,7 @@ export const verifyEmailHandler = async (
       return next(new AppError(401, 'Could not verify email'));
     }
 
-    res.status(200).json({
+    return res.status(200).json({
       status: 'success',
       message: 'Email verified successfully',
     });
@@ -265,7 +286,11 @@ export const forgotPasswordHandler = async (
   next: NextFunction
 ) => {
   try {
-    const agent = await findAgent({ email: req.body.email.toLowerCase() });
+    // const agent = await findAgent({ email: req.body.email.toLowerCase() });
+    const email = req.body.email.toLowerCase();
+    console.log(email)
+    const agent = await findAgent1({ email: email });
+    console.log(agent)
     const message =
       'You will receive a reset email if agent with that email exist';
     if (!agent) {
@@ -306,10 +331,10 @@ export const forgotPasswordHandler = async (
 
     try {
       const baseUrl = process.env.BASE_URL;
-      const url = `${baseUrl}/resetpassword/${resetToken}`;
+      const url = `${baseUrl}/api/auth/resetpassword/${resetToken}`;
       await new Email(agent, url).sendPasswordResetToken();
 
-      res.status(200).json({
+     return res.status(200).json({
         status: 'success',
         message,
       });
@@ -325,6 +350,8 @@ export const forgotPasswordHandler = async (
       });
     }
   } catch (err: any) {
+    console.log(err);
+    
     next(err);
   }
 };
@@ -359,7 +386,7 @@ export const resetPasswordHandler = async (
     }
 
     const hashedPassword = await bcrypt.hash(req.body.password, 12);
-    // Change password data
+
     await updateAgent(
       {
         id: user.id,

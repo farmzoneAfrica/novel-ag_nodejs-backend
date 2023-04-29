@@ -11,8 +11,6 @@ const auth_1 = require("../middleware/auth");
 const requireUser_1 = require("../middleware/requireUser");
 const validate_1 = require("../middleware/validate");
 const warehouseRouter = express_1.default.Router();
-// the base variable is for purposes of swagger compilation, 
-// it should always be an empty string but api/agent when auto compiling swagger
 const base = "";
 warehouseRouter.post(base + '/create', auth_1.auth, requireUser_1.requireUser, (0, validate_1.validate)(warehouse_schema_1.createWarehouseSchema), warehouse_controller_1.createWarehouseHandler);
 warehouseRouter.patch(base + '/update', auth_1.auth, requireUser_1.requireUser, (0, validate_1.validate)(warehouse_schema_1.updateWarehouseSchema), warehouse_controller_1.updateWarehouseHandler);

@@ -31,7 +31,7 @@ authRouter.post(base+'/login', validate(loginAgentSchema), loginAgentHandler);
 authRouter.get(base+'/refresh', refreshAccessTokenHandler);
 authRouter.get( base+'/verifyemail/:verificationCode', validate(verifyEmailSchema), verifyEmailHandler );
 authRouter.get( base+'/logout', auth, requireUser, logoutAgentHandler );
-authRouter.post( base+'/forgotpassword',validate(forgotPasswordSchema), forgotPasswordHandler );
+authRouter.post( base+'/forgotpassword', validate(forgotPasswordSchema), forgotPasswordHandler );
 authRouter.patch( base+'/resetpassword/:resetToken', validate(resetPasswordSchema), resetPasswordHandler );
 
 export default authRouter;

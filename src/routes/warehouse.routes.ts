@@ -23,8 +23,6 @@ import { validate } from '../middleware/validate';
 
 const warehouseRouter = express.Router();
 
-// the base variable is for purposes of swagger compilation, 
-// it should always be an empty string but api/agent when auto compiling swagger
 const base = ""
 
 warehouseRouter.post(base+'/create', auth, requireUser, validate(createWarehouseSchema), createWarehouseHandler);

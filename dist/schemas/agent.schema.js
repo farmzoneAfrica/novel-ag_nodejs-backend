@@ -13,6 +13,10 @@ exports.registerAgentSchema = (0, zod_1.object)({
             required_error: 'firstName is required',
         }),
         lastName: (0, zod_1.string)().optional(),
+        gender: (0, zod_1.string)().optional(),
+        state: (0, zod_1.string)().optional(),
+        localGovt: (0, zod_1.string)().optional(),
+        maritalStatus: (0, zod_1.string)().optional(),
         phone: (0, zod_1.string)({
             required_error: 'phone number is required',
         }).min(7, 'Number must be more than 6 characters')
@@ -55,6 +59,10 @@ exports.updateAgentSchema = (0, zod_1.object)({
     body: (0, zod_1.object)({
         firstName: (0, zod_1.string)({}),
         lastName: (0, zod_1.string)({}),
+        gender: (0, zod_1.string)({}),
+        state: (0, zod_1.string)({}),
+        localGovt: (0, zod_1.string)({}),
+        maritalStatus: (0, zod_1.string)({}),
         password: (0, zod_1.string)({})
             .min(8, 'Password must be more than 8 characters')
             .max(32, 'Password must be less than 32 characters').optional(),

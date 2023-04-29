@@ -14,12 +14,15 @@ model Agent {
   @@map(name: "agents")
   id    String     @id @default(uuid())
   email String  @unique
-  phone String @unique
+  phone String 
   firstName  String
   lastName  String?
+  gender String @default("")
   address String ?
-  avatar String ?
-  maritalStatus String ? @default("NA")
+  avatar String  @default("")
+  state String  @default("")
+  localGovt String @default("")
+  maritalStatus String ? @default("")
   verified Boolean? @default(false) 
 
   password String 
@@ -45,14 +48,18 @@ enum RoleEnumType {
   AGENT
   ADMIN
 }
+
 model ProsperityHub {
   @@map(name: "prosperityHubs")
   id        String     @id @default(uuid())
-  name     String
+  name     String @unique
   address   String?
+  state     String  @default("")
+  localGovt  String @default("")
   remarks   String?
+  status   Boolean @default(false)
   agent   Agent   @relation(fields: [agentId], onDelete: Cascade, references: [id])
-  agentId String
+  agentId   String
 
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt @default(now())
@@ -60,9 +67,12 @@ model ProsperityHub {
 model Warehouse {
   @@map(name: "warehouses")
   id        String     @id @default(uuid())
-  name     String
+  name     String @unique
+  state String @default("")
+  localGovt String @default("")
   address     String
   remarks     String?
+  status Boolean @default(false)
   agent   Agent   @relation(fields: [agentId], onDelete: Cascade, references: [id])
   agentId String
 

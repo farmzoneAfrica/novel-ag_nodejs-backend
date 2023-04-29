@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteAgent = exports.signTokens = exports.updateAgent = exports.findUniqueAgent = exports.findById = exports.findAgent = exports.pagination = exports.findAll = exports.createAgent = exports.excludedFields = void 0;
+exports.deleteAgent = exports.signTokens = exports.updateAgent = exports.findUniqueAgent = exports.findById = exports.findAgent1 = exports.findAgent = exports.pagination = exports.findAll = exports.createAgent = exports.excludedFields = void 0;
 const client_1 = require("@prisma/client");
 const lodash_1 = require("lodash");
 const config_1 = __importDefault(require("config"));
@@ -34,13 +34,27 @@ const pagination = async (skip, take) => {
     });
 };
 exports.pagination = pagination;
-const findAgent = async (where, select) => {
-    return (await prisma.agent.findFirst({
-        where,
-        select,
+// export const findAgent = async (
+//   where: Partial<Prisma.AgentWhereInput>,
+//   select?: Prisma.AgentSelect
+// ) => {
+//   return (await prisma.agent.findFirst({
+//     where,
+//     select,
+//   })) as Agent;
+// };
+const findAgent = async (where) => {
+    return (await prisma.agent.findUnique({
+        where
     }));
 };
 exports.findAgent = findAgent;
+const findAgent1 = async (where) => {
+    return (await prisma.agent.findUnique({
+        where
+    }));
+};
+exports.findAgent1 = findAgent1;
 const findById = async (where) => {
     return (await prisma.agent.findUnique({
         where,

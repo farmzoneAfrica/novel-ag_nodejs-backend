@@ -8,12 +8,19 @@ import {
   updateProsperityHub,
   deleteProsperityHub,
   
-} from '../services/prosperityHub.service'
+} from '../services/prosperityHub.service';
+
+import { 
+  getStates,
+  getLGAs
+} from '../services/common.service';
+ 
 import AppError from '../utils/appError';
 import {
   CreateProsperityHubInput,
   UpdateProsperityHubInput
-} from "../schemas/prosperityHub.schema"
+} from "../schemas/prosperityHub.schema";
+import { Prisma } from '@prisma/client';
 import agentRouter from '../routes/agent.routes';
 import { userInfo } from 'os';
 
@@ -27,16 +34,42 @@ export const createProsperityHubHandler = async (
     const prosperityHub = await createProsperityHub({
       name: req.body.name,
       address: req.body.address,
+      state: req.body.state,
+      localGovt: req.body.localGovt,
       remarks: req.body.remarks,
       agentId: agentId
     });
+    console.log(prosperityHub);
+    
+    const inputState = prosperityHub.state;
+    const inputLGA = prosperityHub.localGovt;
+    const states = await getStates();
+    const LGAs = await getLGAs(inputState);
+    console.log (
+      "inputState", inputState, 
+      "inputLGA", inputLGA,
+      "states", states, 
+      "LGAs", LGAs )
+    if ( states.includes(inputState) === false ) {
+      return next(new AppError(400, 'Invalid state, please enter a valid state'));
+    }
+    if ( LGAs.includes(inputLGA) === false ) {
+      return next(new AppError(400, 'Invalid LGA, please enter a valid local government'));
+    }
  console.log(prosperityHub);
     return res.status(201).json({
       status: "success",
       prosperityHub
     })
   } catch (err: any) { 
-    console.log(37, err)   
+      if (err instanceof Prisma.PrismaClientKnownRequestError) {
+      if (err.code === 'P2002') {
+        return res.status(409).json({
+          status: 'fail',
+          message: 'Prosperity Hub with a similar name already exist, please use another name',
+        });
+      }
+    }
     next(err);
   }
 };

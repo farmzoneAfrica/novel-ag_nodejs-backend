@@ -92,8 +92,12 @@ export const updateAgentHandler = async (
         firstName: req.body.firstName,
         lastName: req.body.lastName,
         address: req.body.address,
+        gender: req.body.gender,
+        maritalStatus: req.body.maritalStatus,
         phone: req.body.phone,
         avatar: req.body.avatar,
+        state: req.body.state,
+        localGovt: req.body.localGovt,
         password: req.body.password,
      }
     
