@@ -15,7 +15,7 @@ import swaggerFile from './swagger-output.json';
 
 import agentRouter from "./routes/agent.routes";
 import authRouter from "./routes/auth.routes";
-import prosperityHubRouter from "./routes/prosperityHub.routes";
+import prosperityHubRouter from "./routes/prosperity.hub.routes";
 import warehouseRouter from "./routes/warehouse.routes";
 
 validateEnv()

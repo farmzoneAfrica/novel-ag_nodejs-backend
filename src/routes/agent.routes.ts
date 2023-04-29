@@ -19,12 +19,12 @@ import { requireUser } from '../middleware/requireUser';
 
 const agentRouter = express.Router();
 
-const base = "";
+const base = "/api/agent";
 
 agentRouter.get(base+'/get', auth, getAgentsHandler);
-agentRouter.get(base+'/:id', auth, requireUser, getAgentHandler);
+agentRouter.get(base+'/get/:id', auth, requireUser, getAgentHandler);
 agentRouter.get(base+'/:pageNo', getAgentsByPageHandler);
 agentRouter.patch(base+'/update/:id', validate(updateAgentSchema), auth, updateAgentHandler );
-agentRouter.delete(base+'/delete/:id', auth, deleteAgentHandler );
+agentRouter.delete(base+'/delete/:id', auth, adminAuth, deleteAgentHandler );
 
 export default agentRouter;
