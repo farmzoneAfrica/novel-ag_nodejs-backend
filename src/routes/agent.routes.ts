@@ -21,8 +21,8 @@ const agentRouter = express.Router();
 
 const base = "";
 
+agentRouter.get(base+'/get', auth, getAgentsHandler);
 agentRouter.get(base+'/:id', auth, requireUser, getAgentHandler);
-agentRouter.get(base+'/', auth, getAgentsHandler);
 agentRouter.get(base+'/:pageNo', getAgentsByPageHandler);
 agentRouter.patch(base+'/update/:id', validate(updateAgentSchema), auth, updateAgentHandler );
 agentRouter.delete(base+'/delete/:id', auth, deleteAgentHandler );

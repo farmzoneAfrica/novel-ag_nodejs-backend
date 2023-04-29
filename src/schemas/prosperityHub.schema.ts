@@ -1,4 +1,4 @@
-import { object, string, TypeOf, z } from 'zod';
+import { boolean, object, string, TypeOf, z } from 'zod';
 
 export const createProsperityHubSchema = object({
   body: object({
@@ -23,6 +23,7 @@ export const updateProsperityHubSchema = object({
     name: string({}),
     address: string({}),
     state: string({}),
+    status: boolean({}),
     localGovt: string({}),
     remarks: string({})
   })

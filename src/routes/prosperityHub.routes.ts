@@ -23,10 +23,9 @@ const prosperityHubrouter = express.Router();
 const base = ""
 
 prosperityHubrouter.post(base+'/create', auth, requireUser, validate(createProsperityHubSchema), createProsperityHubHandler);
-prosperityHubrouter.patch(base+'/update', auth, validate(updateProsperityHubSchema), updateProsperityHubHandler);
 prosperityHubrouter.get(base+'/get', auth, getProsperityHubsHandler);
 prosperityHubrouter.get(base+'/:id', auth, getProsperityHubHandler);
-// prosperityHubrouter.get(base+'/:id', getProsperityHubHandler);
+prosperityHubrouter.patch(base+'/update/:id', auth, validate(updateProsperityHubSchema), updateProsperityHubHandler);
 prosperityHubrouter.delete(base+'/delete', auth, adminAuth, deleteProsperityHubHandler);
 
 export default prosperityHubrouter;

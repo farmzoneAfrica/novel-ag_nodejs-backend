@@ -17,7 +17,7 @@ model Agent {
   phone String 
   firstName  String
   lastName  String?
-  gender String @default("")
+  gender GenderEnumType
   address String ?
   avatar String  @default("")
   state String  @default("")
@@ -47,6 +47,11 @@ model Agent {
 enum RoleEnumType {
   AGENT
   ADMIN
+}
+
+enum GenderEnumType {
+  Male
+  Female
 }
 
 model ProsperityHub {

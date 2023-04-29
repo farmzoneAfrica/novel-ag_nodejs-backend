@@ -8,7 +8,6 @@ import {
 } from '../services/agent.service'
 import AppError from '../utils/appError';
 
-// get all agents 
 export const getAgentsHandler = async (
   req: Request,
   res: Response,
@@ -27,7 +26,6 @@ export const getAgentsHandler = async (
   }
 };
 
-// get all agents by page
 export const getAgentsByPageHandler = async (
   req: Request,
   res: Response,
@@ -47,7 +45,6 @@ export const getAgentsByPageHandler = async (
   }
 };
 
-// get single agent
 export const getAgentHandler = async (
   req: Response | any,
   res: Response,
@@ -66,12 +63,10 @@ export const getAgentHandler = async (
       },
     });
   } catch (err: any) {
-    console.log(76, err);
     next(err);
   }
 };
 
-// update agent
 export const updateAgentHandler = async (
   req: Response | any,
   res: Response,
@@ -79,34 +74,28 @@ export const updateAgentHandler = async (
 ) => {
   try {
     const { id } = req.params;
-
     const findAgent = await findById({id: id});
-
-    console.log(findAgent);
     if (!findAgent) 
       return next(new AppError(401, 'Agent not found in database'));
+    const body: Array<string> = (Object.keys(req.body));    
+  const data = {
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+    address: req.body.address,
+    gender: req.body.gender,
+    maritalStatus: req.body.maritalStatus,
+    phone: req.body.phone,
+    avatar: req.body.avatar,
+    state: req.body.state,
+    localGovt: req.body.localGovt,
+    password: req.body.password,
+  }
   
-    const body:Array<string> = (Object.keys(req.body));
-
-     const data = {
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        address: req.body.address,
-        gender: req.body.gender,
-        maritalStatus: req.body.maritalStatus,
-        phone: req.body.phone,
-        avatar: req.body.avatar,
-        state: req.body.state,
-        localGovt: req.body.localGovt,
-        password: req.body.password,
-     }
+  const dataKeys: Array<string> = Object.keys(data);
     
-    const keys:Array<string> = Object.keys(data);
-    
-    if (keys.includes(body.toString()) === false){
-      return next(new AppError(401, 'Wrong input value'));
-    }
-
+  if (dataKeys.includes(body.toString()) === false ) {
+    return next(new AppError(401, 'Wrong input value'));
+  }
     const agent = await updateAgent(
       { id: id },
       data,
@@ -121,12 +110,10 @@ export const updateAgentHandler = async (
       },
     });
   } catch (err: any) {
-    console.log(76, err);
     next(err);
   }
 };
 
-// delete agent
 export const deleteAgentHandler = async (
   req: Request,
   res: Response,

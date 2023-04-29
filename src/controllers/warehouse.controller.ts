@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import {
     createWarehouse,
     getWarehouses,
-    findWarehouseById,
+    findById,
     getUniqueWarehouse,
     updateWarehouse,
     deleteWarehouse,
@@ -52,12 +52,11 @@ export const createWarehouseHandler = async (
       warehouse
     })
   } catch (err: any) { 
-    console.log(91, "email verification fail", err)
       if (err instanceof Prisma.PrismaClientKnownRequestError) {
       if (err.code === 'P2002') {
         return res.status(409).json({
           status: 'fail',
-          message: 'Prosperity Hub with a similar name already exist, please use another name',
+          message: 'Warehouse name already exist, please use another name',
         });
       }
     }
@@ -65,18 +64,17 @@ export const createWarehouseHandler = async (
   }
 };
 
-export const viewWarehousesHandler = async (
+export const getWarehousesHandler = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const agents = await getWarehouses()
-      res.status(200).status(200).json({
-        hello: "hello viewWarehousesHandler",
+    const warehouse = await getWarehouses()
+      return res.status(200).status(200).json({
       status: 'success',
       data: {
-        agents,
+        warehouse,
       },
     });
   } catch (err: any) {
@@ -84,33 +82,21 @@ export const viewWarehousesHandler = async (
   }
 };
 
-// get single agent
-export const viewWarehouseHandler = async (
+export const getWarehouseHandler = async (
   req: Response | any,
   res: Response,
   next: NextFunction
 ) => {
   try {
     const { id } = req.params;
-    const agent = await prisma.agent.findUnique({
-      where: { id },
-      select: {
-        id: true,
-        firstName: true,
-        lastName: true,
-        avatar: true,
-        prosperityHub: true,
-        warhouse: true
-      }
-})
-     if (!agent) {
-      return next(new AppError(401, 'Agent does not exist'));
+    const warehouse = await findById({ id: id})
+     if (!warehouse) {
+      return next(new AppError(401, 'Warehouse does not exist'));
     }
       return res.status(200).status(200).json({
-        hello: "hello viewWarehouseHandler",
       status: 'success',
       data: {
-        agent,
+        warehouse,
       },
     });
   } catch (err: any) {

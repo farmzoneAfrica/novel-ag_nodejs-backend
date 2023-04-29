@@ -2,8 +2,8 @@
 import express, { NextFunction, Request, Response, response } from 'express';
 import {
   createWarehouseHandler,
-  viewWarehousesHandler,
-  viewWarehouseHandler,
+  getWarehousesHandler,
+  getWarehouseHandler,
   updateWarehouseHandler,
   deleteWarehouseHandler,
 } from '../controllers/warehouse.controller';
@@ -26,9 +26,9 @@ const warehouseRouter = express.Router();
 const base = ""
 
 warehouseRouter.post(base+'/create', auth, requireUser, validate(createWarehouseSchema), createWarehouseHandler);
+warehouseRouter.get(base+'/get', auth, getWarehousesHandler);
+warehouseRouter.get(base+'/:id', auth, getWarehouseHandler);
 warehouseRouter.patch(base+'/update', auth, requireUser, validate(updateWarehouseSchema), updateWarehouseHandler);
-warehouseRouter.get(base+'/', auth, viewWarehousesHandler);
-warehouseRouter.get(base+'/:id', auth, viewWarehouseHandler);
 warehouseRouter.get(base+'/delete', auth, adminAuth, deleteWarehouseHandler);
 
 export default warehouseRouter;

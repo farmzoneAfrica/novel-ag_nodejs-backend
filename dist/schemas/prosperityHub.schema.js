@@ -24,6 +24,7 @@ exports.updateProsperityHubSchema = (0, zod_1.object)({
         name: (0, zod_1.string)({}),
         address: (0, zod_1.string)({}),
         state: (0, zod_1.string)({}),
+        status: (0, zod_1.boolean)({}),
         localGovt: (0, zod_1.string)({}),
         remarks: (0, zod_1.string)({})
     })

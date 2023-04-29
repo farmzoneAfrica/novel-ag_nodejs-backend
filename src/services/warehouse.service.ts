@@ -24,13 +24,11 @@ export const getUniqueWarehouse = async (
   })) as Agent;
 };
 
-export const findWarehouseById = async (
-  where: string | any,
-  select?: Prisma.AgentSelect
+export const findById = async (
+   where: Prisma.WarehouseWhereUniqueInput,
 ) => {
-  await prisma.warehouse.findUnique({
-    where,
-    select
+  return await prisma.warehouse.findUnique({
+    where
   })
 };
 

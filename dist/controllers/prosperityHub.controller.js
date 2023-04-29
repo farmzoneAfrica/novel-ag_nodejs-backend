@@ -24,14 +24,12 @@ const createProsperityHubHandler = async (req, res, next) => {
         const inputLGA = prosperityHub.localGovt;
         const states = await (0, common_service_1.getStates)();
         const LGAs = await (0, common_service_1.getLGAs)(inputState);
-        console.log("inputState", inputState, "inputLGA", inputLGA, "states", states, "LGAs", LGAs);
         if (states.includes(inputState) === false) {
             return next(new appError_1.default(400, 'Invalid state, please enter a valid state'));
         }
         if (LGAs.includes(inputLGA) === false) {
             return next(new appError_1.default(400, 'Invalid LGA, please enter a valid local government'));
         }
-        console.log(prosperityHub);
         return res.status(201).json({
             status: "success",
             prosperityHub
@@ -76,23 +74,37 @@ const getProsperityHubHandler = async (req, res, next) => {
         });
     }
     catch (err) {
-        console.log(76, err);
         next(err);
     }
 };
 exports.getProsperityHubHandler = getProsperityHubHandler;
 const updateProsperityHubHandler = async (req, res, next) => {
     try {
-        const agent = res.locals.agent;
-        res.status(200).status(200).json({
-            hello: "hello updateProsperityHubHandler",
-            status: 'success',
-            data: {
-                agent,
-            },
+        const { id } = req.params;
+        console.log(req.body);
+        // const prosperityHub = await findById({id: id});
+        // if (!prosperityHub) 
+        //   return next(new AppError(401, 'Prosperity Hub not found in database'));    
+        const data = {
+            name: req.body.name,
+            address: req.body.address,
+            state: req.body.state,
+            localGovt: req.body.localGovt,
+            status: req.body.status,
+            remarks: req.body.remarks,
+        };
+        const prosperityHub = await (0, prosperityHub_service_1.updateProsperityHub)({ id: id }, data);
+        console.log(prosperityHub);
+        if (!prosperityHub) {
+            return next(new appError_1.default(401, 'Prosperity Hub does not exist'));
+        }
+        return res.status(200).json({
+            status: 'Success',
+            prosperityHub,
         });
     }
     catch (err) {
+        console.log(err);
         next(err);
     }
 };

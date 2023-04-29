@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteWarehouse = exports.updateWarehouse = exports.findUniqueWarehouse = exports.findWarehouseById = exports.getUniqueWarehouse = exports.getWarehouses = exports.createWarehouse = void 0;
+exports.deleteWarehouse = exports.updateWarehouse = exports.findUniqueWarehouse = exports.findById = exports.getUniqueWarehouse = exports.getWarehouses = exports.createWarehouse = void 0;
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
 const createWarehouse = async (input) => {
@@ -20,13 +20,12 @@ const getUniqueWarehouse = async (where, select) => {
     }));
 };
 exports.getUniqueWarehouse = getUniqueWarehouse;
-const findWarehouseById = async (where, select) => {
-    await prisma.warehouse.findUnique({
-        where,
-        select
+const findById = async (where) => {
+    return await prisma.warehouse.findUnique({
+        where
     });
 };
-exports.findWarehouseById = findWarehouseById;
+exports.findById = findById;
 const findUniqueWarehouse = async (where, select) => {
     return (await prisma.agent.findUnique({
         where,

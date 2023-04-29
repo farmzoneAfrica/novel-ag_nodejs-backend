@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteProsperityHub = exports.updateProsperityHub = exports.findUniqueProsperityHub = exports.findById = exports.findProsperityHub = exports.getAllProsperityHubs = exports.createProsperityHub = void 0;
+exports.deleteProsperityHub = exports.updateProsperityHub = exports.findById = exports.findProsperityHub = exports.getAllProsperityHubs = exports.createProsperityHub = void 0;
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
 const createProsperityHub = async (input) => {
@@ -26,13 +26,15 @@ const findById = async (where) => {
     });
 };
 exports.findById = findById;
-const findUniqueProsperityHub = async (where, select) => {
-    return (await prisma.prosperityHub.findUnique({
-        where,
-        select,
-    }));
-};
-exports.findUniqueProsperityHub = findUniqueProsperityHub;
+// export const findUniqueProsperityHub = async (
+//   where: Prisma.ProsperityHubWhereUniqueInput,
+//   select?: Prisma.ProsperityHubSelect
+// ) => {
+//   return (await prisma.prosperityHub.findUnique({
+//     where,
+//     select,
+//   })) as ProsperityHub;
+// };
 const updateProsperityHub = async (where, data, select) => {
     return (await prisma.prosperityHub.update({ where, data, select }));
 };
