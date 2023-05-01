@@ -11,7 +11,7 @@ const validate_1 = require("../middleware/validate");
 const auth_1 = require("../middleware/auth");
 const requireUser_1 = require("../middleware/requireUser");
 const prosperityHubrouter = express_1.default.Router();
-const base = "/api/prosperity-hub";
+const base = "";
 prosperityHubrouter.post(base + '/create', (0, validate_1.validate)(prosperityHub_schema_1.createProsperityHubSchema), auth_1.auth, requireUser_1.requireUser, prosperityHub_controller_1.createProsperityHubHandler);
 prosperityHubrouter.get(base + '/get', auth_1.auth, prosperityHub_controller_1.getProsperityHubsHandler);
 prosperityHubrouter.get(base + '/get/:id', auth_1.auth, prosperityHub_controller_1.getProsperityHubHandler);

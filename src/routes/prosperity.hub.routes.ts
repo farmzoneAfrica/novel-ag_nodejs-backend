@@ -20,7 +20,7 @@ import { requireUser } from '../middleware/requireUser';
 
 const prosperityHubrouter = express.Router();
 
-const base = "/api/prosperity-hub"
+const base = ""
 
 prosperityHubrouter.post(base+'/create', validate(createProsperityHubSchema), auth, requireUser, createProsperityHubHandler);
 prosperityHubrouter.get(base+'/get', auth, getProsperityHubsHandler);

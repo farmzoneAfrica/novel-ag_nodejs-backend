@@ -23,7 +23,7 @@ import { validate } from '../middleware/validate';
 
 const warehouseRouter = express.Router();
 
-const base = "/api/warehouse"
+const base = ""
 
 warehouseRouter.post(base+'/create', validate(createWarehouseSchema), auth, requireUser, createWarehouseHandler);
 warehouseRouter.get(base+'/get', auth, getWarehousesHandler);

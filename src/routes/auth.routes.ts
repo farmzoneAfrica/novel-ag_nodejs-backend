@@ -22,7 +22,7 @@ import {
 
 const authRouter = express.Router();
 
-const base = "/api/auth"
+const base = ""
 
 authRouter.post(base+'/register', validate(registerAgentSchema), registerAgentHandler);
 authRouter.post(base+'/login', validate(loginAgentSchema), loginAgentHandler);

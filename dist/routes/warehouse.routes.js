@@ -11,7 +11,7 @@ const auth_1 = require("../middleware/auth");
 const requireUser_1 = require("../middleware/requireUser");
 const validate_1 = require("../middleware/validate");
 const warehouseRouter = express_1.default.Router();
-const base = "/api/warehouse";
+const base = "";
 warehouseRouter.post(base + '/create', (0, validate_1.validate)(warehouse_schema_1.createWarehouseSchema), auth_1.auth, requireUser_1.requireUser, warehouse_controller_1.createWarehouseHandler);
 warehouseRouter.get(base + '/get', auth_1.auth, warehouse_controller_1.getWarehousesHandler);
 warehouseRouter.get(base + '/get/:id', auth_1.auth, warehouse_controller_1.getWarehouseHandler);
