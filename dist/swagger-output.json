@@ -8,6 +8,7 @@
     "host": "novel-ag-node-v1.onrender.com",
     "basePath": "/",
     "schemes": [
+        "https",
         "http"
     ],
     "paths": {
