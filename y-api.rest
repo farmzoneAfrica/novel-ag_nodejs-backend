@@ -13,11 +13,14 @@ Content-Type: application/json
 {
   "password": "usha0816",
   "confirmPassword": "usha0816",
-  "firstName": "usha",
-  "lastName": "shir",
-  "address": "Chief Agbara close",
+  "firstName": "Test",
+  "lastName": "Main",
+  "address": "Chief Agbara close, Lekki Ape Express",
   "phone": "0816559322715",
   "avatar": "NA",
+  "gender": "Male",
+  "state": "Benue",
+  "localGovt": "Tarka",
   "email": "ushahembashir1@gmail.com"
 }
 

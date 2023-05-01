@@ -19,7 +19,7 @@ import { requireUser } from '../middleware/requireUser';
 
 const agentRouter = express.Router();
 
-const base = "/api/agent";
+const base = "";
 
 agentRouter.get(base+'/get', auth, getAgentsHandler);
 agentRouter.get(base+'/get/:id', auth, requireUser, getAgentHandler);

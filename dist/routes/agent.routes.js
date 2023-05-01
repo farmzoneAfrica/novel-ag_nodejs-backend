@@ -10,7 +10,7 @@ const auth_1 = require("../middleware/auth");
 const agent_schema_1 = require("../schemas/agent.schema");
 const requireUser_1 = require("../middleware/requireUser");
 const agentRouter = express_1.default.Router();
-const base = "/api/agent";
+const base = "";
 agentRouter.get(base + '/get', auth_1.auth, agent_controller_1.getAgentsHandler);
 agentRouter.get(base + '/get/:id', auth_1.auth, requireUser_1.requireUser, agent_controller_1.getAgentHandler);
 agentRouter.get(base + '/:pageNo', agent_controller_1.getAgentsByPageHandler);
