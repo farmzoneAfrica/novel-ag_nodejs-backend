@@ -2,33 +2,33 @@
 import express, { NextFunction, Request, Response, response } from 'express';
 import {
   forgotPasswordHandler,
-  loginAgentHandler,
-  logoutAgentHandler,
+  loginUserHandler,
+  logoutUserHandler,
   refreshAccessTokenHandler,
-  registerAgentHandler,
+  registerUserHandler,
   resetPasswordHandler,
   verifyEmailHandler,
 } from '../controllers/auth.controller';
-import { auth, adminAuth } from '../middleware/auth';
+import { auth, adminAuth } from '../middleware/deserializeUser';
 import { requireUser } from '../middleware/requireUser';
 import { validate } from '../middleware/validate';
 import {
   forgotPasswordSchema,
-  loginAgentSchema,
-  registerAgentSchema,
+  loginUserSchema,
+  registerUserSchema,
   resetPasswordSchema,
   verifyEmailSchema
-} from '../schemas/agent.schema';
+} from '../schemas/user.schema';
 
 const authRouter = express.Router();
 
 const base = ""
 
-authRouter.post(base+'/register', validate(registerAgentSchema), registerAgentHandler);
-authRouter.post(base+'/login', validate(loginAgentSchema), loginAgentHandler);
+authRouter.post(base+'/register', validate(registerUserSchema), registerUserHandler);
+authRouter.post(base+'/login', validate(loginUserSchema), loginUserHandler);
 authRouter.get(base+'/refresh', refreshAccessTokenHandler);
 authRouter.get( base+'/verifyemail/:verificationCode', validate(verifyEmailSchema), verifyEmailHandler );
-authRouter.get( base+'/logout', auth, requireUser, logoutAgentHandler );
+authRouter.get( base+'/logout', auth, requireUser, logoutUserHandler );
 authRouter.post( base+'/forgotpassword', validate(forgotPasswordSchema), forgotPasswordHandler );
 authRouter.patch( base+'/resetpassword/:resetToken', validate(resetPasswordSchema), resetPasswordHandler );
 

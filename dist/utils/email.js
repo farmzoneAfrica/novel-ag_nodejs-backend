@@ -13,18 +13,18 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-var _Email_firstName, _Email_to, _Email_from;
+var _Email_first_name, _Email_to, _Email_from;
 Object.defineProperty(exports, "__esModule", { value: true });
 const nodemailer_1 = __importDefault(require("nodemailer"));
 class Email {
-    constructor(agent, url) {
-        this.agent = agent;
+    constructor(user, url) {
+        this.user = user;
         this.url = url;
-        _Email_firstName.set(this, void 0);
+        _Email_first_name.set(this, void 0);
         _Email_to.set(this, void 0);
         _Email_from.set(this, void 0);
-        __classPrivateFieldSet(this, _Email_firstName, agent.firstName.split(' ')[0], "f");
-        __classPrivateFieldSet(this, _Email_to, agent.email, "f");
+        __classPrivateFieldSet(this, _Email_first_name, user.first_name.split(' ')[0], "f");
+        __classPrivateFieldSet(this, _Email_to, user.email, "f");
         __classPrivateFieldSet(this, _Email_from, `Novel-AG <dev.farmzoneafrica@gmail.com`, "f");
     }
     newTransport() {
@@ -43,7 +43,7 @@ class Email {
 <div style="max-width: 700px;text-align: center; text-transform: uppercase;
      margin:auto; border: 10px solid #DE3D6D; padding: 50px 20px; font-size: 110%;">
      <h2 style="color: #03435F;">Welcome to <span style="color : #DE3D6D";>NOVEL<span><span style="color:#F5844C;">-AG<span></h2>
-     <p>Hello ${__classPrivateFieldGet(this, _Email_firstName, "f")}, Please Follow the link by clicking on the button to verify your email
+     <p>Hello ${__classPrivateFieldGet(this, _Email_first_name, "f")}, Please Follow the link by clicking on the button to verify your email
       </p>
       <div style="text-align:center ;">
         <a href=${this.url}
@@ -71,5 +71,5 @@ class Email {
     }
 }
 exports.default = Email;
-_Email_firstName = new WeakMap(), _Email_to = new WeakMap(), _Email_from = new WeakMap();
+_Email_first_name = new WeakMap(), _Email_to = new WeakMap(), _Email_from = new WeakMap();
 //# sourceMappingURL=email.js.map

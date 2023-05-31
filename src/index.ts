@@ -13,10 +13,10 @@ import cors from 'cors';
 import swaggerUi from 'swagger-ui-express';
 import swaggerFile from './swagger-output.json';
 
-import agentRouter from "./routes/agent.routes";
-import authRouter from "./routes/auth.routes";
-import prosperityHubRouter from "./routes/prosperity.hub.routes";
-import warehouseRouter from "./routes/warehouse.routes";
+import user_router from "./routes/user.routes";
+import auth_router from "./routes/auth.routes";
+import prosperity_hub_router from "./routes/prosperity.hub.routes";
+import warehouse_router from "./routes/warehouse.routes";
 
 validateEnv()
 
@@ -35,10 +35,10 @@ const prisma = new PrismaClient();
   app.use(express.urlencoded({ extended: false }));
 
   app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile))
-  app.use('/api/agent', agentRouter);
-  app.use('/api/auth', authRouter);
-  app.use('/api/prosperity-hub', prosperityHubRouter);
-  app.use('/api/warehouse', warehouseRouter);
+  app.use('/api/user', user_router);
+  app.use('/api/auth', auth_router);
+  app.use('/api/prosperity-hub', prosperity_hub_router);
+  app.use('/api/warehouse', warehouse_router);
 
   app.get('/', (req, res) => {
     res.send('Hello World!');

@@ -16,7 +16,7 @@ import {
 import {
   auth,
   adminAuth
-} from '../middleware/auth';
+} from '../middleware/deserializeUser';
 import { requireUser } from '../middleware/requireUser';
 import { validate } from '../middleware/validate';
 

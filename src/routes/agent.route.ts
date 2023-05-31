@@ -10,10 +10,10 @@ import {
 import {
     auth,
     adminAuth
-} from '../middleware/auth';
+} from '../middleware/deserializeUser';
 import {
-  updateAgentSchema
-} from '../schemas/agent.schema';
+  updateUserSchema
+} from '../schemas/user.schema';
 
 import { requireUser } from '../middleware/requireUser';
 
@@ -24,7 +24,7 @@ const base = "";
 agentRouter.get(base+'/get', auth, getAgentsHandler);
 agentRouter.get(base+'/get/:id', auth, requireUser, getAgentHandler);
 agentRouter.get(base+'/:pageNo', getAgentsByPageHandler);
-agentRouter.patch(base+'/update/:id', validate(updateAgentSchema), auth, updateAgentHandler );
+agentRouter.patch(base+'/update/:id', validate(updateUserSchema), auth, updateAgentHandler );
 agentRouter.delete(base+'/delete/:id', auth, adminAuth, deleteAgentHandler );
 
 export default agentRouter;

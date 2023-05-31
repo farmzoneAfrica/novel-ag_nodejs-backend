@@ -3,21 +3,21 @@ import { CookieOptions, NextFunction, Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import {
   ForgotPasswordInput,
-  LoginAgentInput,
-  RegisterAgentInput,
+  LoginUserInput,
+  RegisterUserInput,
   ResetPasswordInput,
   VerifyEmailInput,
-} from '../schemas/agent.schema';
+} from '../schemas/user.schema';
 
 import {
-  createAgent,
-  findUniqueAgent,
-  findAgent,
-  findAgent1,
+  createUser,
+  findUniqueUser,
+  findUser,
+  findUser1,
   findById,
   signTokens,
-  updateAgent,
-} from '../services/agent.service';
+  updateUser,
+} from '../services/user.service';
 
 import { 
   getStates,
@@ -53,8 +53,8 @@ const refreshTokenCookieOptions: CookieOptions = {
   maxAge: config.get<number>('refreshTokenExpiresIn') * 60 * 1000,
 };
 
-export const registerAgentHandler = async (
-  req: Request<{}, {}, RegisterAgentInput>,
+export const registerUserHandler = async (
+  req: Request<{}, {}, RegisterUserInput>,
   res: Response,
   next: NextFunction
 ) => {
@@ -67,23 +67,23 @@ export const registerAgentHandler = async (
       .update(verifyCode)
       .digest('hex');
 
-    const agent = await createAgent({
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
+    const user = await createUser({
+        first_name: req.body.first_name,
+        last_name: req.body.last_name,
         address: req.body.address,
         phone: req.body.phone,
         avatar: req.body.avatar,
         gender: req.body.gender,
         state: req.body.state,
-        localGovt: req.body.localGovt,
-        maritalStatus: req.body.maritalStatus,
+        local_govt: req.body.local_govt,
+        marital_status: req.body.marital_status,
         email: req.body.email.toLowerCase(),
         password: hashedPassword,
         verificationCode,
     });
 
-    const inputState = agent.state;
-    const inputLGA = agent.localGovt;
+    const inputState = user.state;
+    const inputLGA = user.local_govt;
     const states = await getStates();
     const LGAs = await getLGAs(inputState);
     if ( states.includes(inputState) === false ) {
@@ -97,16 +97,16 @@ export const registerAgentHandler = async (
     const redirectUrl = `${baseUrl}/api/auth/verifyemail/${verifyCode}`;
 
     try {
-      await new Email(agent, redirectUrl).sendVerificationCode();      
-      await updateAgent({ id: agent.id }, { verificationCode });
+      await new Email(user, redirectUrl).sendVerificationCode();      
+      await updateUser({ id: user.id }, { verificationCode });
       res.status(201).json({
         status: 'success',
         message:
           'An email with a verification code has been sent to your email',
-        agent
+        user
       });
     } catch (error) {
-      await updateAgent({ id: agent.id }, { verificationCode: null });
+      await updateUser({ id: user.id }, { verificationCode: null });
       return res.status(500).json({
         status: 'error',
         message: 'There was an error sending email, please try again',
@@ -125,21 +125,21 @@ export const registerAgentHandler = async (
   }
 };
 
-export const loginAgentHandler = async (
-  req: Request<{}, {}, LoginAgentInput>,
+export const loginUserHandler = async (
+  req: Request<{}, {}, LoginUserInput>,
   res: Response,
   next: NextFunction
 ) => {
   try {
     const { email, password } = req.body;
-    const agent = await findUniqueAgent(
+    const user = await findUniqueUser(
       { email: email.toLowerCase() },
       { id: true, email: true, verified: true, password: true }
     );
-    if (!agent) {
+    if (!user) {
       return next(new AppError(400, 'Invalid email or password'));
     }
-    if (!agent.verified) {
+    if (!user.verified) {
       return next(
         new AppError(
           401,
@@ -147,12 +147,12 @@ export const loginAgentHandler = async (
         )
       );
     }
-    if (!agent || !(await bcrypt.compare(password, agent.password))) {
+    if (!user || !(await bcrypt.compare(password, user.password))) {
       return next(new AppError(400, 'Invalid email or password'));
     }
 
     // Sign Tokens
-    const { access_token, refresh_token } = await signTokens(agent);
+    const { access_token, refresh_token } = await signTokens(user);
     res.cookie('access_token', access_token, accessTokenCookieOptions);
     res.cookie('refresh_token', refresh_token, refreshTokenCookieOptions);
     res.cookie('logged_in', true, {
@@ -193,7 +193,7 @@ export const refreshAccessTokenHandler = async (
     if (!session) {
       return next(new AppError(403, message));
     }
-    const user = await findUniqueAgent({ id: JSON.parse(session).id });
+    const user = await findUniqueUser({ id: JSON.parse(session).id });
     if (!user) {
       return next(new AppError(403, message));
     }
@@ -223,7 +223,7 @@ function logout(res: Response) {
   res.cookie('logged_in', '', { maxAge: 1 });
 }
 
-export const logoutAgentHandler = async (
+export const logoutUserHandler = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -251,7 +251,7 @@ export const verifyEmailHandler = async (
       .update(req.params.verificationCode)
       .digest('hex');
 
-    const user = await updateAgent(
+    const user = await updateUser(
       { verificationCode },
       { verified: true, verificationCode: null },
       { email: true }
@@ -286,28 +286,27 @@ export const forgotPasswordHandler = async (
   next: NextFunction
 ) => {
   try {
-    // const agent = await findAgent({ email: req.body.email.toLowerCase() });
+    // const agent = await findUser({ email: req.body.email.toLowerCase() });
     const email = req.body.email.toLowerCase();
-    console.log(email)
-    const agent = await findAgent1({ email: email });
-    console.log(agent)
+    const user = await findUser1({ email: email });
+    console.log(user)
     const message =
-      'You will receive a reset email if agent with that email exist';
-    if (!agent) {
+      'You will receive a reset email if user with that email exist';
+    if (!user) {
       return res.status(200).json({
         status: 'success',
         message,
       });
     }
 
-    if (!agent.verified) {
+    if (!user.verified) {
       return res.status(403).json({
         status: 'fail',
         message: 'Account not verified',
       });
     }
 
-    if (agent.provider) {
+    if (user.provider) {
       return res.status(403).json({
         status: 'fail',
         message:
@@ -320,8 +319,8 @@ export const forgotPasswordHandler = async (
       .update(resetToken)
       .digest('hex');
 
-    await updateAgent(
-      { id: agent.id },
+    await updateUser(
+      { id: user.id },
       {
         passwordResetToken,
         passwordResetAt: new Date(Date.now() + 10 * 60 * 1000),
@@ -332,15 +331,15 @@ export const forgotPasswordHandler = async (
     try {
       const baseUrl = process.env.BASE_URL;
       const url = `${baseUrl}/api/auth/resetpassword/${resetToken}`;
-      await new Email(agent, url).sendPasswordResetToken();
+      await new Email(user, url).sendPasswordResetToken();
 
      return res.status(200).json({
         status: 'success',
         message,
       });
     } catch (err: any) {
-      await updateAgent(
-        { id: agent.id },
+      await updateUser(
+        { id: user.id },
         { passwordResetToken: null, passwordResetAt: null },
         {}
       );
@@ -350,8 +349,6 @@ export const forgotPasswordHandler = async (
       });
     }
   } catch (err: any) {
-    console.log(err);
-    
     next(err);
   }
 };
@@ -372,7 +369,7 @@ export const resetPasswordHandler = async (
       .update(req.params.resetToken)
       .digest('hex');
 
-    const user = await findAgent({
+    const user = await findUser({
       passwordResetToken,
       passwordResetAt: Date.now().toString(),
       
@@ -387,7 +384,7 @@ export const resetPasswordHandler = async (
 
     const hashedPassword = await bcrypt.hash(req.body.password, 12);
 
-    await updateAgent(
+    await updateUser(
       {
         id: user.id,
       },

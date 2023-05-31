@@ -1,22 +1,24 @@
 -- CreateEnum
-CREATE TYPE "RoleEnumType" AS ENUM ('AGENT', 'ADMIN');
+CREATE TYPE "RoleEnumType" AS ENUM ('user', 'farmer', 'admin', 'agent', 'buyer', 'dealer', 'aggregator', 'logistics');
 
 -- CreateTable
-CREATE TABLE "agents" (
+CREATE TABLE "users" (
     "id" TEXT NOT NULL,
-    "email" TEXT NOT NULL,
+    "first_name" TEXT NOT NULL,
+    "last_name" TEXT,
     "phone" TEXT NOT NULL,
-    "firstName" TEXT NOT NULL,
-    "lastName" TEXT,
-    "gender" TEXT NOT NULL DEFAULT '',
-    "address" TEXT,
-    "avatar" TEXT DEFAULT '',
-    "state" TEXT DEFAULT '',
-    "localGovt" TEXT DEFAULT '',
-    "maritalStatus" TEXT DEFAULT '',
-    "verified" BOOLEAN DEFAULT false,
+    "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
-    "role" "RoleEnumType" NOT NULL DEFAULT 'AGENT',
+    "gender" TEXT,
+    "avatar" TEXT NOT NULL DEFAULT '',
+    "nationality" TEXT NOT NULL DEFAULT '',
+    "state" TEXT NOT NULL DEFAULT '',
+    "local_govt" TEXT NOT NULL DEFAULT '',
+    "ward" TEXT NOT NULL DEFAULT '',
+    "address" TEXT,
+    "marital_status" TEXT DEFAULT '',
+    "verified" BOOLEAN DEFAULT false,
+    "role" "RoleEnumType" NOT NULL DEFAULT 'user',
     "verificationCode" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -24,7 +26,7 @@ CREATE TABLE "agents" (
     "passwordResetToken" TEXT,
     "passwordResetAt" TIMESTAMP(3),
 
-    CONSTRAINT "agents_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "users_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -36,7 +38,7 @@ CREATE TABLE "prosperityHubs" (
     "localGovt" TEXT NOT NULL DEFAULT '',
     "remarks" TEXT,
     "status" BOOLEAN NOT NULL DEFAULT false,
-    "agentId" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
@@ -52,7 +54,7 @@ CREATE TABLE "warehouses" (
     "address" TEXT NOT NULL,
     "remarks" TEXT,
     "status" BOOLEAN NOT NULL DEFAULT false,
-    "agentId" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
@@ -60,16 +62,19 @@ CREATE TABLE "warehouses" (
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "agents_email_key" ON "agents"("email");
+CREATE UNIQUE INDEX "users_phone_key" ON "users"("phone");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "agents_verificationCode_key" ON "agents"("verificationCode");
+CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
 
 -- CreateIndex
-CREATE INDEX "agents_email_verificationCode_passwordResetToken_idx" ON "agents"("email", "verificationCode", "passwordResetToken");
+CREATE UNIQUE INDEX "users_verificationCode_key" ON "users"("verificationCode");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "agents_email_verificationCode_passwordResetToken_key" ON "agents"("email", "verificationCode", "passwordResetToken");
+CREATE INDEX "users_email_verificationCode_passwordResetToken_idx" ON "users"("email", "verificationCode", "passwordResetToken");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "users_email_phone_verificationCode_passwordResetToken_key" ON "users"("email", "phone", "verificationCode", "passwordResetToken");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "prosperityHubs_name_key" ON "prosperityHubs"("name");
@@ -78,7 +83,7 @@ CREATE UNIQUE INDEX "prosperityHubs_name_key" ON "prosperityHubs"("name");
 CREATE UNIQUE INDEX "warehouses_name_key" ON "warehouses"("name");
 
 -- AddForeignKey
-ALTER TABLE "prosperityHubs" ADD CONSTRAINT "prosperityHubs_agentId_fkey" FOREIGN KEY ("agentId") REFERENCES "agents"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "prosperityHubs" ADD CONSTRAINT "prosperityHubs_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "warehouses" ADD CONSTRAINT "warehouses_agentId_fkey" FOREIGN KEY ("agentId") REFERENCES "agents"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "warehouses" ADD CONSTRAINT "warehouses_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;

@@ -22,21 +22,10 @@ export const verifyJwt = <T>(
   keyName: 'ab1234' | 'ab1234'
 ): T | null => {
   try {
-    // const publicKey = fs.readFileSync('public_key.pem').toString('ascii');
     const publicKey = 'ab1234'
-    console.log("jwt", 10, publicKey);
     const decoded = jwt.verify(token, publicKey) as T;
-
     return decoded;
   } catch (error) {
     return null;
   }
 }
-
-
-
-
-
-
-
-

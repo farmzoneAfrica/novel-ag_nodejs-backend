@@ -22,6 +22,16 @@
             "database": "novel_ag",
             "username": "usha",
             "password": "ouTMGbxtLOllFHmcAbLYagbpGM5aq7DA"
+        },
+        {
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 5432,
+            "driver": "PostgreSQL",
+            "name": "novel",
+            "database": "test",
+            "username": "postgres",
+            "password": ""
         }
     ]
 }

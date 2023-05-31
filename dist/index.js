@@ -15,7 +15,7 @@ const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const cors_1 = __importDefault(require("cors"));
 const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
 const swagger_output_json_1 = __importDefault(require("./swagger-output.json"));
-const agent_routes_1 = __importDefault(require("./routes/agent.routes"));
+const user_routes_1 = __importDefault(require("./routes/user.routes"));
 const auth_routes_1 = __importDefault(require("./routes/auth.routes"));
 const prosperity_hub_routes_1 = __importDefault(require("./routes/prosperity.hub.routes"));
 const warehouse_routes_1 = __importDefault(require("./routes/warehouse.routes"));
@@ -32,7 +32,7 @@ if (process.env.NODE_ENV === 'development')
     app.use((0, morgan_1.default)('dev'));
 app.use(express_1.default.urlencoded({ extended: false }));
 app.use('/api-docs', swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swagger_output_json_1.default));
-app.use('/api/agent', agent_routes_1.default);
+app.use('/api/user', user_routes_1.default);
 app.use('/api/auth', auth_routes_1.default);
 app.use('/api/prosperity-hub', prosperity_hub_routes_1.default);
 app.use('/api/warehouse', warehouse_routes_1.default);

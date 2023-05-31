@@ -1,4 +1,4 @@
-import { PrismaClient, Prisma, Agent, ProsperityHub } from '@prisma/client';
+import { PrismaClient, Prisma, User, ProsperityHub } from '@prisma/client';
 import config from 'config';
 import redisClient from '../utils/connectRedis';
 
