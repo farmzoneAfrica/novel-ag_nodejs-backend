@@ -19,9 +19,7 @@ const signJwt = (payload, keyName, options) => {
 exports.signJwt = signJwt;
 const verifyJwt = (token, keyName) => {
     try {
-        // const publicKey = fs.readFileSync('public_key.pem').toString('ascii');
         const publicKey = 'ab1234';
-        console.log("jwt", 10, publicKey);
         const decoded = jsonwebtoken_1.default.verify(token, publicKey);
         return decoded;
     }

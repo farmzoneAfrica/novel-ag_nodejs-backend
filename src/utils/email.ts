@@ -1,12 +1,13 @@
 import nodemailer from 'nodemailer';
 import { Prisma } from '@prisma/client';
+
 export default class Email {
-  #firstName: string;
+  #first_name: string;
   #to: string;
   #from: string;
-  constructor(private agent: Prisma.AgentCreateInput, private url: string) {
-    this.#firstName = agent.firstName.split(' ')[0];
-    this.#to = agent.email;
+  constructor(private user: Prisma.UserCreateInput, private url: string) {
+    this.#first_name = user.first_name.split(' ')[0];
+    this.#to = user.email;
     this.#from = `Novel-AG <dev.farmzoneafrica@gmail.com`;
   }
 
@@ -28,7 +29,7 @@ export default class Email {
 <div style="max-width: 700px;text-align: center; text-transform: uppercase;
      margin:auto; border: 10px solid #DE3D6D; padding: 50px 20px; font-size: 110%;">
      <h2 style="color: #03435F;">Welcome to <span style="color : #DE3D6D";>NOVEL<span><span style="color:#F5844C;">-AG<span></h2>
-     <p>Hello ${this.#firstName}, Please Follow the link by clicking on the button to verify your email
+     <p>Hello ${this.#first_name}, Please Follow the link by clicking on the button to verify your email
       </p>
       <div style="text-align:center ;">
         <a href=${this.url}
@@ -38,7 +39,6 @@ export default class Email {
       </div>
 </div>
 `;
-
     const mailOptions = {
       from: this.#from,
       to: this.#to,

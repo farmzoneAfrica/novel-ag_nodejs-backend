@@ -10,23 +10,25 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Agent {
-  @@map(name: "agents")
+model User {
+  @@map(name: "users")
   id    String     @id @default(uuid())
+  first_name  String
+  last_name  String?
+  phone String @unique
   email String  @unique
-  phone String 
-  firstName  String
-  lastName  String?
-  gender GenderEnumType
-  address String ?
-  avatar String  @default("")
-  state String  @default("")
-  localGovt String @default("")
-  maritalStatus String ? @default("")
-  verified Boolean? @default(false) 
-
   password String 
-  role RoleEnumType @default(AGENT)
+  gender String?
+  avatar String  @default("")
+  nationality String  @default("")
+  state String  @default("")
+  local_govt String @default("")
+  ward String @default("")
+  address String?
+  marital_status String? @default("")
+  verified Boolean? @default(false)
+
+  role RoleEnumType @default(user)
 
   verificationCode String? @db.Text @unique
 
@@ -40,18 +42,19 @@ model Agent {
   prosperityHub ProsperityHub[]
   warhouse Warehouse[]
 
-  @@unique([email, verificationCode, passwordResetToken])
+  @@unique([email, phone, verificationCode, passwordResetToken])
   @@index([email, verificationCode, passwordResetToken])
 }
 
 enum RoleEnumType {
-  AGENT
-  ADMIN
-}
-
-enum GenderEnumType {
-  Male
-  Female
+  user
+  farmer
+  admin
+  agent
+  buyer
+  dealer
+  aggregator
+  logistics
 }
 
 model ProsperityHub {
@@ -63,8 +66,8 @@ model ProsperityHub {
   localGovt  String @default("")
   remarks   String?
   status   Boolean @default(false)
-  agent   Agent   @relation(fields: [agentId], onDelete: Cascade, references: [id])
-  agentId   String
+  agent   User   @relation(fields: [userId], onDelete: Cascade, references: [id])
+  userId   String
 
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt @default(now())
@@ -78,8 +81,8 @@ model Warehouse {
   address     String
   remarks     String?
   status Boolean @default(false)
-  agent   Agent   @relation(fields: [agentId], onDelete: Cascade, references: [id])
-  agentId String
+  agent   User   @relation(fields: [userId], onDelete: Cascade, references: [id])
+  userId String
 
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt @default(now())

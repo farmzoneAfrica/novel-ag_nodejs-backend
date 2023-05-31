@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { omit } from 'lodash';
-import { excludedFields, findUniqueAgent } from '../services/agent.service';
+import { excludedFields, findUniqueUser } from '../services/user.service';
 import AppError from '../utils/appError';
 import redisClient from '../utils/connectRedis';
 import { verifyJwt } from '../utils/jwt';
@@ -12,7 +12,6 @@ export const auth = async (
 ) => {
   try {
     let access_token;
-
     if (
       req.headers.authorization &&
       req.headers.authorization.startsWith('Bearer')
@@ -41,13 +40,12 @@ export const auth = async (
       return next(new AppError(401, `Invalid token or session has expired`));
     }
 
-    const user = await findUniqueAgent({ id: JSON.parse(session).id });
+    const user = await findUniqueUser({ id: JSON.parse(session).id });
   
 
     if (!user) {
       return next(new AppError(401, `Invalid token or session has expired`));
     }
-
     res.locals.user = omit(user, excludedFields);
     req.user = decoded
 
@@ -93,9 +91,9 @@ export const adminAuth = async (
       return next(new AppError(401, `Invalid token or session has expired`));
     }
 
-    const user = await findUniqueAgent({ id: JSON.parse(session).id });
+    const user = await findUniqueUser({ id: JSON.parse(session).id });
       console.log(user)
-      if (user.role !== "ADMIN")
+      if (user.role !== "admin")
           return next(new AppError(401, "Fobbitten route, you are not an admin"))
 
     if (!user) {

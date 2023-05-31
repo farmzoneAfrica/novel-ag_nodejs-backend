@@ -3,9 +3,9 @@ import {
   findAll,
   pagination,
   findById,
-  updateAgent,
-  deleteAgent
-} from '../services/agent.service'
+  updateUser,
+  deleteUser
+} from '../services/user.service'
 import AppError from '../utils/appError';
 
 export const getAgentsHandler = async (
@@ -96,7 +96,7 @@ export const updateAgentHandler = async (
   if (dataKeys.includes(body.toString()) === false ) {
     return next(new AppError(401, 'Wrong input value'));
   }
-  const agent = await updateAgent({ id: id }, data);
+  const agent = await updateUser({ id: id }, data);
      if (!agent) {
       return next(new AppError(401, 'Agent does not exist'));
     }
@@ -122,7 +122,7 @@ export const deleteAgentHandler = async (
     if (!agent) 
       return next(new AppError(401, 'Agent not found in database'));
     
-    const response = await deleteAgent(id)
+    const response = await deleteUser(id)
     return res.status(200).json({
       status: 'success',
       response

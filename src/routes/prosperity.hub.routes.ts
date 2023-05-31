@@ -15,7 +15,7 @@ import {
 } from '../schemas/prosperityHub.schema';
 import { validate } from '../middleware/validate';
 
-import { auth, adminAuth } from '../middleware/auth';
+import { auth, adminAuth } from '../middleware/deserializeUser';
 import { requireUser } from '../middleware/requireUser';
 
 const prosperityHubrouter = express.Router();
