@@ -12,7 +12,7 @@ import {
 import {
   createProsperityHubSchema,
   updateProsperityHubSchema,
-} from '../schemas/prosperityHub.schema';
+} from '../schemas/prosperity.hub.schema';
 import { validate } from '../middleware/validate';
 
 import { auth, adminAuth } from '../middleware/deserializeUser';

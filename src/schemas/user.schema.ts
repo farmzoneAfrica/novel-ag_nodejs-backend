@@ -44,9 +44,9 @@ export const registerUserSchema = object({
     confirm_password: string({
       required_error: 'Please confirm your password',
     }),
-    role: z.optional(z.nativeEnum(RoleEnumType)),
+    role: (z.nativeEnum(RoleEnumType)),
   }).refine((data) => data.password === data.confirm_password, {
-    path: ['confirmPassword'],
+    path: ['confirm_password'],
     message: 'Passwords do not match',
   }),
 });

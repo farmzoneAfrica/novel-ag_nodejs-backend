@@ -6,7 +6,7 @@ import {
     getAgentsByPageHandler,
     updateAgentHandler,
     deleteAgentHandler
-} from '../controllers/agent.controller';
+} from '../controllers/user.controller';
 import {
     auth,
     adminAuth

@@ -15,7 +15,7 @@ export const excludedFields = [
 
 const prisma = new PrismaClient();
 
-// adjust logic to bring out farmers only
+// adjust user services to only query out farmers
 
 export const createUser = async (input: Prisma.UserCreateInput) => {  
   return (await prisma.user.create({
@@ -36,6 +36,16 @@ export const pagination = async (
     take
   });
 }
+
+// export const findAgent = async (
+//   where: Partial<Prisma.AgentWhereInput>,
+//   select?: Prisma.AgentSelect
+// ) => {
+//   return (await prisma.user.findFirst({
+//     where,
+//     select,
+//   })) as Agent;
+// };
 
 export const findUser = async (
   where: Prisma.UserCreateInput | any,
@@ -101,3 +111,4 @@ export const signTokens = async (user: Prisma.UserCreateInput) => {
 export const deleteUser = async (id: string) => {
   return await prisma.user.delete({where:{id}});
 }
+
