@@ -32,8 +32,8 @@ exports.registerUserSchema = (0, zod_1.object)({
         gender: (0, zod_1.string)().optional(),
         avatar: (0, zod_1.string)().optional(),
         nationality: (0, zod_1.string)().optional(),
-        state: (0, zod_1.string)().optional(),
-        local_govt: (0, zod_1.string)().optional(),
+        state: (0, zod_1.string)(),
+        local_govt: (0, zod_1.string)(),
         ward: (0, zod_1.string)().optional(),
         address: (0, zod_1.string)().optional(),
         marital_status: (0, zod_1.string)().optional(),
@@ -45,9 +45,9 @@ exports.registerUserSchema = (0, zod_1.object)({
         confirm_password: (0, zod_1.string)({
             required_error: 'Please confirm your password',
         }),
-        role: zod_1.z.optional(zod_1.z.nativeEnum(RoleEnumType)),
+        role: (zod_1.z.nativeEnum(RoleEnumType)),
     }).refine((data) => data.password === data.confirm_password, {
-        path: ['confirmPassword'],
+        path: ['confirm_password'],
         message: 'Passwords do not match',
     }),
 });

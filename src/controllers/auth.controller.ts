@@ -31,6 +31,7 @@ import redisClient from '../utils/connectRedis';
 import { signJwt, verifyJwt } from '../utils/jwt';
 import Email from '../utils/email';
 import { date } from 'zod';
+import { log } from 'console';
 
 const cookiesOptions: CookieOptions = {
   httpOnly: true,
@@ -59,7 +60,6 @@ export const registerUserHandler = async (
   next: NextFunction
 ) => {
   try {
-    
     const hashedPassword = await bcrypt.hash(req.body.password, 12);
     const verifyCode = crypto.randomBytes(32).toString('hex');
     const verificationCode = crypto
@@ -68,9 +68,10 @@ export const registerUserHandler = async (
       .digest('hex');
 
     const user = await createUser({
+        role: req.body.role,
         first_name: req.body.first_name,
         last_name: req.body.last_name,
-        address: req.body.address,
+        address: req.body.address,                                                                                                                               
         phone: req.body.phone,
         avatar: req.body.avatar,
         gender: req.body.gender,
@@ -81,7 +82,7 @@ export const registerUserHandler = async (
         password: hashedPassword,
         verificationCode,
     });
-
+    
     const inputState = user.state;
     const inputLGA = user.local_govt;
     const states = await getStates();
@@ -92,19 +93,25 @@ export const registerUserHandler = async (
     if ( LGAs.includes(inputLGA) === false ) {
       return next(new AppError(400, 'Invalid LGA, please enter a valid local government'));
     }
-
+    const user_role = user.role;
     const baseUrl = process.env.BASE_URL;
     const redirectUrl = `${baseUrl}/api/auth/verifyemail/${verifyCode}`;
+    
 
     try {
-      await new Email(user, redirectUrl).sendVerificationCode();      
-      await updateUser({ id: user.id }, { verificationCode });
-      res.status(201).json({
-        status: 'success',
-        message:
-          'An email with a verification code has been sent to your email',
-        user
-      });
+      if (user_role === "farmer"){
+        // logic for OTP
+        return res.json({msg: "This user is farmer"})
+      } else {
+        await new Email(user, redirectUrl).sendVerificationCode();      
+        await updateUser({ id: user.id }, { verificationCode });
+        res.status(201).json({
+          status: 'success',
+          message:
+            'An email with a verification code has been sent to your email',
+          user
+        });
+      }
     } catch (error) {
       await updateUser({ id: user.id }, { verificationCode: null });
       return res.status(500).json({
@@ -113,6 +120,7 @@ export const registerUserHandler = async (
       });
     }
   } catch (err: any) {   
+    console.log(117)
     if (err instanceof Prisma.PrismaClientKnownRequestError) {
       if (err.code === 'P2002') {
         return res.status(409).json({

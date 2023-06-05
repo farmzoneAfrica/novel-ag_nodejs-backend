@@ -16,7 +16,7 @@ import AppError from '../utils/appError';
 import {
   CreateProsperityHubInput,
   UpdateProsperityHubInput
-} from "../schemas/prosperityHub.schema";
+} from "../schemas/prosperity.hub.schema";
 
 import { Prisma } from '@prisma/client';
 // import agentRouter from '../routes/agent.routes';

@@ -37,6 +37,7 @@ const registerUserHandler = async (req, res, next) => {
             .update(verifyCode)
             .digest('hex');
         const user = await (0, user_service_1.createUser)({
+            role: req.body.role,
             first_name: req.body.first_name,
             last_name: req.body.last_name,
             address: req.body.address,
@@ -60,16 +61,23 @@ const registerUserHandler = async (req, res, next) => {
         if (LGAs.includes(inputLGA) === false) {
             return next(new appError_1.default(400, 'Invalid LGA, please enter a valid local government'));
         }
+        const user_role = user.role;
         const baseUrl = process.env.BASE_URL;
         const redirectUrl = `${baseUrl}/api/auth/verifyemail/${verifyCode}`;
         try {
-            await new email_1.default(user, redirectUrl).sendVerificationCode();
-            await (0, user_service_1.updateUser)({ id: user.id }, { verificationCode });
-            res.status(201).json({
-                status: 'success',
-                message: 'An email with a verification code has been sent to your email',
-                user
-            });
+            if (user_role === "farmer") {
+                // logic for OTP
+                return res.json({ msg: "This user is farmer" });
+            }
+            else {
+                await new email_1.default(user, redirectUrl).sendVerificationCode();
+                await (0, user_service_1.updateUser)({ id: user.id }, { verificationCode });
+                res.status(201).json({
+                    status: 'success',
+                    message: 'An email with a verification code has been sent to your email',
+                    user
+                });
+            }
         }
         catch (error) {
             await (0, user_service_1.updateUser)({ id: user.id }, { verificationCode: null });
@@ -80,6 +88,7 @@ const registerUserHandler = async (req, res, next) => {
         }
     }
     catch (err) {
+        console.log(117);
         if (err instanceof client_1.Prisma.PrismaClientKnownRequestError) {
             if (err.code === 'P2002') {
                 return res.status(409).json({
