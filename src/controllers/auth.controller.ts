@@ -101,7 +101,7 @@ export const registerUserHandler = async (
     try {
       if (user_role === "farmer"){
         // logic for OTP
-        console.log("user logic")
+        return res.json({msg: "This user is farmer"})
       } else {
         await new Email(user, redirectUrl).sendVerificationCode();      
         await updateUser({ id: user.id }, { verificationCode });
