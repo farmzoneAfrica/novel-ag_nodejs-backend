@@ -14,7 +14,7 @@ import {
   getLGAs
  } from '../services/common.service';
 
-import AppError from '../utils/appError';
+import AppError from '../utils/app.error';
 import {
   CreateWarehouseInput,
   UpdateWarehouseInput

@@ -14,7 +14,7 @@ const base = "";
 agentRouter.get(base + '/get', deserializeUser_1.auth, user_controller_1.getAgentsHandler);
 agentRouter.get(base + '/get/:id', deserializeUser_1.auth, requireUser_1.requireUser, user_controller_1.getAgentHandler);
 agentRouter.get(base + '/:pageNo', user_controller_1.getAgentsByPageHandler);
-agentRouter.patch(base + '/update/:id', (0, validate_1.validate)(user_schema_1.updateUserSchema), deserializeUser_1.auth, user_controller_1.updateAgentHandler);
+agentRouter.patch(base + '/update/:id', (0, validate_1.validate)(user_schema_1.updateUserSchema), deserializeUser_1.auth, user_controller_1.updateUserHandler);
 agentRouter.delete(base + '/delete/:id', deserializeUser_1.auth, deserializeUser_1.adminAuth, user_controller_1.deleteAgentHandler);
 exports.default = agentRouter;
 //# sourceMappingURL=agent.route.js.map

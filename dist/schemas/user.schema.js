@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getSingleUserSchema = exports.resetPasswordSchema = exports.forgotPasswordSchema = exports.updateUserSchema = exports.verifyEmailSchema = exports.loginUserSchema = exports.registerUserSchema = void 0;
+exports.getSingleUserSchema = exports.resetPasswordSchema = exports.forgotPasswordSchema = exports.updateUserSchema = exports.verifyOtpSchema = exports.verifyEmailSchema = exports.loginUserSchema = exports.registerUserSchema = void 0;
 const zod_1 = require("zod");
 var RoleEnumType;
 (function (RoleEnumType) {
@@ -63,6 +63,11 @@ exports.loginUserSchema = (0, zod_1.object)({
 });
 exports.verifyEmailSchema = (0, zod_1.object)({
     params: (0, zod_1.object)({
+        verificationCode: (0, zod_1.string)(),
+    }),
+});
+exports.verifyOtpSchema = (0, zod_1.object)({
+    body: (0, zod_1.object)({
         verificationCode: (0, zod_1.string)(),
     }),
 });

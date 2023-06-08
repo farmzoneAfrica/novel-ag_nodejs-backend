@@ -9,7 +9,7 @@ const config_1 = __importDefault(require("config"));
 const morgan_1 = __importDefault(require("morgan"));
 const validateEnv_1 = __importDefault(require("./utils/validateEnv"));
 const client_1 = require("@prisma/client");
-const appError_1 = __importDefault(require("./utils/appError"));
+const app_error_1 = __importDefault(require("./utils/app.error"));
 const http_errors_1 = __importDefault(require("http-errors"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const cors_1 = __importDefault(require("cors"));
@@ -48,7 +48,7 @@ app.use('/api/farmer', farmer_routes_1.default);
 app.use('/api/prosperity-hub', prosperity_hub_routes_1.default);
 app.use('/api/warehouse', warehouse_routes_1.default);
 app.all('*', (req, res, next) => {
-    next(new appError_1.default(404, `Route ${req.originalUrl} not found`));
+    next(new app_error_1.default(404, `Route ${req.originalUrl} not found`));
 });
 app.use((err, req, res, next) => {
     err.status = err.status || 'error';

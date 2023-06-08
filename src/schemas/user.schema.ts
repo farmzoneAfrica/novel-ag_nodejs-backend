@@ -68,6 +68,12 @@ export const verifyEmailSchema = object({
   }),
 });
 
+export const verifyOtpSchema = object({
+  body: object({
+    verificationCode: string(),
+  }),
+});
+
 export const updateUserSchema = object({
   body: object({
     first_name: string({}),
@@ -127,6 +133,7 @@ export type RegisterUserInput = Omit<
 
 export type LoginUserInput = TypeOf<typeof loginUserSchema>['body'];
 export type VerifyEmailInput = TypeOf<typeof verifyEmailSchema>['params'];
+export type VerifyOtpInput = TypeOf<typeof verifyOtpSchema>['body'];
 export type UpdateUserInput = TypeOf<typeof updateUserSchema>['body'];
 export type ForgotPasswordInput = TypeOf<typeof forgotPasswordSchema>['body'];
 export type ResetPasswordInput = TypeOf<typeof resetPasswordSchema>;

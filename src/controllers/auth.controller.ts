@@ -9,12 +9,13 @@ import {
   VerifyEmailInput,
 } from '../schemas/user.schema';
 
+import { sendOtp } from '../utils/phoneOtp'
+
 import {
   createUser,
   findUniqueUser,
   findUser,
   findUser1,
-  findById,
   signTokens,
   updateUser,
 } from '../services/user.service';
@@ -26,12 +27,13 @@ import {
  
 import { Prisma } from '@prisma/client';
 import config from 'config';
-import AppError from '../utils/appError';
-import redisClient from '../utils/connectRedis';
+import AppError from '../utils/app.error';
+import redisClient from '../utils/connect.redis';
 import { signJwt, verifyJwt } from '../utils/jwt';
 import Email from '../utils/email';
-import { date } from 'zod';
 import { log } from 'console';
+// import { date } from 'zod';
+// import { log } from 'console';
 
 const cookiesOptions: CookieOptions = {
   httpOnly: true,
@@ -66,52 +68,54 @@ export const registerUserHandler = async (
       .createHash('sha256')
       .update(verifyCode)
       .digest('hex');
-
+ 
+      // const state = req.body.state;
+      // const localGov = req.body.local_govt;
+      // const states = await getStates();
+      // const LGAs = await getLGAs(state);
+  
+      // if ( states.includes(state) === false ) {
+      //   return next(new AppError(400, 'Invalid state, please enter a valid state'));
+      // }
+      // if ( LGAs.includes(localGov) === false ) {
+      //   return next(new AppError(400, 'Invalid LGA, please enter a valid local government'));
+      // }
+ 
     const user = await createUser({
-        role: req.body.role,
-        first_name: req.body.first_name,
-        last_name: req.body.last_name,
-        address: req.body.address,                                                                                                                               
-        phone: req.body.phone,
-        avatar: req.body.avatar,
-        gender: req.body.gender,
-        state: req.body.state,
-        local_govt: req.body.local_govt,
-        marital_status: req.body.marital_status,
-        email: req.body.email.toLowerCase(),
-        password: hashedPassword,
-        verificationCode,
+      role: req.body.role,
+      first_name: req.body.first_name,
+      last_name: req.body.last_name,
+      address: req.body.address,                                                                                                                               
+      phone: req.body.phone,
+      avatar: req.body.avatar,
+      gender: req.body.gender,
+      state: req.body.state,
+      local_govt: req.body.local_govt,
+      marital_status: req.body.marital_status,
+      email: req.body.email.toLowerCase(),
+      password: hashedPassword,
+      verificationCode
     });
-    
-    const inputState = user.state;
-    const inputLGA = user.local_govt;
-    const states = await getStates();
-    const LGAs = await getLGAs(inputState);
-    if ( states.includes(inputState) === false ) {
-      return next(new AppError(400, 'Invalid state, please enter a valid state'));
-    }
-    if ( LGAs.includes(inputLGA) === false ) {
-      return next(new AppError(400, 'Invalid LGA, please enter a valid local government'));
-    }
-    const user_role = user.role;
+
+    const userRole = user.role;
+    console.log(userRole)
+    const phone = user.phone;
     const baseUrl = process.env.BASE_URL;
     const redirectUrl = `${baseUrl}/api/auth/verifyemail/${verifyCode}`;
-    
 
-    try {
-      if (user_role === "farmer"){
-        // logic for OTP
-        return res.json({msg: "This user is farmer"})
-      } else {
-        await new Email(user, redirectUrl).sendVerificationCode();      
-        await updateUser({ id: user.id }, { verificationCode });
-        res.status(201).json({
-          status: 'success',
-          message:
-            'An email with a verification code has been sent to your email',
-          user
-        });
-      }
+    try { 
+      userRole === "farmer" ? 
+      await sendOtp (phone) :
+      console.log(110, "User is farmer, I am not suppose to run")
+      await new Email(user, redirectUrl).sendVerificationCode();
+            
+      await updateUser({ id: user.id }, { verificationCode });
+      res.status(201).json({
+        status: 'success',
+        message:
+          'An email with a verification code has been sent to your email',
+        user
+      });
     } catch (error) {
       await updateUser({ id: user.id }, { verificationCode: null });
       return res.status(500).json({
@@ -119,13 +123,13 @@ export const registerUserHandler = async (
         message: 'There was an error sending email, please try again',
       });
     }
+
   } catch (err: any) {   
-    console.log(117)
     if (err instanceof Prisma.PrismaClientKnownRequestError) {
       if (err.code === 'P2002') {
         return res.status(409).json({
           status: 'fail',
-          message: 'Email already exist, please use another email address',
+          message: 'Email or Phone number already exist, please check and try again',
         });
       }
     }

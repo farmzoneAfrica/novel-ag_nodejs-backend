@@ -1,0 +1,19 @@
+curl -X POST "https://verify.twilio.com/v2/Services/VA9c7fc2650bcdef97adda0c4e99d33727/Verifications" \
+  --data-urlencode "To=+2349018515257" \
+  --data-urlencode "Channel=sms" \
+  -u "AC515c59af4659fc81ba8881610617dcc5:4d42c988d23169a9a97fa8f80120ebbf"
+
+echo
+echo -n "Please enter the OTP:"
+read OTP_CODE
+
+curl -X POST "https://verify.twilio.com/v2/Services/VA9c7fc2650bcdef97adda0c4e99d33727/VerificationCheck" \
+  --data-urlencode "To=+2349018515257" \
+  --data-urlencode "Code=$OTP_CODE" \
+  -u "AC515c59af4659fc81ba8881610617dcc5:4d42c988d23169a9a97fa8f80120ebbf"
+
+email: mustapha.adi@farmzoneafrica.com
+password: -+~NJHsWdeF9
+
+email: emaduka@farmzoneafrica.com
+password: Iwe%)bKxiz3P

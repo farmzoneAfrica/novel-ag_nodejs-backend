@@ -73,6 +73,7 @@ model ProsperityHub {
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt @default(now())
 }
+
 model Warehouse {
   @@map(name: "warehouses")
   id        String     @id @default(uuid())
@@ -84,6 +85,20 @@ model Warehouse {
   status Boolean @default(false)
   agent   User   @relation(fields: [userId], onDelete: Cascade, references: [id])
   userId String
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt @default(now())
+}
+
+model Farm {
+  @@map(name: "farms")
+  id        String     @id @default(uuid())
+  name     String @unique
+  size String ?
+  location String?
+  crop     String?
+  status Boolean @default(false)
+  action String @default("")
 
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt @default(now())

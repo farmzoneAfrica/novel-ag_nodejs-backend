@@ -6,7 +6,7 @@ import {
   updateUser,
   deleteUser
 } from '../services/user.service'
-import AppError from '../utils/appError';
+import AppError from '../utils/app.error';
 
 export const getAgentsHandler = async (
   req: Request,
@@ -67,27 +67,27 @@ export const getAgentHandler = async (
   }
 };
 
-export const updateAgentHandler = async (
+export const updateUserHandler = async (
   req: Response | any,
   res: Response,
   next: NextFunction
 ) => {
   try {
     const { id } = req.params;
-    const findAgent = await findById({id: id});
-    if (!findAgent) 
-      return next(new AppError(401, 'Agent not found in database'));
+    const findUser = await findById({id: id});
+    if (!findUser) 
+      return next(new AppError(401, 'User not found in database'));
     const body: Array<string> = (Object.keys(req.body));    
   const data = {
-    firstName: req.body.firstName,
-    lastName: req.body.lastName,
+    first_name: req.body.firstName,
+    last_name: req.body.lastName,
     address: req.body.address,
     gender: req.body.gender,
-    maritalStatus: req.body.maritalStatus,
+    marital_status: req.body.maritalStatus,
     phone: req.body.phone,
     avatar: req.body.avatar,
     state: req.body.state,
-    localGovt: req.body.localGovt,
+    local_govt: req.body.localGovt,
     password: req.body.password,
   }
   
@@ -96,14 +96,14 @@ export const updateAgentHandler = async (
   if (dataKeys.includes(body.toString()) === false ) {
     return next(new AppError(401, 'Wrong input value'));
   }
-  const agent = await updateUser({ id: id }, data);
-     if (!agent) {
-      return next(new AppError(401, 'Agent does not exist'));
+  const user = await updateUser({ id: id }, data);
+     if (!user) {
+      return next(new AppError(401, 'User does not exist'));
     }
     return res.status(200).json({
       status: 'success',
       data: {
-        agent,
+        user,
       },
     });
   } catch (err: any) {

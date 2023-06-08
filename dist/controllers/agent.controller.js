@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteAgentHandler = exports.updateAgentHandler = exports.getAgentHandler = exports.getAgentsByPageHandler = exports.getAgentsHandler = void 0;
 const user_service_1 = require("../services/user.service");
-const appError_1 = __importDefault(require("../utils/appError"));
+const app_error_1 = __importDefault(require("../utils/app.error"));
 const getAgentsHandler = async (req, res, next) => {
     try {
         const agents = await (0, user_service_1.findAll)();
@@ -42,7 +42,7 @@ const getAgentHandler = async (req, res, next) => {
         const { id } = req.params;
         const agent = await (0, user_service_1.findById)({ id: id });
         if (!agent) {
-            return next(new appError_1.default(401, 'Agent does not exist'));
+            return next(new app_error_1.default(401, 'Agent does not exist'));
         }
         return res.status(200).json({
             status: 'success',
@@ -61,7 +61,7 @@ const updateAgentHandler = async (req, res, next) => {
         const { id } = req.params;
         const findAgent = await (0, user_service_1.findById)({ id: id });
         if (!findAgent)
-            return next(new appError_1.default(401, 'Agent not found in database'));
+            return next(new app_error_1.default(401, 'Agent not found in database'));
         const body = (Object.keys(req.body));
         const data = {
             firstName: req.body.firstName,
@@ -77,11 +77,11 @@ const updateAgentHandler = async (req, res, next) => {
         };
         const dataKeys = Object.keys(data);
         if (dataKeys.includes(body.toString()) === false) {
-            return next(new appError_1.default(401, 'Wrong input value'));
+            return next(new app_error_1.default(401, 'Wrong input value'));
         }
         const agent = await (0, user_service_1.updateUser)({ id: id }, data);
         if (!agent) {
-            return next(new appError_1.default(401, 'Agent does not exist'));
+            return next(new app_error_1.default(401, 'Agent does not exist'));
         }
         return res.status(200).json({
             status: 'success',
@@ -100,7 +100,7 @@ const deleteAgentHandler = async (req, res, next) => {
         const { id } = req.params;
         const agent = await (0, user_service_1.findById)({ id: id });
         if (!agent)
-            return next(new appError_1.default(401, 'Agent not found in database'));
+            return next(new app_error_1.default(401, 'Agent not found in database'));
         const response = await (0, user_service_1.deleteUser)(id);
         return res.status(200).json({
             status: 'success',
