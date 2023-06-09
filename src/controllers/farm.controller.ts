@@ -61,11 +61,11 @@ export const getFarmsHandler = async (
   next: NextFunction
 ) => {
   try {
-    const warehouse = await getFarms()
+    const farm = await getFarms()
       return res.status(200).status(200).json({
       status: 'success',
       data: {
-        warehouse,
+        farm,
       },
     });
   } catch (err: any) {
@@ -80,14 +80,14 @@ export const getFarmHandler = async (
 ) => {
   try {
     const { id } = req.params;
-    const warehouse = await findById({ id: id})
-     if (!warehouse) {
+    const farm = await findById({ id: id})
+     if (!farm) {
       return next(new AppError(401, 'Warehouse does not exist'));
     }
       return res.status(200).status(200).json({
       status: 'success',
       data: {
-        warehouse,
+        farm,
       },
     });
   } catch (err: any) {
@@ -103,7 +103,7 @@ export const updateFarmHandler = async (
   try {
 //   const data = 
   const { id } = req.params;
-    const warehouse = await updateFarm(
+    const farm = await updateFarm(
         { id: id }, 
         {
             name: req.body.name,
@@ -115,12 +115,12 @@ export const updateFarmHandler = async (
             local_govt: req.body.local_govt,
             ward: req.body.ward, 
           });
-     if (!warehouse) 
+     if (!farm) 
       return next(new AppError(401, 'Warehouse does not exist'));
     
     return res.status(200).json({
       status: 'Success',
-      warehouse,
+      farm,
     });
   } catch (err: any) {    
     next(err);
@@ -134,8 +134,8 @@ export const deleteFarmHandler = async (
 ) => {
   try {
     const { id } = req.params;
-    const warehouse = await findById({id: id});
-    if (!warehouse) 
+    const farm = await findById({id: id});
+    if (!farm) 
       return next(new AppError(401, 'Err! Warehouse not found'));
     
     const response = await deleteFarm(id)

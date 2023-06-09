@@ -9,9 +9,9 @@ import {
 } from '../controllers/farm.controller';
 
 import {
-  createWarehouseSchema,
-  updateWarehouseSchema,
-} from '../schemas/warehouse.schema';
+  createFarmSchema,
+  updateFarmSchema,
+} from '../schemas/farm.schema';
 
 import {
   auth,
@@ -23,10 +23,10 @@ import { validate } from '../middleware/validate';
 
 const farmRouter = express.Router();
 
-farmRouter.post( '/', validate(createWarehouseSchema), auth, requireUser, createFarmHandler);
+farmRouter.post( '/', validate(createFarmSchema), auth, requireUser, createFarmHandler);
 farmRouter.get( '/', auth, getFarmsHandler);
 farmRouter.get( '/:id', auth, getFarmHandler);
-farmRouter.patch( '/:id', validate(updateWarehouseSchema), auth, updateFarmHandler);
+farmRouter.patch( '/:id', validate(updateFarmSchema), auth, updateFarmHandler);
 farmRouter.delete( '/:id', auth, adminAuth, deleteFarmHandler);
 
 export default farmRouter;

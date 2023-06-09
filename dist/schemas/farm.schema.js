@@ -26,15 +26,15 @@ exports.createFarmSchema = (0, zod_1.object)({
 });
 exports.updateFarmSchema = (0, zod_1.object)({
     body: (0, zod_1.object)({
-        name: (0, zod_1.string)(),
-        size: (0, zod_1.string)(),
-        location: (0, zod_1.string)(),
-        closest_landmark: (0, zod_1.string)(),
-        crop: (0, zod_1.string)(),
-        state: (0, zod_1.string)(),
-        local_govt: (0, zod_1.string)(),
-        ward: (0, zod_1.string)(),
-        status: (0, zod_1.boolean)()
+        name: (0, zod_1.string)().optional(),
+        size: (0, zod_1.string)().optional(),
+        location: (0, zod_1.string)().optional(),
+        closest_landmark: (0, zod_1.string)().optional(),
+        crop: (0, zod_1.string)().optional(),
+        state: (0, zod_1.string)().optional(),
+        local_govt: (0, zod_1.string)().optional(),
+        ward: (0, zod_1.string)().optional(),
+        status: (0, zod_1.boolean)().optional()
     })
 });
 //# sourceMappingURL=farm.schema.js.map

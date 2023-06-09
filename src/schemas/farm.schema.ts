@@ -25,15 +25,15 @@ export const createFarmSchema = object({
 
 export const updateFarmSchema = object({
   body: object({
-    name: string(),
-    size: string(),
-    location: string(),
-    closest_landmark: string(),
-    crop: string(),
-    state: string(),
-    local_govt: string(),
-    ward: string(),
-    status: boolean()
+    name: string().optional(),
+    size: string().optional(),
+    location: string().optional(),
+    closest_landmark: string().optional(),
+    crop: string().optional(),
+    state: string().optional(),
+    local_govt: string().optional(),
+    ward: string().optional(),
+    status: boolean().optional()
   })
 });
 

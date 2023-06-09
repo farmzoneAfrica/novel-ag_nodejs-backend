@@ -41,11 +41,11 @@ const createFarmHandler = async (req, res, next) => {
 exports.createFarmHandler = createFarmHandler;
 const getFarmsHandler = async (req, res, next) => {
     try {
-        const warehouse = await (0, farm_service_1.getFarms)();
+        const farm = await (0, farm_service_1.getFarms)();
         return res.status(200).status(200).json({
             status: 'success',
             data: {
-                warehouse,
+                farm,
             },
         });
     }
@@ -57,14 +57,14 @@ exports.getFarmsHandler = getFarmsHandler;
 const getFarmHandler = async (req, res, next) => {
     try {
         const { id } = req.params;
-        const warehouse = await (0, farm_service_1.findById)({ id: id });
-        if (!warehouse) {
+        const farm = await (0, farm_service_1.findById)({ id: id });
+        if (!farm) {
             return next(new app_error_1.default(401, 'Warehouse does not exist'));
         }
         return res.status(200).status(200).json({
             status: 'success',
             data: {
-                warehouse,
+                farm,
             },
         });
     }
@@ -77,7 +77,7 @@ const updateFarmHandler = async (req, res, next) => {
     try {
         //   const data = 
         const { id } = req.params;
-        const warehouse = await (0, farm_service_1.updateFarm)({ id: id }, {
+        const farm = await (0, farm_service_1.updateFarm)({ id: id }, {
             name: req.body.name,
             size: req.body.size,
             location: req.body.location,
@@ -87,11 +87,11 @@ const updateFarmHandler = async (req, res, next) => {
             local_govt: req.body.local_govt,
             ward: req.body.ward,
         });
-        if (!warehouse)
+        if (!farm)
             return next(new app_error_1.default(401, 'Warehouse does not exist'));
         return res.status(200).json({
             status: 'Success',
-            warehouse,
+            farm,
         });
     }
     catch (err) {
@@ -102,8 +102,8 @@ exports.updateFarmHandler = updateFarmHandler;
 const deleteFarmHandler = async (req, res, next) => {
     try {
         const { id } = req.params;
-        const warehouse = await (0, farm_service_1.findById)({ id: id });
-        if (!warehouse)
+        const farm = await (0, farm_service_1.findById)({ id: id });
+        if (!farm)
             return next(new app_error_1.default(401, 'Err! Warehouse not found'));
         const response = await (0, farm_service_1.deleteFarm)(id);
         return res.status(200).json({
