@@ -3,9 +3,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteAgentHandler = exports.updateAgentHandler = exports.getAgentHandler = exports.getAgentsByPageHandler = exports.getAgentsHandler = void 0;
+exports.deleteAgentHandler = exports.updateUserHandler = exports.getAgentHandler = exports.getAgentsByPageHandler = exports.getAgentsHandler = void 0;
 const user_service_1 = require("../services/user.service");
-const appError_1 = __importDefault(require("../utils/appError"));
+const app_error_1 = __importDefault(require("../utils/app.error"));
 const getAgentsHandler = async (req, res, next) => {
     try {
         const agents = await (0, user_service_1.findAll)();
@@ -42,7 +42,7 @@ const getAgentHandler = async (req, res, next) => {
         const { id } = req.params;
         const agent = await (0, user_service_1.findById)({ id: id });
         if (!agent) {
-            return next(new appError_1.default(401, 'Agent does not exist'));
+            return next(new app_error_1.default(401, 'Agent does not exist'));
         }
         return res.status(200).json({
             status: 'success',
@@ -56,37 +56,37 @@ const getAgentHandler = async (req, res, next) => {
     }
 };
 exports.getAgentHandler = getAgentHandler;
-const updateAgentHandler = async (req, res, next) => {
+const updateUserHandler = async (req, res, next) => {
     try {
         const { id } = req.params;
-        const findAgent = await (0, user_service_1.findById)({ id: id });
-        if (!findAgent)
-            return next(new appError_1.default(401, 'Agent not found in database'));
+        const findUser = await (0, user_service_1.findById)({ id: id });
+        if (!findUser)
+            return next(new app_error_1.default(401, 'User not found in database'));
         const body = (Object.keys(req.body));
         const data = {
-            firstName: req.body.firstName,
-            lastName: req.body.lastName,
+            first_name: req.body.firstName,
+            last_name: req.body.lastName,
             address: req.body.address,
             gender: req.body.gender,
-            maritalStatus: req.body.maritalStatus,
+            marital_status: req.body.maritalStatus,
             phone: req.body.phone,
             avatar: req.body.avatar,
             state: req.body.state,
-            localGovt: req.body.localGovt,
+            local_govt: req.body.localGovt,
             password: req.body.password,
         };
         const dataKeys = Object.keys(data);
         if (dataKeys.includes(body.toString()) === false) {
-            return next(new appError_1.default(401, 'Wrong input value'));
+            return next(new app_error_1.default(401, 'Wrong input value'));
         }
-        const agent = await (0, user_service_1.updateUser)({ id: id }, data);
-        if (!agent) {
-            return next(new appError_1.default(401, 'Agent does not exist'));
+        const user = await (0, user_service_1.updateUser)({ id: id }, data);
+        if (!user) {
+            return next(new app_error_1.default(401, 'User does not exist'));
         }
         return res.status(200).json({
             status: 'success',
             data: {
-                agent,
+                user,
             },
         });
     }
@@ -94,13 +94,13 @@ const updateAgentHandler = async (req, res, next) => {
         next(err);
     }
 };
-exports.updateAgentHandler = updateAgentHandler;
+exports.updateUserHandler = updateUserHandler;
 const deleteAgentHandler = async (req, res, next) => {
     try {
         const { id } = req.params;
         const agent = await (0, user_service_1.findById)({ id: id });
         if (!agent)
-            return next(new appError_1.default(401, 'Agent not found in database'));
+            return next(new app_error_1.default(401, 'Agent not found in database'));
         const response = await (0, user_service_1.deleteUser)(id);
         return res.status(200).json({
             status: 'success',

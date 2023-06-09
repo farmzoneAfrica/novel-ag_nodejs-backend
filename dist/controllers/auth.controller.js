@@ -3,17 +3,19 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.resetPasswordHandler = exports.forgotPasswordHandler = exports.verifyEmailHandler = exports.logoutUserHandler = exports.refreshAccessTokenHandler = exports.loginUserHandler = exports.registerUserHandler = void 0;
+exports.resetPasswordHandler = exports.forgotPasswordHandler = exports.verifyOtpHandler = exports.verifyEmailHandler = exports.logoutUserHandler = exports.refreshAccessTokenHandler = exports.loginUserHandler = exports.registerUserHandler = void 0;
 const crypto_1 = __importDefault(require("crypto"));
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
+const phoneOtp_1 = require("../utils/phoneOtp");
 const user_service_1 = require("../services/user.service");
-const common_service_1 = require("../services/common.service");
 const client_1 = require("@prisma/client");
 const config_1 = __importDefault(require("config"));
-const appError_1 = __importDefault(require("../utils/appError"));
-const connectRedis_1 = __importDefault(require("../utils/connectRedis"));
+const app_error_1 = __importDefault(require("../utils/app.error"));
+const connect_redis_1 = __importDefault(require("../utils/connect.redis"));
 const jwt_1 = require("../utils/jwt");
 const email_1 = __importDefault(require("../utils/email"));
+// import { date } from 'zod';
+// import { log } from 'console';
 const cookiesOptions = {
     httpOnly: true,
     sameSite: 'lax',
@@ -51,33 +53,23 @@ const registerUserHandler = async (req, res, next) => {
             password: hashedPassword,
             verificationCode,
         });
-        const inputState = user.state;
-        const inputLGA = user.local_govt;
-        const states = await (0, common_service_1.getStates)();
-        const LGAs = await (0, common_service_1.getLGAs)(inputState);
-        if (states.includes(inputState) === false) {
-            return next(new appError_1.default(400, 'Invalid state, please enter a valid state'));
-        }
-        if (LGAs.includes(inputLGA) === false) {
-            return next(new appError_1.default(400, 'Invalid LGA, please enter a valid local government'));
-        }
-        const user_role = user.role;
+        const userRole = user.role;
+        const phone = user.phone;
         const baseUrl = process.env.BASE_URL;
-        const redirectUrl = `${baseUrl}/api/auth/verifyemail/${verifyCode}`;
+        const emailVerificationRedirectUrl = `${baseUrl}/api/auth/verifyemail/${verifyCode}`;
+        const phoneVerificationRedirectUrl = `${baseUrl}/api/auth/verifyphone/:otp`;
+        // const redirectUrl = `${baseUrl}/api/auth/verifyemail/${verifyCode}`;
         try {
-            if (user_role === "farmer") {
-                // logic for OTP
-                return res.json({ msg: "This user is farmer" });
-            }
-            else {
-                await new email_1.default(user, redirectUrl).sendVerificationCode();
-                await (0, user_service_1.updateUser)({ id: user.id }, { verificationCode });
-                res.status(201).json({
-                    status: 'success',
-                    message: 'An email with a verification code has been sent to your email',
-                    user
-                });
-            }
+            const genOtp = Math.floor(Math.random() * 1000000).toString();
+            userRole === "farmer" ?
+                await (0, phoneOtp_1.sendOtp)(phone, genOtp) :
+                await new email_1.default(user, emailVerificationRedirectUrl).sendVerificationCode();
+            await (0, user_service_1.updateUser)({ id: user.id }, { verificationCode });
+            res.status(201).json({
+                status: 'success',
+                message: 'An email with a verification code has been sent to your email',
+                user
+            });
         }
         catch (error) {
             await (0, user_service_1.updateUser)({ id: user.id }, { verificationCode: null });
@@ -88,12 +80,11 @@ const registerUserHandler = async (req, res, next) => {
         }
     }
     catch (err) {
-        console.log(117);
         if (err instanceof client_1.Prisma.PrismaClientKnownRequestError) {
             if (err.code === 'P2002') {
                 return res.status(409).json({
                     status: 'fail',
-                    message: 'Email already exist, please use another email address',
+                    message: 'Email or Phone number already exist, please check and try again',
                 });
             }
         }
@@ -103,18 +94,17 @@ const registerUserHandler = async (req, res, next) => {
 exports.registerUserHandler = registerUserHandler;
 const loginUserHandler = async (req, res, next) => {
     try {
-        const { email, password } = req.body;
-        const user = await (0, user_service_1.findUniqueUser)({ email: email.toLowerCase() }, { id: true, email: true, verified: true, password: true });
+        const { email, phone, password } = req.body;
+        const user = await (0, user_service_1.findUniqueUser)({ email: email.toLowerCase() } || { phone: email.toLowerCase() }, { id: true, email: true, verified: true, phone: true, password: true });
         if (!user) {
-            return next(new appError_1.default(400, 'Invalid email or password'));
+            return next(new app_error_1.default(400, 'Invalid credentials, kindly check and try again'));
         }
         if (!user.verified) {
-            return next(new appError_1.default(401, 'You are not verified, please verify your email to login'));
+            return next(new app_error_1.default(401, 'You are not verified, please verify your email or phone number to login'));
         }
         if (!user || !(await bcryptjs_1.default.compare(password, user.password))) {
-            return next(new appError_1.default(400, 'Invalid email or password'));
+            return next(new app_error_1.default(400, 'Invalid email or password'));
         }
-        // Sign Tokens
         const { access_token, refresh_token } = await (0, user_service_1.signTokens)(user);
         res.cookie('access_token', access_token, accessTokenCookieOptions);
         res.cookie('refresh_token', refresh_token, refreshTokenCookieOptions);
@@ -137,19 +127,19 @@ const refreshAccessTokenHandler = async (req, res, next) => {
         const refresh_token = req.cookies.refresh_token;
         const message = 'Could not refresh access token';
         if (!refresh_token) {
-            return next(new appError_1.default(403, message));
+            return next(new app_error_1.default(403, message));
         }
         const decoded = (0, jwt_1.verifyJwt)(refresh_token, 'ab1234');
         if (!decoded) {
-            return next(new appError_1.default(403, message));
+            return next(new app_error_1.default(403, message));
         }
-        const session = await connectRedis_1.default.get(decoded.sub);
+        const session = await connect_redis_1.default.get(decoded.sub);
         if (!session) {
-            return next(new appError_1.default(403, message));
+            return next(new app_error_1.default(403, message));
         }
         const user = await (0, user_service_1.findUniqueUser)({ id: JSON.parse(session).id });
         if (!user) {
-            return next(new appError_1.default(403, message));
+            return next(new app_error_1.default(403, message));
         }
         const access_token = (0, jwt_1.signJwt)({ sub: user.id }, 'ab1234', {
             expiresIn: `${config_1.default.get('accessTokenExpiresIn')}m`,
@@ -177,7 +167,7 @@ function logout(res) {
 }
 const logoutUserHandler = async (req, res, next) => {
     try {
-        await connectRedis_1.default.del(res.locals.user.id);
+        await connect_redis_1.default.del(res.locals.user.id);
         logout(res);
         res.status(200).json({
             status: 'success',
@@ -196,7 +186,7 @@ const verifyEmailHandler = async (req, res, next) => {
             .digest('hex');
         const user = await (0, user_service_1.updateUser)({ verificationCode }, { verified: true, verificationCode: null }, { email: true });
         if (!user) {
-            return next(new appError_1.default(401, 'Could not verify email'));
+            return next(new app_error_1.default(401, 'Could not verify email'));
         }
         return res.status(200).json({
             status: 'success',
@@ -214,6 +204,29 @@ const verifyEmailHandler = async (req, res, next) => {
     }
 };
 exports.verifyEmailHandler = verifyEmailHandler;
+const verifyOtpHandler = async (req, res, next) => {
+    try {
+        const phoneVerificationCode = Math.floor(Math.random() * 1000000).toString();
+        const user = await (0, user_service_1.updateUser)({ phoneVerificationCode }, { verified: true, phoneVerificationCode: null }, { email: true });
+        if (!user) {
+            return next(new app_error_1.default(401, 'Could not verify phone number'));
+        }
+        return res.status(200).json({
+            status: 'success',
+            message: 'Phone numbrt verified successfully',
+        });
+    }
+    catch (err) {
+        if (err.code === 'P2025') {
+            return res.status(403).json({
+                status: 'fail',
+                message: `Verification code is invalid or user doesn't exist`,
+            });
+        }
+        next(err);
+    }
+};
+exports.verifyOtpHandler = verifyOtpHandler;
 const forgotPasswordHandler = async (req, res, next) => {
     try {
         // const agent = await findUser({ email: req.body.email.toLowerCase() });

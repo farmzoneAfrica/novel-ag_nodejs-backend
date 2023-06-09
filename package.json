@@ -6,7 +6,7 @@
   "scripts": {
     "env": " source /home/novellmr/nodevenv/v1/10/bin/activate && cd /home/novellmr/v1",
     "start": "node dist/index.js",
-    "start:dev": "nodemon dist/index.js",
+    "dev": "nodemon dist/index.js",
     "compile": "tsc",
     "compile:w": "tsc -w",
     "swagger": "node swagger.ts",
@@ -14,12 +14,12 @@
     "eslint:fix": "eslint --fix",
     "prisma": "prisma generate",
     "migrate": "npx prisma migrate dev --name user_table_created --create-only && yarn prisma generate",
+    "prisma:update": "yarn add  @prisma/client@dev prisma@dev",
     "migrate:dev": "npx prisma migrate dev",
     "db:push": "npx prisma db push",
     "deploy:test": "",
-    "deploy:stagging": "yarn lint && cat .env.staging > .env && yarn build && aws s3 sync build/ s3://internal-dashboard-staging",
-    "deploy:prod": "yarn lint && cat .env.prod > .env && yarn build && aws s3 sync build/ s3://internal-dashboard-prod",
-    "prisma:update": "yarn add  @prisma/client@dev prisma@dev"
+    "deploy:stagging": "",
+    "deploy:prod": ""
   },
   "author": "",
   "license": "ISC",
@@ -48,6 +48,7 @@
     "swagger-ui-express": "^4.6.2",
     "ts-node": "^10.9.1",
     "tsc": "^2.0.4",
+    "twilio": "^4.11.2",
     "typescript": "^4.9.5",
     "uuid": "^9.0.0",
     "zod": "^3.21.4"
@@ -72,6 +73,7 @@
     "@types/sqlite3": "^3.1.8",
     "@types/swagger-jsdoc": "^6.0.1",
     "@types/swagger-ui-express": "^4.1.3",
+    "@types/twilio": "^3.19.3",
     "@types/uuid": "^9.0.1",
     "@typescript-eslint/eslint-plugin": "^5.55.0",
     "@typescript-eslint/parser": "^5.55.0",

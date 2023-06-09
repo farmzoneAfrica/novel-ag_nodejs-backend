@@ -6,7 +6,7 @@ import {
   updateUser,
   deleteUser
 } from '../services/user.service'
-import AppError from '../utils/appError';
+import AppError from '../utils/app.error';
 
 export const getAgentsHandler = async (
   req: Request,

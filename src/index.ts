@@ -4,7 +4,7 @@ import config from 'config';
 import morgan from 'morgan';
 import validateEnv from './utils/validateEnv';
 import { PrismaClient } from '@prisma/client';
-import AppError from './utils/appError';
+import AppError from './utils/app.error';
 
 import createError from 'http-errors';
 import cookieParser from 'cookie-parser';

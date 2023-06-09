@@ -7,7 +7,7 @@ exports.deleteUser = exports.signTokens = exports.updateUser = exports.findUniqu
 const client_1 = require("@prisma/client");
 const lodash_1 = require("lodash");
 const config_1 = __importDefault(require("config"));
-const connectRedis_1 = __importDefault(require("../utils/connectRedis"));
+const connect_redis_1 = __importDefault(require("../utils/connect.redis"));
 const jwt_1 = require("../utils/jwt");
 exports.excludedFields = [
     "password",
@@ -69,7 +69,7 @@ const updateUser = async (where, data, select) => {
 };
 exports.updateUser = updateUser;
 const signTokens = async (user) => {
-    connectRedis_1.default.set(`${user.id}`, JSON.stringify((0, lodash_1.omit)(user, exports.excludedFields)), {
+    connect_redis_1.default.set(`${user.id}`, JSON.stringify((0, lodash_1.omit)(user, exports.excludedFields)), {
         EX: config_1.default.get('redisCacheExpiresIn') * 60,
     });
     const access_token = (0, jwt_1.signJwt)({ sub: user.id }, 'ab1234', {
