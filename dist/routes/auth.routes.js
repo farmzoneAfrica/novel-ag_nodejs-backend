@@ -16,6 +16,7 @@ authRouter.post(base + '/register', (0, validate_1.validate)(user_schema_1.regis
 authRouter.post(base + '/login', (0, validate_1.validate)(user_schema_1.loginUserSchema), auth_controller_1.loginUserHandler);
 authRouter.get(base + '/refresh', auth_controller_1.refreshAccessTokenHandler);
 authRouter.get(base + '/verifyemail/:verificationCode', (0, validate_1.validate)(user_schema_1.verifyEmailSchema), auth_controller_1.verifyEmailHandler);
+authRouter.post(base + '/otp', (0, validate_1.validate)(user_schema_1.verifyOtpSchema), auth_controller_1.verifyOtpHandler);
 authRouter.get(base + '/logout', deserializeUser_1.auth, requireUser_1.requireUser, auth_controller_1.logoutUserHandler);
 authRouter.post(base + '/forgotpassword', (0, validate_1.validate)(user_schema_1.forgotPasswordSchema), auth_controller_1.forgotPasswordHandler);
 authRouter.patch(base + '/resetpassword/:resetToken', (0, validate_1.validate)(user_schema_1.resetPasswordSchema), auth_controller_1.resetPasswordHandler);

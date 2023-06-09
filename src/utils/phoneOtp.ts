@@ -1,14 +1,12 @@
+import { log } from 'console';
 import twilio from 'twilio';
-import otpGenerator from 'otp-generator';
 
 const accountSid =  process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 const twilioNumber = process.env.TWILIO_PHONE_NUMBER
 const client = twilio(accountSid, authToken);
 
-export function sendOtp (phoneNumber: string): void {
-const otp: string = otpGenerator.generate(6, { digits: true, specialChars: false });
-console.log(11, otp);
+export function sendOtp (phoneNumber: string, otp: string): void {
 
   client.messages.create({
     body: `Your one time OTP is: ${otp}`,

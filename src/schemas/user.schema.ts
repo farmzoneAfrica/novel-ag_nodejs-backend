@@ -10,11 +10,6 @@ enum RoleEnumType {
   logistics = 'logistics',
 }
 
-// enum GenderEnumType {
-//   Male = 'Male',
-//   Female = 'Female',
-// }
-
 export const registerUserSchema = object({
   body: object({
     first_name: string({
@@ -56,6 +51,18 @@ export const loginUserSchema = object({
     email: string({
       required_error: 'Email address is required',
     }).email('Invalid email address'),
+    phone: string().optional(),
+    password: string({
+      required_error: 'Password is required',
+    }).min(8, 'Invalid email or password'),
+  }),
+});
+
+export const loginFarmerSchema = object({
+  body: object({
+    phone: string({
+      required_error: 'Phone number is required',
+    }),
     password: string({
       required_error: 'Password is required',
     }).min(8, 'Invalid email or password'),
@@ -70,7 +77,7 @@ export const verifyEmailSchema = object({
 
 export const verifyOtpSchema = object({
   body: object({
-    verificationCode: string(),
+    otp: string(),
   }),
 });
 
@@ -128,7 +135,7 @@ export const getSingleUserSchema = object({
 
 export type RegisterUserInput = Omit<
   TypeOf<typeof registerUserSchema>['body'],
-  'confirmPassword'
+  'confirm_password'
 >;
 
 export type LoginUserInput = TypeOf<typeof loginUserSchema>['body'];

@@ -31,20 +31,25 @@ model User {
 
   role RoleEnumType @default(user)
 
-  verificationCode String? @unique @db.VarChar(191)
+  verificationCode String? @unique @db.VarChar(90)
+  verificationCodeAt DateTime?
+
+  phoneVerificationCode String? @unique @db.VarChar(90)
+  phoneVerificationAt DateTime?
 
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt @default(now())
 
   provider String?
+
   passwordResetToken String?
   passwordResetAt DateTime?
 
   prosperityHub ProsperityHub[]
   warhouse Warehouse[]
 
-  @@unique([email, phone, verificationCode, passwordResetToken])
-  @@index([email, verificationCode, passwordResetToken])
+  @@unique([email, phone, verificationCode, passwordResetToken, phoneVerificationCode])
+  @@index([email, verificationCode, passwordResetToken, phoneVerificationCode])
 }
 
 enum RoleEnumType {

@@ -7,6 +7,7 @@ import {
   RegisterUserInput,
   ResetPasswordInput,
   VerifyEmailInput,
+  VerifyOtpInput
 } from '../schemas/user.schema';
 
 import { sendOtp } from '../utils/phoneOtp'
@@ -63,24 +64,18 @@ export const registerUserHandler = async (
 ) => {
   try {
     const hashedPassword = await bcrypt.hash(req.body.password, 12);
+
     const verifyCode = crypto.randomBytes(32).toString('hex');
+
     const verificationCode = crypto
       .createHash('sha256')
       .update(verifyCode)
       .digest('hex');
- 
-      // const state = req.body.state;
-      // const localGov = req.body.local_govt;
-      // const states = await getStates();
-      // const LGAs = await getLGAs(state);
-  
-      // if ( states.includes(state) === false ) {
-      //   return next(new AppError(400, 'Invalid state, please enter a valid state'));
-      // }
-      // if ( LGAs.includes(localGov) === false ) {
-      //   return next(new AppError(400, 'Invalid LGA, please enter a valid local government'));
-      // }
- 
+
+    
+    
+    
+
     const user = await createUser({
       role: req.body.role,
       first_name: req.body.first_name,
@@ -94,21 +89,25 @@ export const registerUserHandler = async (
       marital_status: req.body.marital_status,
       email: req.body.email.toLowerCase(),
       password: hashedPassword,
-      verificationCode
+      verificationCode,
+  
     });
 
     const userRole = user.role;
-    console.log(userRole)
     const phone = user.phone;
     const baseUrl = process.env.BASE_URL;
-    const redirectUrl = `${baseUrl}/api/auth/verifyemail/${verifyCode}`;
+    const emailVerificationRedirectUrl = `${baseUrl}/api/auth/verifyemail/${verifyCode}`;
+    const phoneVerificationRedirectUrl = `${baseUrl}/api/auth/verifyphone/:otp`;
+    // const redirectUrl = `${baseUrl}/api/auth/verifyemail/${verifyCode}`;
 
     try { 
+      const genOtp = Math.floor(Math.random()*1000000).toString();
+
       userRole === "farmer" ? 
-      await sendOtp (phone) :
-      console.log(110, "User is farmer, I am not suppose to run")
-      await new Email(user, redirectUrl).sendVerificationCode();
-            
+
+      await sendOtp (phone, genOtp) :
+
+      await new Email(user, emailVerificationRedirectUrl).sendVerificationCode();
       await updateUser({ id: user.id }, { verificationCode });
       res.status(201).json({
         status: 'success',
@@ -143,19 +142,21 @@ export const loginUserHandler = async (
   next: NextFunction
 ) => {
   try {
-    const { email, password } = req.body;
+    const { email, phone, password } = req.body;
+
     const user = await findUniqueUser(
-      { email: email.toLowerCase() },
-      { id: true, email: true, verified: true, password: true }
+      { email: email.toLowerCase() } || { phone: email.toLowerCase() },
+      { id: true, email: true, verified: true, phone: true, password: true }
     );
     if (!user) {
-      return next(new AppError(400, 'Invalid email or password'));
+      return next(new AppError(400, 'Invalid credentials, kindly check and try again'));
     }
+
     if (!user.verified) {
       return next(
         new AppError(
           401,
-          'You are not verified, please verify your email to login'
+          'You are not verified, please verify your email or phone number to login'
         )
       );
     }
@@ -163,8 +164,8 @@ export const loginUserHandler = async (
       return next(new AppError(400, 'Invalid email or password'));
     }
 
-    // Sign Tokens
     const { access_token, refresh_token } = await signTokens(user);
+
     res.cookie('access_token', access_token, accessTokenCookieOptions);
     res.cookie('refresh_token', refresh_token, refreshTokenCookieOptions);
     res.cookie('logged_in', true, {
@@ -276,6 +277,40 @@ export const verifyEmailHandler = async (
     return res.status(200).json({
       status: 'success',
       message: 'Email verified successfully',
+    });
+  } catch (err: any) {
+    if (err.code === 'P2025') {
+      return res.status(403).json({
+        status: 'fail',
+        message: `Verification code is invalid or user doesn't exist`,
+      });
+    }
+    next(err);
+  }
+};
+
+export const verifyOtpHandler = async (
+  req: Request<VerifyOtpInput>,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+  
+    const phoneVerificationCode = Math.floor(Math.random()*1000000).toString();
+
+    const user = await updateUser(
+      { phoneVerificationCode },
+      { verified: true, phoneVerificationCode: null },
+      { email: true }
+    );
+
+    if (!user) {
+      return next(new AppError(401, 'Could not verify phone number'));
+    }
+
+    return res.status(200).json({
+      status: 'success',
+      message: 'Phone numbrt verified successfully',
     });
   } catch (err: any) {
     if (err.code === 'P2025') {

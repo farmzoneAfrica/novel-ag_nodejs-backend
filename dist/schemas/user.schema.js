@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getSingleUserSchema = exports.resetPasswordSchema = exports.forgotPasswordSchema = exports.updateUserSchema = exports.verifyOtpSchema = exports.verifyEmailSchema = exports.loginUserSchema = exports.registerUserSchema = void 0;
+exports.getSingleUserSchema = exports.resetPasswordSchema = exports.forgotPasswordSchema = exports.updateUserSchema = exports.verifyOtpSchema = exports.verifyEmailSchema = exports.loginFarmerSchema = exports.loginUserSchema = exports.registerUserSchema = void 0;
 const zod_1 = require("zod");
 var RoleEnumType;
 (function (RoleEnumType) {
@@ -12,10 +12,6 @@ var RoleEnumType;
     RoleEnumType["dealer"] = "dealer";
     RoleEnumType["logistics"] = "logistics";
 })(RoleEnumType || (RoleEnumType = {}));
-// enum GenderEnumType {
-//   Male = 'Male',
-//   Female = 'Female',
-// }
 exports.registerUserSchema = (0, zod_1.object)({
     body: (0, zod_1.object)({
         first_name: (0, zod_1.string)({
@@ -56,6 +52,17 @@ exports.loginUserSchema = (0, zod_1.object)({
         email: (0, zod_1.string)({
             required_error: 'Email address is required',
         }).email('Invalid email address'),
+        phone: (0, zod_1.string)().optional(),
+        password: (0, zod_1.string)({
+            required_error: 'Password is required',
+        }).min(8, 'Invalid email or password'),
+    }),
+});
+exports.loginFarmerSchema = (0, zod_1.object)({
+    body: (0, zod_1.object)({
+        phone: (0, zod_1.string)({
+            required_error: 'Phone number is required',
+        }),
         password: (0, zod_1.string)({
             required_error: 'Password is required',
         }).min(8, 'Invalid email or password'),
@@ -68,7 +75,7 @@ exports.verifyEmailSchema = (0, zod_1.object)({
 });
 exports.verifyOtpSchema = (0, zod_1.object)({
     body: (0, zod_1.object)({
-        verificationCode: (0, zod_1.string)(),
+        otp: (0, zod_1.string)(),
     }),
 });
 exports.updateUserSchema = (0, zod_1.object)({
