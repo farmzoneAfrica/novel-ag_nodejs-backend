@@ -3,36 +3,27 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteWarehouseHandler = exports.updateWarehouseHandler = exports.getWarehouseHandler = exports.getWarehousesHandler = exports.createWarehouseHandler = void 0;
-const warehouse_service_1 = require("../services/warehouse.service");
-const common_service_1 = require("../services/common.service");
+exports.deleteFarmHandler = exports.updateFarmHandler = exports.getFarmHandler = exports.getFarmsHandler = exports.createFarmHandler = void 0;
+const farm_service_1 = require("../services/farm.service");
 const app_error_1 = __importDefault(require("../utils/app.error"));
 const client_1 = require("@prisma/client");
-const createWarehouseHandler = async (req, res, next) => {
+const createFarmHandler = async (req, res, next) => {
     try {
-        const agentId = req.user.sub;
-        const warehouse = await (0, warehouse_service_1.createWarehouse)({
+        const userId = req.user.sub;
+        const farm = await (0, farm_service_1.createFarm)({
             name: req.body.name,
+            size: req.body.size,
             location: req.body.location,
             closest_landmark: req.body.closest_landmark,
+            crop: req.body.crop,
             state: req.body.state,
             local_govt: req.body.local_govt,
             ward: req.body.ward,
-            status: req.body.status,
+            userId: userId
         });
-        const inputState = warehouse.state;
-        const inputLGA = warehouse.local_govt;
-        const states = await (0, common_service_1.getStates)();
-        const LGAs = await (0, common_service_1.getLGAs)(inputState);
-        if (states.includes(inputState) === false) {
-            return next(new app_error_1.default(400, 'Invalid state, please enter a valid state'));
-        }
-        if (LGAs.includes(inputLGA) === false) {
-            return next(new app_error_1.default(400, 'Invalid LGA, please enter a valid local government'));
-        }
         return res.status(201).json({
-            status: "Sucess",
-            warehouse
+            status: "Success",
+            farm
         });
     }
     catch (err) {
@@ -40,17 +31,17 @@ const createWarehouseHandler = async (req, res, next) => {
             if (err.code === 'P2002') {
                 return res.status(409).json({
                     status: 'fail',
-                    message: 'Warehouse name already exist, please use another name',
+                    message: 'Farm with similara name already exist, please use another name',
                 });
             }
         }
         next(err);
     }
 };
-exports.createWarehouseHandler = createWarehouseHandler;
-const getWarehousesHandler = async (req, res, next) => {
+exports.createFarmHandler = createFarmHandler;
+const getFarmsHandler = async (req, res, next) => {
     try {
-        const warehouse = await (0, warehouse_service_1.getWarehouses)();
+        const warehouse = await (0, farm_service_1.getFarms)();
         return res.status(200).status(200).json({
             status: 'success',
             data: {
@@ -62,11 +53,11 @@ const getWarehousesHandler = async (req, res, next) => {
         next(err);
     }
 };
-exports.getWarehousesHandler = getWarehousesHandler;
-const getWarehouseHandler = async (req, res, next) => {
+exports.getFarmsHandler = getFarmsHandler;
+const getFarmHandler = async (req, res, next) => {
     try {
         const { id } = req.params;
-        const warehouse = await (0, warehouse_service_1.findById)({ id: id });
+        const warehouse = await (0, farm_service_1.findById)({ id: id });
         if (!warehouse) {
             return next(new app_error_1.default(401, 'Warehouse does not exist'));
         }
@@ -81,20 +72,21 @@ const getWarehouseHandler = async (req, res, next) => {
         next(err);
     }
 };
-exports.getWarehouseHandler = getWarehouseHandler;
-const updateWarehouseHandler = async (req, res, next) => {
+exports.getFarmHandler = getFarmHandler;
+const updateFarmHandler = async (req, res, next) => {
     try {
+        //   const data = 
         const { id } = req.params;
-        const data = {
+        const warehouse = await (0, farm_service_1.updateFarm)({ id: id }, {
             name: req.body.name,
+            size: req.body.size,
             location: req.body.location,
             closest_landmark: req.body.closest_landmark,
+            crop: req.body.crop,
             state: req.body.state,
             local_govt: req.body.local_govt,
             ward: req.body.ward,
-            status: req.body.status
-        };
-        const warehouse = await (0, warehouse_service_1.updateWarehouse)({ id: id }, data);
+        });
         if (!warehouse)
             return next(new app_error_1.default(401, 'Warehouse does not exist'));
         return res.status(200).json({
@@ -106,14 +98,14 @@ const updateWarehouseHandler = async (req, res, next) => {
         next(err);
     }
 };
-exports.updateWarehouseHandler = updateWarehouseHandler;
-const deleteWarehouseHandler = async (req, res, next) => {
+exports.updateFarmHandler = updateFarmHandler;
+const deleteFarmHandler = async (req, res, next) => {
     try {
         const { id } = req.params;
-        const warehouse = await (0, warehouse_service_1.findById)({ id: id });
+        const warehouse = await (0, farm_service_1.findById)({ id: id });
         if (!warehouse)
             return next(new app_error_1.default(401, 'Err! Warehouse not found'));
-        const response = await (0, warehouse_service_1.deleteWarehouse)(id);
+        const response = await (0, farm_service_1.deleteFarm)(id);
         return res.status(200).json({
             status: 'success',
             response
@@ -123,5 +115,5 @@ const deleteWarehouseHandler = async (req, res, next) => {
         next(err);
     }
 };
-exports.deleteWarehouseHandler = deleteWarehouseHandler;
-//# sourceMappingURL=warehouse.controller.js.map
+exports.deleteFarmHandler = deleteFarmHandler;
+//# sourceMappingURL=farm.controller.js.map

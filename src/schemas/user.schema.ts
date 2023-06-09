@@ -51,18 +51,7 @@ export const loginUserSchema = object({
     email: string({
       required_error: 'Email address is required',
     }).email('Invalid email address'),
-    phone: string().optional(),
-    password: string({
-      required_error: 'Password is required',
-    }).min(8, 'Invalid email or password'),
-  }),
-});
-
-export const loginFarmerSchema = object({
-  body: object({
-    phone: string({
-      required_error: 'Phone number is required',
-    }),
+    phone: string(),
     password: string({
       required_error: 'Password is required',
     }).min(8, 'Invalid email or password'),
@@ -145,5 +134,4 @@ export type UpdateUserInput = TypeOf<typeof updateUserSchema>['body'];
 export type ForgotPasswordInput = TypeOf<typeof forgotPasswordSchema>['body'];
 export type ResetPasswordInput = TypeOf<typeof resetPasswordSchema>;
 export type GetSingleUserInput = TypeOf<typeof getSingleUserSchema>['params'];
-
 

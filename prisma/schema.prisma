@@ -47,6 +47,7 @@ model User {
 
   prosperityHub ProsperityHub[]
   warhouse Warehouse[]
+  farm Farm []
 
   @@unique([email, phone, verificationCode, passwordResetToken, phoneVerificationCode])
   @@index([email, verificationCode, passwordResetToken, phoneVerificationCode])
@@ -65,14 +66,15 @@ enum RoleEnumType {
 
 model ProsperityHub {
   @@map(name: "prosperityHubs")
-  id        String     @id @default(uuid())
-  name     String @unique
-  address   String?
-  state     String  @default("")
-  localGovt  String @default("")
-  remarks   String?
+  id      String     @id @default(uuid())
+  name    String @unique
+  location  String
+  closest_landmark  String ?
+  state   String  
+  local_govt  String 
+  ward   String?
   status   Boolean @default(false)
-  agent   User   @relation(fields: [userId], onDelete: Cascade, references: [id])
+  user   User   @relation(fields: [userId], onDelete: Cascade, references: [id])
   userId   String
 
   createdAt     DateTime @default(now())
@@ -83,12 +85,13 @@ model Warehouse {
   @@map(name: "warehouses")
   id        String     @id @default(uuid())
   name     String @unique
-  state String @default("")
-  localGovt String @default("")
-  address     String
-  remarks     String?
+  location String 
+  closest_landmark String @default("")
+  state String 
+  local_govt String
+  ward String @default("")
   status Boolean @default(false)
-  agent   User   @relation(fields: [userId], onDelete: Cascade, references: [id])
+  user   User   @relation(fields: [userId], onDelete: Cascade, references: [id])
   userId String
 
   createdAt     DateTime @default(now())
@@ -97,13 +100,18 @@ model Warehouse {
 
 model Farm {
   @@map(name: "farms")
-  id        String     @id @default(uuid())
+  id       String     @id @default(uuid())
   name     String @unique
-  size String ?
-  location String?
-  crop     String?
+  size String 
+  location String
+  closest_landmark String ?
+  crop     String ?
+  state String 
+  local_govt String
+  ward String @default("")
   status Boolean @default(false)
-  action String @default("")
+  user   User   @relation(fields: [userId], onDelete: Cascade, references: [id])
+  userId String
 
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt @default(now())

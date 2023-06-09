@@ -6,7 +6,7 @@ import {
     getAgentsByPageHandler,
     updateUserHandler,
     deleteAgentHandler
-} from '../controllers/user.controller';
+} from '../controllers/farmers.controller';
 import {
     auth,
     adminAuth
@@ -21,10 +21,10 @@ const agentRouter = express.Router();
 
 const base = "";
 
-agentRouter.get(base+'/get', auth, getAgentsHandler);
-agentRouter.get(base+'/get/:id', auth, requireUser, getAgentHandler);
+agentRouter.get(base+'/', auth, getAgentsHandler);
+agentRouter.get(base+'/:id', auth, requireUser, getAgentHandler);
 agentRouter.get(base+'/:pageNo', getAgentsByPageHandler);
-agentRouter.patch(base+'/update/:id', validate(updateUserSchema), auth, updateUserHandler );
-agentRouter.delete(base+'/delete/:id', auth, adminAuth, deleteAgentHandler );
+agentRouter.patch(base+'/:id', validate(updateUserSchema), auth, updateUserHandler );
+agentRouter.delete(base+'/:id', auth, adminAuth, deleteAgentHandler );
 
 export default agentRouter;

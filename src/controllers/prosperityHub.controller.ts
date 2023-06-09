@@ -28,19 +28,19 @@ export const createProsperityHubHandler = async (
   next: NextFunction
 ) => {
   try {
-    const agentId = req.user.sub
     const prosperityHub = await createProsperityHub({
       name: req.body.name,
-      address: req.body.address,
+      location: req.body.location,
+      closest_landmark: req.body.closest_landmark,
       state: req.body.state,
-      localGovt: req.body.localGovt,
-      remarks: req.body.remarks,
-      agentId: agentId
+      local_govt: req.body.local_govt,
+      ward: req.body.ward,
+      status: req.body.status
     });
     console.log(prosperityHub);
     
     const inputState = prosperityHub.state;
-    const inputLGA = prosperityHub.localGovt;
+    const inputLGA = prosperityHub.local_govt;
     const states = await getStates();
     const LGAs = await getLGAs(inputState);
 
@@ -93,7 +93,7 @@ export const getProsperityHubHandler = async (
     const { id } = req.params;
     const prosperityHub = await findById({ id: id })
      if (!prosperityHub) {
-      return next(new AppError(401, 'Agent does not exist'));
+      return next(new AppError(401, 'Prosperity hub does not exist'));
     }
       return res.status(200).json({
       status: 'success',
@@ -113,11 +113,12 @@ export const updateProsperityHubHandler = async (
   const { id } = req.params; 
   const data = {
     name: req.body.name,
-    address: req.body.address,
+    location: req.body.location,
+    closest_landmark: req.body.closest_landmark,
     state: req.body.state,
-    localGovt: req.body.localGovt,
+    local_govt: req.body.local_govt,
+    ward: req.body.ward,
     status: req.body.status,
-    remarks: req.body.remarks,
   }
     const prosperityHub = await updateProsperityHub({ id: id }, data);
      if (!prosperityHub) 

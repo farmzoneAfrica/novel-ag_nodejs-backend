@@ -11,10 +11,10 @@ const user_schema_1 = require("../schemas/user.schema");
 const requireUser_1 = require("../middleware/requireUser");
 const agentRouter = express_1.default.Router();
 const base = "";
-agentRouter.get(base + '/get', deserializeUser_1.auth, user_controller_1.getAgentsHandler);
-agentRouter.get(base + '/get/:id', deserializeUser_1.auth, requireUser_1.requireUser, user_controller_1.getAgentHandler);
-agentRouter.get(base + '/:pageNo', user_controller_1.getAgentsByPageHandler);
-agentRouter.patch(base + '/update/:id', (0, validate_1.validate)(user_schema_1.updateUserSchema), deserializeUser_1.auth, user_controller_1.updateUserHandler);
-agentRouter.delete(base + '/delete/:id', deserializeUser_1.auth, deserializeUser_1.adminAuth, user_controller_1.deleteAgentHandler);
+agentRouter.get(base + '/', deserializeUser_1.auth, user_controller_1.getAgentsHandler);
+agentRouter.get(base + '/:id', deserializeUser_1.auth, requireUser_1.requireUser, user_controller_1.getAgentHandler);
+agentRouter.get(base + '/:pageNumber', user_controller_1.getAgentsByPageHandler);
+agentRouter.patch(base + '/:id', (0, validate_1.validate)(user_schema_1.updateUserSchema), deserializeUser_1.auth, user_controller_1.updateUserHandler);
+agentRouter.delete(base + '/:id', deserializeUser_1.auth, deserializeUser_1.adminAuth, user_controller_1.deleteAgentHandler);
 exports.default = agentRouter;
 //# sourceMappingURL=user.routes.js.map

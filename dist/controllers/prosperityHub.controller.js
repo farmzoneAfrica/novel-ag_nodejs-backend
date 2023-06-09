@@ -12,18 +12,18 @@ const client_1 = require("@prisma/client");
 // import { userInfo } from 'os';
 const createProsperityHubHandler = async (req, res, next) => {
     try {
-        const agentId = req.user.sub;
         const prosperityHub = await (0, prosperityHub_service_1.createProsperityHub)({
             name: req.body.name,
-            address: req.body.address,
+            location: req.body.location,
+            closest_landmark: req.body.closest_landmark,
             state: req.body.state,
-            localGovt: req.body.localGovt,
-            remarks: req.body.remarks,
-            agentId: agentId
+            local_govt: req.body.local_govt,
+            ward: req.body.ward,
+            status: req.body.status
         });
         console.log(prosperityHub);
         const inputState = prosperityHub.state;
-        const inputLGA = prosperityHub.localGovt;
+        const inputLGA = prosperityHub.local_govt;
         const states = await (0, common_service_1.getStates)();
         const LGAs = await (0, common_service_1.getLGAs)(inputState);
         if (states.includes(inputState) === false) {
@@ -68,7 +68,7 @@ const getProsperityHubHandler = async (req, res, next) => {
         const { id } = req.params;
         const prosperityHub = await (0, prosperityHub_service_1.findById)({ id: id });
         if (!prosperityHub) {
-            return next(new app_error_1.default(401, 'Agent does not exist'));
+            return next(new app_error_1.default(401, 'Prosperity hub does not exist'));
         }
         return res.status(200).json({
             status: 'success',
@@ -85,11 +85,12 @@ const updateProsperityHubHandler = async (req, res, next) => {
         const { id } = req.params;
         const data = {
             name: req.body.name,
-            address: req.body.address,
+            location: req.body.location,
+            closest_landmark: req.body.closest_landmark,
             state: req.body.state,
-            localGovt: req.body.localGovt,
+            local_govt: req.body.local_govt,
+            ward: req.body.ward,
             status: req.body.status,
-            remarks: req.body.remarks,
         };
         const prosperityHub = await (0, prosperityHub_service_1.updateProsperityHub)({ id: id }, data);
         if (!prosperityHub)

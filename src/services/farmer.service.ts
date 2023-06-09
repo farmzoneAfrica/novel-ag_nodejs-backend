@@ -17,17 +17,11 @@ const prisma = new PrismaClient();
 
 // adjust logic to bring out farmers only
 
-export const createUser = async (input: Prisma.UserCreateInput) => {  
-  return (await prisma.user.create({
-    data: input,
-  })) as User;
-};
-
-export const findAll = async () => {
+export const findAllFarmers = async () => {
   return await prisma.user.findMany();
 }
 
-export const pagination = async (
+export const farmerPagination = async (
   skip: number, 
   take: number
 ) => {
@@ -37,7 +31,7 @@ export const pagination = async (
   });
 }
 
-export const findUser = async (
+export const findFarmer = async (
   where: Prisma.UserCreateInput | any,
 ) => {
   return (await prisma.user.findUnique({
@@ -53,7 +47,7 @@ export const findUser1 = async(
   }))
 }
 
-export const findById = async (
+export const findFarmerById = async (
   where: Prisma.UserWhereUniqueInput,
 ) => {
   return (await prisma.user.findUnique({
@@ -65,7 +59,7 @@ export const findById = async (
   }))
 };
 
-export const findUniqueUser = async (
+export const findUniqueFarmer = async (
   where: Prisma.UserWhereUniqueInput,
   select?: Prisma.UserSelect
 ) => {
@@ -83,21 +77,7 @@ export const updateUser = async (
   return (await prisma.user.update({ where, data, select })) as User;
 };
 
-export const signTokens = async (user: Prisma.UserCreateInput) => {
-  redisClient.set(`${user.id}`, JSON.stringify(omit(user, excludedFields)), {
-    EX: config.get<number>('redisCacheExpiresIn') * 60,
-  });
 
-  const access_token = signJwt({ sub: user.id }, 'ab1234', {
-    expiresIn: `30s`,
-  });
-
-  const refresh_token = signJwt({ sub: user.id }, 'ab1234', {
-    expiresIn: `30s`,
-  });
-  return { access_token, refresh_token };
-};
-
-export const deleteUser = async (id: string) => {
+export const deleteFarm = async (id: string) => {
   return await prisma.user.delete({where:{id}});
 }

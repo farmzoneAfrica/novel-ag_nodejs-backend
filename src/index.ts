@@ -18,6 +18,7 @@ import user_router from "./routes/user.routes";
 import farmer_router from "./routes/farmer.routes";
 import prosperity_hub_router from "./routes/prosperity.hub.routes";
 import warehouse_router from "./routes/warehouse.routes";
+import farm_router from "./routes/farm.routes";
 
 validateEnv()
 
@@ -53,6 +54,7 @@ const prisma = new PrismaClient();
   app.use('/api/farmer', farmer_router);
   app.use('/api/prosperity-hub', prosperity_hub_router);
   app.use('/api/warehouse', warehouse_router);
+  app.use('/api/farms', farm_router);
 
   app.all('*', (req: Request, res: Response, next: NextFunction) => {
     next(new AppError(404, `Route ${req.originalUrl} not found`));

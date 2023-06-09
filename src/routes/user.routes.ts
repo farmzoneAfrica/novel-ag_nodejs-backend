@@ -21,10 +21,10 @@ const agentRouter = express.Router();
 
 const base = "";
 
-agentRouter.get(base+'/get', auth, getAgentsHandler);
-agentRouter.get(base+'/get/:id', auth, requireUser, getAgentHandler);
-agentRouter.get(base+'/:pageNo', getAgentsByPageHandler);
-agentRouter.patch(base+'/update/:id', validate(updateUserSchema), auth, updateUserHandler );
-agentRouter.delete(base+'/delete/:id', auth, adminAuth, deleteAgentHandler );
+agentRouter.get(base+'/', auth, getAgentsHandler);
+agentRouter.get(base+'/:id', auth, requireUser, getAgentHandler);
+agentRouter.get(base+'/:pageNumber', getAgentsByPageHandler);
+agentRouter.patch(base+'/:id', validate(updateUserSchema), auth, updateUserHandler );
+agentRouter.delete(base+'/:id', auth, adminAuth, deleteAgentHandler );
 
 export default agentRouter;

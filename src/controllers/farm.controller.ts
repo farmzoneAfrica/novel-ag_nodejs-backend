@@ -1,12 +1,11 @@
 import { NextFunction, Request, Response } from 'express';
 import {
-    createWarehouse,
-    getWarehouses,
+    createFarm,
+    getFarms,
     findById,
-    updateWarehouse,
-    deleteWarehouse,
-  
-} from '../services/warehouse.service';
+    updateFarm,
+    deleteFarm
+} from '../services/farm.service';
 
 import { 
   getStates,
@@ -15,49 +14,40 @@ import {
 
 import AppError from '../utils/app.error';
 import {
-  CreateWarehouseInput,
-  UpdateWarehouseInput
-} from "../schemas/warehouse.schema"
-import prisma from '../utils/prismaClient';
+  CreateFarmInput,
+  UpdateFarmInput
+} from "../schemas/farm.schema"
 import { Prisma } from '@prisma/client';
 
-export const createWarehouseHandler = async (
-  req: Request<{}, {}, CreateWarehouseInput> | any,
+export const createFarmHandler = async (
+  req: Request<{}, {}, CreateFarmInput> | any,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const agentId = req.user.sub
-    const warehouse = await createWarehouse({
+    const userId = req.user.sub
+    const farm = await createFarm({
       name: req.body.name,
+      size: req.body.size,
       location: req.body.location,
       closest_landmark: req.body.closest_landmark,
+      crop: req.body.crop,
       state: req.body.state,
       local_govt: req.body.local_govt,
-      ward: req.body.ward,
-      status: req.body.status,
+      ward: req.body.ward, 
+      userId: userId
     });
 
-    const inputState = warehouse.state;
-    const inputLGA = warehouse.local_govt;
-    const states = await getStates();
-    const LGAs = await getLGAs(inputState);
-    if ( states.includes(inputState) === false ) {
-      return next(new AppError(400, 'Invalid state, please enter a valid state'));
-    }
-    if ( LGAs.includes(inputLGA) === false ) {
-      return next(new AppError(400, 'Invalid LGA, please enter a valid local government'));
-    }
     return res.status(201).json({
-      status: "Sucess",
-      warehouse
+      status: "Success",
+      farm
     })
   } catch (err: any) { 
       if (err instanceof Prisma.PrismaClientKnownRequestError) {
       if (err.code === 'P2002') {
         return res.status(409).json({
           status: 'fail',
-          message: 'Warehouse name already exist, please use another name',
+          message: 'Farm with similara name already exist, please use another name',
         });
       }
     }
@@ -65,13 +55,13 @@ export const createWarehouseHandler = async (
   }
 };
 
-export const getWarehousesHandler = async (
+export const getFarmsHandler = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const warehouse = await getWarehouses()
+    const warehouse = await getFarms()
       return res.status(200).status(200).json({
       status: 'success',
       data: {
@@ -83,7 +73,7 @@ export const getWarehousesHandler = async (
   }
 };
 
-export const getWarehouseHandler = async (
+export const getFarmHandler = async (
   req: Response | any,
   res: Response,
   next: NextFunction
@@ -105,23 +95,26 @@ export const getWarehouseHandler = async (
   }
 };
 
-export const updateWarehouseHandler = async (
-  req: Request < {}, {}, UpdateWarehouseInput > | any,
+export const updateFarmHandler = async (
+  req: Request < {}, {}, UpdateFarmInput > | any,
   res: Response,
   next: NextFunction
 ) => {
   try {
-  const { id } = req.params; 
-  const data = {
-      name: req.body.name,
-      location: req.body.location,
-      closest_landmark: req.body.closest_landmark,
-      state: req.body.state,
-      local_govt: req.body.local_govt,
-      ward: req.body.ward,
-      status: req.body.status
-  }
-    const warehouse = await updateWarehouse({ id: id }, data);
+//   const data = 
+  const { id } = req.params;
+    const warehouse = await updateFarm(
+        { id: id }, 
+        {
+            name: req.body.name,
+            size: req.body.size,
+            location: req.body.location,
+            closest_landmark: req.body.closest_landmark,
+            crop: req.body.crop,
+            state: req.body.state,
+            local_govt: req.body.local_govt,
+            ward: req.body.ward, 
+          });
      if (!warehouse) 
       return next(new AppError(401, 'Warehouse does not exist'));
     
@@ -134,7 +127,7 @@ export const updateWarehouseHandler = async (
   }
 };
 
-export const deleteWarehouseHandler = async (
+export const deleteFarmHandler = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -145,7 +138,7 @@ export const deleteWarehouseHandler = async (
     if (!warehouse) 
       return next(new AppError(401, 'Err! Warehouse not found'));
     
-    const response = await deleteWarehouse(id)
+    const response = await deleteFarm(id)
     return res.status(200).json({
       status: 'success',
       response
