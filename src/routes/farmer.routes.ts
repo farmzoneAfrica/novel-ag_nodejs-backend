@@ -17,14 +17,12 @@ import {
 
 import { requireUser } from '../middleware/requireUser';
 
-const agentRouter = express.Router();
+const farmerRouter = express.Router();
 
-const base = "";
+farmerRouter.get( '/', auth, getAgentsHandler);
+farmerRouter.get( '/:id', auth, requireUser, getAgentHandler);
+farmerRouter.get( '/:pageNo', getAgentsByPageHandler);
+farmerRouter.patch( '/:id', validate(updateUserSchema), auth, updateUserHandler );
+farmerRouter.delete( '/:id', auth, adminAuth, deleteAgentHandler );
 
-agentRouter.get(base+'/', auth, getAgentsHandler);
-agentRouter.get(base+'/:id', auth, requireUser, getAgentHandler);
-agentRouter.get(base+'/:pageNo', getAgentsByPageHandler);
-agentRouter.patch(base+'/:id', validate(updateUserSchema), auth, updateUserHandler );
-agentRouter.delete(base+'/:id', auth, adminAuth, deleteAgentHandler );
-
-export default agentRouter;
+export default farmerRouter;

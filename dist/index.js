@@ -43,12 +43,12 @@ app.get('/api/healthchecker', (_, res) => {
         message: 'Welcome to NodeJs with Prisma and PostgreSQL',
     });
 });
-app.use('/api/auth', auth_routes_1.default);
-app.use('/api/user', user_routes_1.default);
-app.use('/api/farmer', farmer_routes_1.default);
-app.use('/api/prosperity-hub', prosperity_hub_routes_1.default);
-app.use('/api/warehouse', warehouse_routes_1.default);
-app.use('/api/farms', farm_routes_1.default);
+app.use('/api/v1/auth', auth_routes_1.default);
+app.use('/api/v1/user', user_routes_1.default);
+app.use('/api/v1/farmer', farmer_routes_1.default);
+app.use('/api/v1/prosperity-hub', prosperity_hub_routes_1.default);
+app.use('/api/v1/warehouse', warehouse_routes_1.default);
+app.use('/api/v1/farm', farm_routes_1.default);
 app.all('*', (req, res, next) => {
     next(new app_error_1.default(404, `Route ${req.originalUrl} not found`));
 });

@@ -23,12 +23,10 @@ import { validate } from '../middleware/validate';
 
 const warehouseRouter = express.Router();
 
-const base = ""
-
-warehouseRouter.post(base+'/', validate(createWarehouseSchema), auth, requireUser, createWarehouseHandler);
-warehouseRouter.get(base+'/', auth, getWarehousesHandler);
-warehouseRouter.get(base+'/:id', auth, getWarehouseHandler);
-warehouseRouter.patch(base+'/:id', validate(updateWarehouseSchema), auth, updateWarehouseHandler);
-warehouseRouter.delete(base+'/:id', auth, adminAuth, deleteWarehouseHandler);
+warehouseRouter.post( '/', validate(createWarehouseSchema), auth, requireUser, createWarehouseHandler);
+warehouseRouter.get( '/', auth, getWarehousesHandler);
+warehouseRouter.get( '/:id', auth, getWarehouseHandler);
+warehouseRouter.patch( '/:id', validate(updateWarehouseSchema), auth, updateWarehouseHandler);
+warehouseRouter.delete( '/:id', auth, adminAuth, deleteWarehouseHandler);
 
 export default warehouseRouter;

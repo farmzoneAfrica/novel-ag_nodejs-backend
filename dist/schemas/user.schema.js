@@ -52,7 +52,7 @@ exports.loginUserSchema = (0, zod_1.object)({
         email: (0, zod_1.string)({
             required_error: 'Email address is required',
         }).email('Invalid email address'),
-        phone: (0, zod_1.string)(),
+        phone: (0, zod_1.string)().optional(),
         password: (0, zod_1.string)({
             required_error: 'Password is required',
         }).min(8, 'Invalid email or password'),

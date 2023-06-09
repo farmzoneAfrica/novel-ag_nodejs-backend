@@ -21,14 +21,12 @@ import { requireUser } from '../middleware/requireUser';
 import { validate } from '../middleware/validate';
 
 
-const warehouseRouter = express.Router();
+const farmRouter = express.Router();
 
-// const base = ""
+farmRouter.post( '/', validate(createWarehouseSchema), auth, requireUser, createFarmHandler);
+farmRouter.get( '/', auth, getFarmsHandler);
+farmRouter.get( '/:id', auth, getFarmHandler);
+farmRouter.patch( '/:id', validate(updateWarehouseSchema), auth, updateFarmHandler);
+farmRouter.delete( '/:id', auth, adminAuth, deleteFarmHandler);
 
-warehouseRouter.post( '/', validate(createWarehouseSchema), auth, requireUser, createFarmHandler);
-warehouseRouter.get( '/', auth, getFarmsHandler);
-warehouseRouter.get( '/:id', auth, getFarmHandler);
-warehouseRouter.patch( '/:id', validate(updateWarehouseSchema), auth, updateFarmHandler);
-warehouseRouter.delete( '/:id', auth, adminAuth, deleteFarmHandler);
-
-export default warehouseRouter;
+export default farmRouter;

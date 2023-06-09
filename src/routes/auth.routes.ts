@@ -24,15 +24,13 @@ import {
 
 const authRouter = express.Router();
 
-const base = ""
-
-authRouter.post( base+'/register', validate(registerUserSchema), registerUserHandler);
-authRouter.post( base+'/login', validate(loginUserSchema), loginUserHandler);
-authRouter.get( base+'/refresh', refreshAccessTokenHandler);
-authRouter.get( base+'/verifyemail/:verificationCode', validate(verifyEmailSchema), verifyEmailHandler );
-authRouter.post( base+'/otp', validate(verifyOtpSchema), verifyOtpHandler );
-authRouter.get( base+'/logout', auth, requireUser, logoutUserHandler );
-authRouter.post( base+'/forgotpassword', validate(forgotPasswordSchema), forgotPasswordHandler );
-authRouter.patch( base+'/resetpassword/:resetToken', validate(resetPasswordSchema), resetPasswordHandler );
+authRouter.post( '/register', validate(registerUserSchema), registerUserHandler);
+authRouter.post( '/login', validate(loginUserSchema), loginUserHandler);
+authRouter.get( '/refresh', refreshAccessTokenHandler);
+authRouter.get( '/verifyemail/:verificationCode', validate(verifyEmailSchema), verifyEmailHandler );
+authRouter.post( '/otp', validate(verifyOtpSchema), verifyOtpHandler );
+authRouter.get( '/logout', auth, requireUser, logoutUserHandler );
+authRouter.post( '/forgotpassword', validate(forgotPasswordSchema), forgotPasswordHandler );
+authRouter.patch( '/resetpassword/:resetToken', validate(resetPasswordSchema), resetPasswordHandler );
 
 export default authRouter;
