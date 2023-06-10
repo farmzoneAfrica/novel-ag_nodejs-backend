@@ -2,6 +2,7 @@ import crypto from 'crypto';
 import { CookieOptions, NextFunction, Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import {
+
   ForgotPasswordInput,
   LoginUserInput,
   RegisterUserInput,
@@ -14,11 +15,15 @@ import { sendOtp } from '../utils/phoneOtp'
 
 import {
   createUser,
+  findAll,
+  pagination,
+  findById,
   findUniqueUser,
   findUser,
   findUser1,
   signTokens,
   updateUser,
+  deleteUser,
 } from '../services/user.service';
 
 import { 
@@ -71,10 +76,6 @@ export const registerUserHandler = async (
       .createHash('sha256')
       .update(verifyCode)
       .digest('hex');
-
-    
-    
-    
 
     const user = await createUser({
       role: req.body.role,
@@ -447,6 +448,130 @@ export const resetPasswordHandler = async (
     res.status(200).json({
       status: 'success',
       message: 'Password data updated successfully',
+    });
+  } catch (err: any) {
+    next(err);
+  }
+};
+
+export const getUsersHandler = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const agents = await findAll()
+    res.status(200).status(200).json({
+      status: 'success',
+      data: {
+        agents,
+      },
+    });
+  } catch (err: any) {
+    next(err);
+  }
+};
+
+export const usersPaginationHandler = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { pageNo } = req.params as any;
+    const agents = await pagination(pageNo * 10, 10)
+    res.status(200).status(200).json({
+      status: 'success',
+      data: {
+        agents,
+      },
+    });
+  } catch (err: any) {
+    next(err);
+  }
+};
+
+export const getUserHandler = async (
+  req: Response | any,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { id } = req.params;
+    const agent = await findById({ id: id })
+     if (!agent) {
+      return next(new AppError(401, 'Agent does not exist'));
+    }
+    return res.status(200).json({
+      status: 'success',
+      data: {
+        agent,
+      },
+    });
+  } catch (err: any) {
+    next(err);
+  }
+};
+
+export const updateUserHandler = async (
+  req: Response | any,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { id } = req.params;
+    const findUser = await findById({id: id});
+    if (!findUser) 
+      return next(new AppError(401, 'User not found in database'));
+    const body: Array<string> = (Object.keys(req.body));    
+  const data = {
+    first_name: req.body.firstName,
+    last_name: req.body.lastName,
+    address: req.body.address,
+    gender: req.body.gender,
+    marital_status: req.body.maritalStatus,
+    phone: req.body.phone,
+    avatar: req.body.avatar,
+    state: req.body.state,
+    local_govt: req.body.localGovt,
+    password: req.body.password,
+  }
+  
+  const dataKeys: Array<string> = Object.keys(data);
+    
+  if (dataKeys.includes(body.toString()) === false ) {
+    return next(new AppError(401, 'Wrong input value'));
+  }
+  const user = await updateUser({ id: id }, data);
+     if (!user) {
+      return next(new AppError(401, 'User does not exist'));
+    }
+    return res.status(200).json({
+      status: 'success',
+      data: {
+        user,
+      },
+    });
+  } catch (err: any) {
+    next(err);
+  }
+};
+
+export const deleteUserHandler = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { id } = req.params;
+    const agent = await findById({id: id});
+    if (!agent) 
+      return next(new AppError(401, 'Agent not found in database'));
+    
+    const response = await deleteUser(id)
+    return res.status(200).json({
+      status: 'success',
+      response
     });
   } catch (err: any) {
     next(err);

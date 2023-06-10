@@ -6,51 +6,52 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
-  url = env("DATABASE_URL")
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
   relationMode = "prisma"
 }
 
 model User {
-  @@map(name: "users")
-  id    String     @id @default(uuid())
-  first_name  String
-  last_name  String?
-  phone String @unique
-  email String  @unique
-  password String 
-  gender String?
-  avatar String  @default("")
-  nationality String  @default("")
-  state String @default("")
-  local_govt String @default("")
-  ward String @default("")
-  address String? @default("")
-  marital_status String? @default("")
-  verified Boolean? @default(false)
+  id             String   @id @default(uuid())
+  first_name     String
+  last_name      String?
+  phone          String   @unique
+  email          String   @unique
+  password       String
+  gender         String?
+  avatar         String   @default("")
+  nationality    String   @default("")
+  state          String   @default("")
+  local_govt     String   @default("")
+  ward           String   @default("")
+  address        String?  @default("")
+  marital_status String?  @default("")
+  verified       Boolean? @default(false)
 
   role RoleEnumType @default(user)
 
-  verificationCode String? @unique @db.VarChar(90)
+  verificationCode   String?   @unique @db.VarChar(90)
   verificationCodeAt DateTime?
 
-  phoneVerificationCode String? @unique @db.VarChar(90)
-  phoneVerificationAt DateTime?
+  phoneVerificationCode String?   @unique @db.VarChar(90)
+  phoneVerificationAt   DateTime?
 
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt @default(now())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 
   provider String?
 
   passwordResetToken String?
-  passwordResetAt DateTime?
+  passwordResetAt    DateTime?
 
   prosperityHub ProsperityHub[]
-  warhouse Warehouse[]
-  farm Farm []
+  warhouse      Warehouse[]
+  farm          Farm[]
+  Wallet        Wallet[]
 
   @@unique([email, phone, verificationCode, passwordResetToken, phoneVerificationCode])
   @@index([email, verificationCode, passwordResetToken, phoneVerificationCode])
+  @@map(name: "users")
 }
 
 enum RoleEnumType {
@@ -65,54 +66,74 @@ enum RoleEnumType {
 }
 
 model ProsperityHub {
-  @@map(name: "prosperityHubs")
-  id      String     @id @default(uuid())
-  name    String @unique
-  location  String
-  closest_landmark  String ?
-  state   String  
-  local_govt  String 
-  ward   String?
-  status   Boolean @default(false)
-  user   User   @relation(fields: [userId], onDelete: Cascade, references: [id])
-  userId   String
+  id               String  @id @default(uuid())
+  name             String  @unique
+  location         String
+  closest_landmark String?
+  state            String
+  local_govt       String
+  ward             String?
+  status           Boolean @default(false)
+  user             User    @relation(fields: [userId], onDelete: Cascade, references: [id])
+  userId           String
 
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt @default(now())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  @@map(name: "prosperityHubs")
 }
 
 model Warehouse {
-  @@map(name: "warehouses")
-  id        String     @id @default(uuid())
-  name     String @unique
-  location String 
-  closest_landmark String @default("")
-  state String 
-  local_govt String
-  ward String @default("")
-  status Boolean @default(false)
-  user   User   @relation(fields: [userId], onDelete: Cascade, references: [id])
-  userId String
+  id               String  @id @default(uuid())
+  name             String  @unique
+  location         String
+  closest_landmark String  @default("")
+  state            String
+  local_govt       String
+  ward             String  @default("")
+  status           Boolean @default(false)
+  user             User    @relation(fields: [userId], onDelete: Cascade, references: [id])
+  userId           String
 
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt @default(now())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  @@map(name: "warehouses")
 }
 
 model Farm {
+  id               String  @id @default(uuid())
+  name             String  @unique
+  size             String
+  location         String
+  closest_landmark String?
+  crop             String?
+  state            String
+  local_govt       String
+  ward             String  @default("")
+  status           Boolean @default(false)
+  user             User    @relation(fields: [userId], onDelete: Cascade, references: [id])
+  userId           String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
   @@map(name: "farms")
-  id       String     @id @default(uuid())
-  name     String @unique
-  size String 
-  location String
-  closest_landmark String ?
-  crop     String ?
-  state String 
-  local_govt String
-  ward String @default("")
-  status Boolean @default(false)
+}
+
+model Wallet {
+  id             String  @id @default(uuid())
+  bvn            String  @unique
+  bank           String
+  account_number String
+  account_name   String?
+  status         Boolean @default(false)
+
   user   User   @relation(fields: [userId], onDelete: Cascade, references: [id])
   userId String
 
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt @default(now())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  @@map(name: "wallets")
 }

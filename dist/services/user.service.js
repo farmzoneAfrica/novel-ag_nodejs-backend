@@ -34,15 +34,6 @@ const pagination = async (skip, take) => {
     });
 };
 exports.pagination = pagination;
-// export const findAgent = async (
-//   where: Partial<Prisma.AgentWhereInput>,
-//   select?: Prisma.AgentSelect
-// ) => {
-//   return (await prisma.user.findFirst({
-//     where,
-//     select,
-//   })) as Agent;
-// };
 const findUser = async (where) => {
     return (await prisma.user.findUnique({
         where

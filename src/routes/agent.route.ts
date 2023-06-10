@@ -1,12 +1,12 @@
 import express from 'express';
 import { validate } from '../middleware/validate';
 import {
-    getAgentsHandler,
-    getAgentHandler,
-    getAgentsByPageHandler,
+    getUsersHandler,
+    getUserHandler,
+    usersPaginationHandler,
     updateUserHandler,
-    deleteAgentHandler
-} from '../controllers/user.controller';
+    deleteUserHandler
+} from '../controllers/auth.controller';
 import {
     auth,
     adminAuth
@@ -19,10 +19,10 @@ import { requireUser } from '../middleware/requireUser';
 
 const agentRouter = express.Router();
 
-agentRouter.get( '/get', auth, getAgentsHandler);
-agentRouter.get( '/get/:id', auth, requireUser, getAgentHandler);
-agentRouter.get( '/:pageNo', getAgentsByPageHandler);
+agentRouter.get( '/get', auth, getUsersHandler);
+agentRouter.get( '/get/:id', auth, requireUser, getUserHandler);
+agentRouter.get( '/:pageNo', usersPaginationHandler);
 agentRouter.patch( '/update/:id', validate(updateUserSchema), auth, updateUserHandler );
-agentRouter.delete( '/delete/:id', auth, adminAuth, deleteAgentHandler );
+agentRouter.delete( '/delete/:id', auth, adminAuth, deleteUserHandler );
 
 export default agentRouter;

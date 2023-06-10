@@ -44,6 +44,111 @@
                 }
             }
         },
+        "/api/v1/auth/users": {
+            "get": {
+                "description": "",
+                "parameters": [
+                    {
+                        "name": "authorization",
+                        "in": "header",
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/v1/auth/user/{id}": {
+            "get": {
+                "description": "",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "authorization",
+                        "in": "header",
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/v1/auth/users/{pageNumber}": {
+            "get": {
+                "description": "",
+                "parameters": [
+                    {
+                        "name": "pageNumber",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/v1/auth/{userid}": {
+            "patch": {
+                "description": "",
+                "parameters": [
+                    {
+                        "name": "userid",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "authorization",
+                        "in": "header",
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    }
+                }
+            },
+            "delete": {
+                "description": "",
+                "parameters": [
+                    {
+                        "name": "userid",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "authorization",
+                        "in": "header",
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
         "/api/v1/auth/login": {
             "post": {
                 "description": "",
@@ -162,109 +267,6 @@
                 "responses": {
                     "400": {
                         "description": "Bad Request"
-                    }
-                }
-            }
-        },
-        "/api/v1/user/": {
-            "get": {
-                "description": "",
-                "parameters": [
-                    {
-                        "name": "authorization",
-                        "in": "header",
-                        "type": "string"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK"
-                    }
-                }
-            }
-        },
-        "/api/v1/user/{id}": {
-            "get": {
-                "description": "",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "type": "string"
-                    },
-                    {
-                        "name": "authorization",
-                        "in": "header",
-                        "type": "string"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK"
-                    }
-                }
-            },
-            "patch": {
-                "description": "",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "type": "string"
-                    },
-                    {
-                        "name": "authorization",
-                        "in": "header",
-                        "type": "string"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK"
-                    },
-                    "400": {
-                        "description": "Bad Request"
-                    }
-                }
-            },
-            "delete": {
-                "description": "",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "type": "string"
-                    },
-                    {
-                        "name": "authorization",
-                        "in": "header",
-                        "type": "string"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK"
-                    }
-                }
-            }
-        },
-        "/api/v1/user/{pageNumber}": {
-            "get": {
-                "description": "",
-                "parameters": [
-                    {
-                        "name": "pageNumber",
-                        "in": "path",
-                        "required": true,
-                        "type": "string"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK"
                     }
                 }
             }
@@ -599,6 +601,103 @@
             }
         },
         "/api/v1/farm/{id}": {
+            "get": {
+                "description": "",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "authorization",
+                        "in": "header",
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "patch": {
+                "description": "",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "authorization",
+                        "in": "header",
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "description": "Bad Request"
+                    }
+                }
+            },
+            "delete": {
+                "description": "",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "authorization",
+                        "in": "header",
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/v1/wallet/": {
+            "post": {
+                "description": "",
+                "parameters": [
+                    {
+                        "name": "authorization",
+                        "in": "header",
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "description": "Bad Request"
+                    }
+                }
+            },
+            "get": {
+                "description": "",
+                "parameters": [
+                    {
+                        "name": "authorization",
+                        "in": "header",
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/v1/wallet/{id}": {
             "get": {
                 "description": "",
                 "parameters": [
