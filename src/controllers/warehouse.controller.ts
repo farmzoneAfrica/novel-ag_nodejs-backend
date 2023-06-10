@@ -3,7 +3,6 @@ import {
     createWarehouse,
     getWarehouses,
     findById,
-    getUniqueWarehouse,
     updateWarehouse,
     deleteWarehouse,
   
@@ -26,28 +25,30 @@ export const createWarehouseHandler = async (
   req: Request<{}, {}, CreateWarehouseInput> | any,
   res: Response,
   next: NextFunction
-) => {
-  try {
-    const agentId = req.user.sub
-    const warehouse = await createWarehouse({
+  ) => {
+    
+    try {
+    const userId = req.user.sub;
+    const data = {
       name: req.body.name,
-      address: req.body.address,
+      location: req.body.location,
+      closest_landmark: req.body.closest_landmark,
       state: req.body.state,
-      localGovt: req.body.localGovt,
-      remarks: req.body.remarks,
-      agentId: agentId
-    });
+      local_govt: req.body.local_govt,
+      ward: req.body.ward,
+      status: req.body.status,
+      userId: userId,
+    }
 
-    const inputState = warehouse.state;
-    const inputLGA = warehouse.localGovt;
-    const states = await getStates();
-    const LGAs = await getLGAs(inputState);
-    if ( states.includes(inputState) === false ) {
+    if ( getStates().includes(data.state) === false ) {
       return next(new AppError(400, 'Invalid state, please enter a valid state'));
     }
-    if ( LGAs.includes(inputLGA) === false ) {
+
+    if ( getLGAs(data.state).includes(data.local_govt) === false ) {
       return next(new AppError(400, 'Invalid LGA, please enter a valid local government'));
     }
+
+    const warehouse = await createWarehouse(data);
     return res.status(201).json({
       status: "Sucess",
       warehouse
@@ -71,12 +72,10 @@ export const getWarehousesHandler = async (
   next: NextFunction
 ) => {
   try {
-    const warehouse = await getWarehouses()
-      return res.status(200).status(200).json({
+    const warehouses = await getWarehouses()
+      return res.status(200).json({
       status: 'success',
-      data: {
-        warehouse,
-      },
+      warehouses
     });
   } catch (err: any) {
     next(err);
@@ -94,7 +93,7 @@ export const getWarehouseHandler = async (
      if (!warehouse) {
       return next(new AppError(401, 'Warehouse does not exist'));
     }
-      return res.status(200).status(200).json({
+      return res.status(200).json({
       status: 'success',
       data: {
         warehouse,
@@ -113,12 +112,13 @@ export const updateWarehouseHandler = async (
   try {
   const { id } = req.params; 
   const data = {
-    name: req.body.name,
-    address: req.body.address,
-    state: req.body.state,
-    localGovt: req.body.localGovt,
-    status: req.body.status,
-    remarks: req.body.remarks,
+      name: req.body.name,
+      location: req.body.location,
+      closest_landmark: req.body.closest_landmark,
+      state: req.body.state,
+      local_govt: req.body.local_govt,
+      ward: req.body.ward,
+      status: req.body.status
   }
     const warehouse = await updateWarehouse({ id: id }, data);
      if (!warehouse) 

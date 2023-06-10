@@ -14,10 +14,11 @@ import swaggerUi from 'swagger-ui-express';
 import swaggerFile from './swagger-output.json';
 
 import auth_router from "./routes/auth.routes";
-import user_router from "./routes/user.routes";
 import farmer_router from "./routes/farmer.routes";
 import prosperity_hub_router from "./routes/prosperity.hub.routes";
 import warehouse_router from "./routes/warehouse.routes";
+import farm_router from "./routes/farm.routes";
+import wallet_router from "./routes/wallet.route";
 
 validateEnv()
 
@@ -48,11 +49,12 @@ const prisma = new PrismaClient();
     });
   });
 
-  app.use('/api/auth', auth_router);
-  app.use('/api/user', user_router);
-  app.use('/api/farmer', farmer_router);
-  app.use('/api/prosperity-hub', prosperity_hub_router);
-  app.use('/api/warehouse', warehouse_router);
+  app.use('/api/v1/auth', auth_router);
+  app.use('/api/v1/farmer', farmer_router);
+  app.use('/api/v1/prosperity-hub', prosperity_hub_router);
+  app.use('/api/v1/warehouse', warehouse_router);
+  app.use('/api/v1/farm', farm_router);
+  app.use('/api/v1/wallet', wallet_router);
 
   app.all('*', (req: Request, res: Response, next: NextFunction) => {
     next(new AppError(404, `Route ${req.originalUrl} not found`));

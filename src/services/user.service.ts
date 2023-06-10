@@ -35,16 +35,6 @@ export const pagination = async (
   });
 }
 
-// export const findAgent = async (
-//   where: Partial<Prisma.AgentWhereInput>,
-//   select?: Prisma.AgentSelect
-// ) => {
-//   return (await prisma.user.findFirst({
-//     where,
-//     select,
-//   })) as Agent;
-// };
-
 export const findUser = async (
   where: Prisma.UserCreateInput | any,
 ) => {

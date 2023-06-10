@@ -6,7 +6,7 @@ import {
     getAgentsByPageHandler,
     updateUserHandler,
     deleteAgentHandler
-} from '../controllers/user.controller';
+} from '../controllers/farmers.controller';
 import {
     auth,
     adminAuth
@@ -17,14 +17,12 @@ import {
 
 import { requireUser } from '../middleware/requireUser';
 
-const agentRouter = express.Router();
+const farmerRouter = express.Router();
 
-const base = "";
+farmerRouter.get( '/', auth, getAgentsHandler);
+farmerRouter.get( '/:id', auth, requireUser, getAgentHandler);
+farmerRouter.get( '/:pageNo', getAgentsByPageHandler);
+farmerRouter.patch( '/:id', validate(updateUserSchema), auth, updateUserHandler );
+farmerRouter.delete( '/:id', auth, adminAuth, deleteAgentHandler );
 
-agentRouter.get(base+'/get', auth, getAgentsHandler);
-agentRouter.get(base+'/get/:id', auth, requireUser, getAgentHandler);
-agentRouter.get(base+'/:pageNo', getAgentsByPageHandler);
-agentRouter.patch(base+'/update/:id', validate(updateUserSchema), auth, updateUserHandler );
-agentRouter.delete(base+'/delete/:id', auth, adminAuth, deleteAgentHandler );
-
-export default agentRouter;
+export default farmerRouter;

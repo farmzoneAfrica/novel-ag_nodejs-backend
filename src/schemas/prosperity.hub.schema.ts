@@ -1,31 +1,33 @@
-import { boolean, object, string, TypeOf, z } from 'zod';
+import { boolean, object, string, TypeOf } from 'zod';
 
 export const createProsperityHubSchema = object({
   body: object({
     name: string({
-      required_error: 'firstName is required',
+      required_error: 'Prosperity hub name is required',
     }),
-    address: string({
-      required_error: 'Address is required',
+    location: string({
+      required_error: 'Location is required',
     }),
+    closest_landmark: string().optional(),
     state: string({
       required_error: 'State is required',
     }),
-    localGovt: string({
-      required_error: 'Address is required',
+    local_govt: string({
+      required_error: 'Local government is required',
     }),
-    remarks: string().optional(),
+    ward: string().optional(),
   })
 });
 
 export const updateProsperityHubSchema = object({
   body: object({
-    name: string({}).optional(),
-    address: string({}).optional(),
-    state: string({}).optional(),
-    status: boolean({}).optional(),
-    localGovt: string({}).optional(),
-    remarks: string({}).optional()
+    name: string(),
+    location: string(),
+    closest_landmark: string(),
+    state: string(),
+    local_govt: string(),
+    ward: string(),
+    status: boolean()
   })
 });
 

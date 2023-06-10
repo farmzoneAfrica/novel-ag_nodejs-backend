@@ -33,7 +33,18 @@
                 }
             }
         },
-        "api/agent/get": {
+        "/api/v1/auth/register": {
+            "post": {
+                "description": "",
+                "parameters": [],
+                "responses": {
+                    "400": {
+                        "description": "Bad Request"
+                    }
+                }
+            }
+        },
+        "/api/v1/auth/users": {
             "get": {
                 "description": "",
                 "parameters": [
@@ -50,7 +61,7 @@
                 }
             }
         },
-        "api/agent/get/{id}": {
+        "/api/v1/auth/user/{id}": {
             "get": {
                 "description": "",
                 "parameters": [
@@ -73,12 +84,12 @@
                 }
             }
         },
-        "api/agent/{pageNo}": {
+        "/api/v1/auth/users/{pageNumber}": {
             "get": {
                 "description": "",
                 "parameters": [
                     {
-                        "name": "pageNo",
+                        "name": "pageNumber",
                         "in": "path",
                         "required": true,
                         "type": "string"
@@ -91,12 +102,12 @@
                 }
             }
         },
-        "api/agent/update/{id}": {
+        "/api/v1/auth/{userid}": {
             "patch": {
                 "description": "",
                 "parameters": [
                     {
-                        "name": "id",
+                        "name": "userid",
                         "in": "path",
                         "required": true,
                         "type": "string"
@@ -105,45 +116,6 @@
                         "name": "authorization",
                         "in": "header",
                         "type": "string"
-                    },
-                    {
-                        "name": "body",
-                        "in": "body",
-                        "schema": {
-                            "type": "object",
-                            "properties": {
-                                "firstName": {
-                                    "example": "any"
-                                },
-                                "lastName": {
-                                    "example": "any"
-                                },
-                                "address": {
-                                    "example": "any"
-                                },
-                                "gender": {
-                                    "example": "any"
-                                },
-                                "maritalStatus": {
-                                    "example": "any"
-                                },
-                                "phone": {
-                                    "example": "any"
-                                },
-                                "avatar": {
-                                    "example": "any"
-                                },
-                                "state": {
-                                    "example": "any"
-                                },
-                                "localGovt": {
-                                    "example": "any"
-                                },
-                                "password": {
-                                    "example": "any"
-                                }
-                            }
-                        }
                     }
                 ],
                 "responses": {
@@ -154,14 +126,12 @@
                         "description": "Bad Request"
                     }
                 }
-            }
-        },
-        "api/agent/delete/{id}": {
+            },
             "delete": {
                 "description": "",
                 "parameters": [
                     {
-                        "name": "id",
+                        "name": "userid",
                         "in": "path",
                         "required": true,
                         "type": "string"
@@ -179,234 +149,18 @@
                 }
             }
         },
-        "/get": {
-            "get": {
-                "description": "",
-                "parameters": [
-                    {
-                        "name": "authorization",
-                        "in": "header",
-                        "type": "string"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK"
-                    }
-                }
-            }
-        },
-        "/get/{id}": {
-            "get": {
-                "description": "",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "type": "string"
-                    },
-                    {
-                        "name": "authorization",
-                        "in": "header",
-                        "type": "string"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK"
-                    }
-                }
-            }
-        },
-        "/{pageNo}": {
-            "get": {
-                "description": "",
-                "parameters": [
-                    {
-                        "name": "pageNo",
-                        "in": "path",
-                        "required": true,
-                        "type": "string"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK"
-                    }
-                }
-            }
-        },
-        "/update/{id}": {
-            "patch": {
-                "description": "",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "type": "string"
-                    },
-                    {
-                        "name": "authorization",
-                        "in": "header",
-                        "type": "string"
-                    },
-                    {
-                        "name": "body",
-                        "in": "body",
-                        "schema": {
-                            "type": "object",
-                            "properties": {
-                                "name": {
-                                    "example": "any"
-                                },
-                                "address": {
-                                    "example": "any"
-                                },
-                                "state": {
-                                    "example": "any"
-                                },
-                                "localGovt": {
-                                    "example": "any"
-                                },
-                                "status": {
-                                    "example": "any"
-                                },
-                                "remarks": {
-                                    "example": "any"
-                                }
-                            }
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK"
-                    },
-                    "400": {
-                        "description": "Bad Request"
-                    }
-                }
-            }
-        },
-        "/delete/{id}": {
-            "delete": {
-                "description": "",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "type": "string"
-                    },
-                    {
-                        "name": "authorization",
-                        "in": "header",
-                        "type": "string"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK"
-                    }
-                }
-            }
-        },
-        "api/auth/register": {
+        "/api/v1/auth/login": {
             "post": {
                 "description": "",
-                "parameters": [
-                    {
-                        "name": "body",
-                        "in": "body",
-                        "schema": {
-                            "type": "object",
-                            "properties": {
-                                "password": {
-                                    "example": "any"
-                                },
-                                "first_name": {
-                                    "example": "any"
-                                },
-                                "last_name": {
-                                    "example": "any"
-                                },
-                                "address": {
-                                    "example": "any"
-                                },
-                                "phone": {
-                                    "example": "any"
-                                },
-                                "avatar": {
-                                    "example": "any"
-                                },
-                                "gender": {
-                                    "example": "any"
-                                },
-                                "state": {
-                                    "example": "any"
-                                },
-                                "local_govt": {
-                                    "example": "any"
-                                },
-                                "marital_status": {
-                                    "example": "any"
-                                },
-                                "email": {
-                                    "example": "any"
-                                }
-                            }
-                        }
-                    }
-                ],
+                "parameters": [],
                 "responses": {
-                    "201": {
-                        "description": "Created"
-                    },
-                    "400": {
-                        "description": "Bad Request"
-                    },
-                    "409": {
-                        "description": "Conflict"
-                    },
-                    "500": {
-                        "description": "Internal Server Error"
-                    }
-                }
-            }
-        },
-        "api/auth/login": {
-            "post": {
-                "description": "",
-                "parameters": [
-                    {
-                        "name": "body",
-                        "in": "body",
-                        "schema": {
-                            "type": "object",
-                            "properties": {
-                                "email": {
-                                    "example": "any"
-                                },
-                                "password": {
-                                    "example": "any"
-                                }
-                            }
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK"
-                    },
                     "400": {
                         "description": "Bad Request"
                     }
                 }
             }
         },
-        "api/auth/refresh": {
+        "/api/v1/auth/refresh": {
             "get": {
                 "description": "",
                 "parameters": [],
@@ -417,7 +171,7 @@
                 }
             }
         },
-        "api/auth/verifyemail/{verificationCode}": {
+        "/api/v1/auth/verifyemail/{verificationCode}": {
             "get": {
                 "description": "",
                 "parameters": [
@@ -441,7 +195,24 @@
                 }
             }
         },
-        "api/auth/logout": {
+        "/api/v1/auth/otp": {
+            "post": {
+                "description": "",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            }
+        },
+        "/api/v1/auth/logout": {
             "get": {
                 "description": "",
                 "parameters": [
@@ -458,7 +229,7 @@
                 }
             }
         },
-        "api/auth/forgotpassword": {
+        "/api/v1/auth/forgotpassword": {
             "post": {
                 "description": "",
                 "parameters": [
@@ -476,22 +247,13 @@
                     }
                 ],
                 "responses": {
-                    "200": {
-                        "description": "OK"
-                    },
                     "400": {
                         "description": "Bad Request"
-                    },
-                    "403": {
-                        "description": "Forbidden"
-                    },
-                    "500": {
-                        "description": "Internal Server Error"
                     }
                 }
             }
         },
-        "api/auth/resetpassword/{resetToken}": {
+        "/api/v1/auth/resetpassword/{resetToken}": {
             "patch": {
                 "description": "",
                 "parameters": [
@@ -500,34 +262,16 @@
                         "in": "path",
                         "required": true,
                         "type": "string"
-                    },
-                    {
-                        "name": "body",
-                        "in": "body",
-                        "schema": {
-                            "type": "object",
-                            "properties": {
-                                "password": {
-                                    "example": "any"
-                                }
-                            }
-                        }
                     }
                 ],
                 "responses": {
-                    "200": {
-                        "description": "OK"
-                    },
                     "400": {
                         "description": "Bad Request"
-                    },
-                    "403": {
-                        "description": "Forbidden"
                     }
                 }
             }
         },
-        "api/farmer/get": {
+        "/api/v1/farmer/": {
             "get": {
                 "description": "",
                 "parameters": [
@@ -544,8 +288,53 @@
                 }
             }
         },
-        "api/farmer/get/{id}": {
+        "/api/v1/farmer/{id}": {
             "get": {
+                "description": "",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "authorization",
+                        "in": "header",
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "patch": {
+                "description": "",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "authorization",
+                        "in": "header",
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    }
+                }
+            },
+            "delete": {
                 "description": "",
                 "parameters": [
                     {
@@ -567,7 +356,7 @@
                 }
             }
         },
-        "api/farmer/{pageNo}": {
+        "/api/v1/farmer/{pageNo}": {
             "get": {
                 "description": "",
                 "parameters": [
@@ -585,7 +374,60 @@
                 }
             }
         },
-        "api/farmer/update/{id}": {
+        "/api/v1/prosperity-hub/": {
+            "post": {
+                "description": "",
+                "parameters": [
+                    {
+                        "name": "authorization",
+                        "in": "header",
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "description": "Bad Request"
+                    }
+                }
+            },
+            "get": {
+                "description": "",
+                "parameters": [
+                    {
+                        "name": "authorization",
+                        "in": "header",
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/v1/prosperity-hub/{id}": {
+            "get": {
+                "description": "",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "authorization",
+                        "in": "header",
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            },
             "patch": {
                 "description": "",
                 "parameters": [
@@ -599,58 +441,14 @@
                         "name": "authorization",
                         "in": "header",
                         "type": "string"
-                    },
-                    {
-                        "name": "body",
-                        "in": "body",
-                        "schema": {
-                            "type": "object",
-                            "properties": {
-                                "firstName": {
-                                    "example": "any"
-                                },
-                                "lastName": {
-                                    "example": "any"
-                                },
-                                "address": {
-                                    "example": "any"
-                                },
-                                "gender": {
-                                    "example": "any"
-                                },
-                                "maritalStatus": {
-                                    "example": "any"
-                                },
-                                "phone": {
-                                    "example": "any"
-                                },
-                                "avatar": {
-                                    "example": "any"
-                                },
-                                "state": {
-                                    "example": "any"
-                                },
-                                "localGovt": {
-                                    "example": "any"
-                                },
-                                "password": {
-                                    "example": "any"
-                                }
-                            }
-                        }
                     }
                 ],
                 "responses": {
-                    "200": {
-                        "description": "OK"
-                    },
                     "400": {
                         "description": "Bad Request"
                     }
                 }
-            }
-        },
-        "api/farmer/delete/{id}": {
+            },
             "delete": {
                 "description": "",
                 "parameters": [
@@ -673,7 +471,7 @@
                 }
             }
         },
-        "api/prosperity-hub/create": {
+        "/api/v1/warehouse/": {
             "post": {
                 "description": "",
                 "parameters": [
@@ -681,46 +479,14 @@
                         "name": "authorization",
                         "in": "header",
                         "type": "string"
-                    },
-                    {
-                        "name": "body",
-                        "in": "body",
-                        "schema": {
-                            "type": "object",
-                            "properties": {
-                                "name": {
-                                    "example": "any"
-                                },
-                                "address": {
-                                    "example": "any"
-                                },
-                                "state": {
-                                    "example": "any"
-                                },
-                                "localGovt": {
-                                    "example": "any"
-                                },
-                                "remarks": {
-                                    "example": "any"
-                                }
-                            }
-                        }
                     }
                 ],
                 "responses": {
-                    "201": {
-                        "description": "Created"
-                    },
                     "400": {
                         "description": "Bad Request"
-                    },
-                    "409": {
-                        "description": "Conflict"
                     }
                 }
-            }
-        },
-        "api/prosperity-hub/get": {
+            },
             "get": {
                 "description": "",
                 "parameters": [
@@ -737,7 +503,7 @@
                 }
             }
         },
-        "api/prosperity-hub/get/{id}": {
+        "/api/v1/warehouse/{id}": {
             "get": {
                 "description": "",
                 "parameters": [
@@ -758,9 +524,7 @@
                         "description": "OK"
                     }
                 }
-            }
-        },
-        "api/prosperity-hub/update/{id}": {
+            },
             "patch": {
                 "description": "",
                 "parameters": [
@@ -774,46 +538,14 @@
                         "name": "authorization",
                         "in": "header",
                         "type": "string"
-                    },
-                    {
-                        "name": "body",
-                        "in": "body",
-                        "schema": {
-                            "type": "object",
-                            "properties": {
-                                "name": {
-                                    "example": "any"
-                                },
-                                "address": {
-                                    "example": "any"
-                                },
-                                "state": {
-                                    "example": "any"
-                                },
-                                "localGovt": {
-                                    "example": "any"
-                                },
-                                "status": {
-                                    "example": "any"
-                                },
-                                "remarks": {
-                                    "example": "any"
-                                }
-                            }
-                        }
                     }
                 ],
                 "responses": {
-                    "200": {
-                        "description": "OK"
-                    },
                     "400": {
                         "description": "Bad Request"
                     }
                 }
-            }
-        },
-        "api/prosperity-hub/delete/{id}": {
+            },
             "delete": {
                 "description": "",
                 "parameters": [
@@ -836,7 +568,7 @@
                 }
             }
         },
-        "/create": {
+        "/api/v1/farm/": {
             "post": {
                 "description": "",
                 "parameters": [
@@ -844,46 +576,31 @@
                         "name": "authorization",
                         "in": "header",
                         "type": "string"
-                    },
-                    {
-                        "name": "body",
-                        "in": "body",
-                        "schema": {
-                            "type": "object",
-                            "properties": {
-                                "name": {
-                                    "example": "any"
-                                },
-                                "address": {
-                                    "example": "any"
-                                },
-                                "state": {
-                                    "example": "any"
-                                },
-                                "localGovt": {
-                                    "example": "any"
-                                },
-                                "remarks": {
-                                    "example": "any"
-                                }
-                            }
-                        }
                     }
                 ],
                 "responses": {
-                    "201": {
-                        "description": "Created"
-                    },
                     "400": {
                         "description": "Bad Request"
-                    },
-                    "409": {
-                        "description": "Conflict"
+                    }
+                }
+            },
+            "get": {
+                "description": "",
+                "parameters": [
+                    {
+                        "name": "authorization",
+                        "in": "header",
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
                     }
                 }
             }
         },
-        "/{id}": {
+        "/api/v1/farm/{id}": {
             "get": {
                 "description": "",
                 "parameters": [
@@ -904,67 +621,7 @@
                         "description": "OK"
                     }
                 }
-            }
-        },
-        "api/user/get": {
-            "get": {
-                "description": "",
-                "parameters": [
-                    {
-                        "name": "authorization",
-                        "in": "header",
-                        "type": "string"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK"
-                    }
-                }
-            }
-        },
-        "api/user/get/{id}": {
-            "get": {
-                "description": "",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "type": "string"
-                    },
-                    {
-                        "name": "authorization",
-                        "in": "header",
-                        "type": "string"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK"
-                    }
-                }
-            }
-        },
-        "api/user/{pageNo}": {
-            "get": {
-                "description": "",
-                "parameters": [
-                    {
-                        "name": "pageNo",
-                        "in": "path",
-                        "required": true,
-                        "type": "string"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK"
-                    }
-                }
-            }
-        },
-        "api/user/update/{id}": {
+            },
             "patch": {
                 "description": "",
                 "parameters": [
@@ -978,58 +635,14 @@
                         "name": "authorization",
                         "in": "header",
                         "type": "string"
-                    },
-                    {
-                        "name": "body",
-                        "in": "body",
-                        "schema": {
-                            "type": "object",
-                            "properties": {
-                                "firstName": {
-                                    "example": "any"
-                                },
-                                "lastName": {
-                                    "example": "any"
-                                },
-                                "address": {
-                                    "example": "any"
-                                },
-                                "gender": {
-                                    "example": "any"
-                                },
-                                "maritalStatus": {
-                                    "example": "any"
-                                },
-                                "phone": {
-                                    "example": "any"
-                                },
-                                "avatar": {
-                                    "example": "any"
-                                },
-                                "state": {
-                                    "example": "any"
-                                },
-                                "localGovt": {
-                                    "example": "any"
-                                },
-                                "password": {
-                                    "example": "any"
-                                }
-                            }
-                        }
                     }
                 ],
                 "responses": {
-                    "200": {
-                        "description": "OK"
-                    },
                     "400": {
                         "description": "Bad Request"
                     }
                 }
-            }
-        },
-        "api/user/delete/{id}": {
+            },
             "delete": {
                 "description": "",
                 "parameters": [
@@ -1052,140 +665,7 @@
                 }
             }
         },
-        "/register": {
-            "post": {
-                "description": "",
-                "parameters": [],
-                "responses": {
-                    "400": {
-                        "description": "Bad Request"
-                    }
-                }
-            }
-        },
-        "/login": {
-            "post": {
-                "description": "",
-                "parameters": [],
-                "responses": {
-                    "400": {
-                        "description": "Bad Request"
-                    }
-                }
-            }
-        },
-        "/refresh": {
-            "get": {
-                "description": "",
-                "parameters": [],
-                "responses": {
-                    "200": {
-                        "description": "OK"
-                    }
-                }
-            }
-        },
-        "/verifyemail/{verificationCode}": {
-            "get": {
-                "description": "",
-                "parameters": [
-                    {
-                        "name": "verificationCode",
-                        "in": "path",
-                        "required": true,
-                        "type": "string"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK"
-                    },
-                    "400": {
-                        "description": "Bad Request"
-                    },
-                    "403": {
-                        "description": "Forbidden"
-                    }
-                }
-            }
-        },
-        "/logout": {
-            "get": {
-                "description": "",
-                "parameters": [],
-                "responses": {}
-            }
-        },
-        "/forgotpassword": {
-            "post": {
-                "description": "",
-                "parameters": [
-                    {
-                        "name": "body",
-                        "in": "body",
-                        "schema": {
-                            "type": "object",
-                            "properties": {
-                                "email": {
-                                    "example": "any"
-                                }
-                            }
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK"
-                    },
-                    "400": {
-                        "description": "Bad Request"
-                    },
-                    "403": {
-                        "description": "Forbidden"
-                    },
-                    "500": {
-                        "description": "Internal Server Error"
-                    }
-                }
-            }
-        },
-        "/resetpassword/{resetToken}": {
-            "patch": {
-                "description": "",
-                "parameters": [
-                    {
-                        "name": "resetToken",
-                        "in": "path",
-                        "required": true,
-                        "type": "string"
-                    },
-                    {
-                        "name": "body",
-                        "in": "body",
-                        "schema": {
-                            "type": "object",
-                            "properties": {
-                                "password": {
-                                    "example": "any"
-                                }
-                            }
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK"
-                    },
-                    "400": {
-                        "description": "Bad Request"
-                    },
-                    "403": {
-                        "description": "Forbidden"
-                    }
-                }
-            }
-        },
-        "api/warehouse/create": {
+        "/api/v1/wallet/": {
             "post": {
                 "description": "",
                 "parameters": [
@@ -1193,46 +673,14 @@
                         "name": "authorization",
                         "in": "header",
                         "type": "string"
-                    },
-                    {
-                        "name": "body",
-                        "in": "body",
-                        "schema": {
-                            "type": "object",
-                            "properties": {
-                                "name": {
-                                    "example": "any"
-                                },
-                                "address": {
-                                    "example": "any"
-                                },
-                                "state": {
-                                    "example": "any"
-                                },
-                                "localGovt": {
-                                    "example": "any"
-                                },
-                                "remarks": {
-                                    "example": "any"
-                                }
-                            }
-                        }
                     }
                 ],
                 "responses": {
-                    "201": {
-                        "description": "Created"
-                    },
                     "400": {
                         "description": "Bad Request"
-                    },
-                    "409": {
-                        "description": "Conflict"
                     }
                 }
-            }
-        },
-        "api/warehouse/get": {
+            },
             "get": {
                 "description": "",
                 "parameters": [
@@ -1249,7 +697,7 @@
                 }
             }
         },
-        "api/warehouse/get/{id}": {
+        "/api/v1/wallet/{id}": {
             "get": {
                 "description": "",
                 "parameters": [
@@ -1270,9 +718,7 @@
                         "description": "OK"
                     }
                 }
-            }
-        },
-        "api/warehouse/update/{id}": {
+            },
             "patch": {
                 "description": "",
                 "parameters": [
@@ -1286,46 +732,14 @@
                         "name": "authorization",
                         "in": "header",
                         "type": "string"
-                    },
-                    {
-                        "name": "body",
-                        "in": "body",
-                        "schema": {
-                            "type": "object",
-                            "properties": {
-                                "name": {
-                                    "example": "any"
-                                },
-                                "address": {
-                                    "example": "any"
-                                },
-                                "state": {
-                                    "example": "any"
-                                },
-                                "localGovt": {
-                                    "example": "any"
-                                },
-                                "status": {
-                                    "example": "any"
-                                },
-                                "remarks": {
-                                    "example": "any"
-                                }
-                            }
-                        }
                     }
                 ],
                 "responses": {
-                    "200": {
-                        "description": "OK"
-                    },
                     "400": {
                         "description": "Bad Request"
                     }
                 }
-            }
-        },
-        "api/warehouse/delete/{id}": {
+            },
             "delete": {
                 "description": "",
                 "parameters": [

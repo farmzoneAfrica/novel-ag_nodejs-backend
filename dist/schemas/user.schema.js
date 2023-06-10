@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getSingleUserSchema = exports.resetPasswordSchema = exports.forgotPasswordSchema = exports.updateUserSchema = exports.verifyOtpSchema = exports.verifyEmailSchema = exports.loginFarmerSchema = exports.loginUserSchema = exports.registerUserSchema = void 0;
+exports.getSingleUserSchema = exports.resetPasswordSchema = exports.forgotPasswordSchema = exports.updateUserSchema = exports.verifyOtpSchema = exports.verifyEmailSchema = exports.loginUserSchema = exports.registerUserSchema = void 0;
 const zod_1 = require("zod");
 var RoleEnumType;
 (function (RoleEnumType) {
@@ -53,16 +53,6 @@ exports.loginUserSchema = (0, zod_1.object)({
             required_error: 'Email address is required',
         }).email('Invalid email address'),
         phone: (0, zod_1.string)().optional(),
-        password: (0, zod_1.string)({
-            required_error: 'Password is required',
-        }).min(8, 'Invalid email or password'),
-    }),
-});
-exports.loginFarmerSchema = (0, zod_1.object)({
-    body: (0, zod_1.object)({
-        phone: (0, zod_1.string)({
-            required_error: 'Phone number is required',
-        }),
         password: (0, zod_1.string)({
             required_error: 'Password is required',
         }).min(8, 'Invalid email or password'),
