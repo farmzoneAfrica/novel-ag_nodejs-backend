@@ -16,20 +16,19 @@ export const createWarehouseSchema = object({
       required_error: 'Local government is required',
     }),
     ward: string().optional(),
-    user: string(),
-    userId: string()
+ 
   })
 });
 
 export const updateWarehouseSchema = object({
   body: object({
-    name: string(),
-    location: string(),
-    closest_landmark: string(),
-    state: string(),
-    local_govt: string(),
-    ward: string(),
-    status: boolean()
+    name: string().optional(),
+    location: string().optional(),
+    closest_landmark: string().optional(),
+    state: string().optional(),
+    local_govt: string().optional(),
+    ward: string().optional(),
+    status: boolean().optional()
   })
 });
 
