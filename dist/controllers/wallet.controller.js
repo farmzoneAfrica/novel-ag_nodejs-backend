@@ -52,14 +52,14 @@ exports.getWalletsHandler = getWalletsHandler;
 const getWalletHandler = async (req, res, next) => {
     try {
         const { id } = req.params;
-        const warehouse = await (0, wallet_service_1.findById)({ id: id });
-        if (!warehouse) {
-            return next(new app_error_1.default(401, 'Warehouse does not exist'));
+        const wallet = await (0, wallet_service_1.findById)({ id: id });
+        if (!wallet) {
+            return next(new app_error_1.default(401, 'wallet does not exist'));
         }
         return res.status(200).json({
             status: 'success',
             data: {
-                warehouse,
+                wallet,
             },
         });
     }
@@ -80,12 +80,12 @@ const updateWalletHandler = async (req, res, next) => {
             ward: req.body.ward,
             status: req.body.status
         };
-        const warehouse = await (0, wallet_service_1.updateWallet)({ id: id }, data);
-        if (!warehouse)
-            return next(new app_error_1.default(401, 'Warehouse does not exist'));
+        const wallet = await (0, wallet_service_1.updateWallet)({ id: id }, data);
+        if (!wallet)
+            return next(new app_error_1.default(401, 'wallet does not exist'));
         return res.status(200).json({
             status: 'Success',
-            warehouse,
+            wallet,
         });
     }
     catch (err) {
@@ -96,9 +96,9 @@ exports.updateWalletHandler = updateWalletHandler;
 const deleteWalletHandler = async (req, res, next) => {
     try {
         const { id } = req.params;
-        const warehouse = await (0, wallet_service_1.findById)({ id: id });
-        if (!warehouse)
-            return next(new app_error_1.default(401, 'Err! Warehouse not found'));
+        const wallet = await (0, wallet_service_1.findById)({ id: id });
+        if (!wallet)
+            return next(new app_error_1.default(401, 'Err! wallet not found'));
         const response = await (0, wallet_service_1.deleteWallet)(id);
         return res.status(200).json({
             status: 'success',
