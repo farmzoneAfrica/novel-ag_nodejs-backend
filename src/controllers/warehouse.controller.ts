@@ -37,7 +37,7 @@ export const createWarehouseHandler = async (
       local_govt: req.body.local_govt,
       ward: req.body.ward,
       status: req.body.status,
-      userId: userId,
+      userId: userId
     }
 
     if ( getStates().includes(data.state) === false ) {
