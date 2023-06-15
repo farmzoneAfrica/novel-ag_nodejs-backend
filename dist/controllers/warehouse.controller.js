@@ -19,7 +19,7 @@ const createWarehouseHandler = async (req, res, next) => {
             local_govt: req.body.local_govt,
             ward: req.body.ward,
             status: req.body.status,
-            userId: userId,
+            userId: userId
         };
         if ((0, common_service_1.getStates)().includes(data.state) === false) {
             return next(new app_error_1.default(400, 'Invalid state, please enter a valid state'));

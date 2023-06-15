@@ -41,7 +41,7 @@ exports.registerUserSchema = (0, zod_1.object)({
         confirm_password: (0, zod_1.string)({
             required_error: 'Please confirm your password',
         }),
-        role: (zod_1.z.nativeEnum(RoleEnumType)),
+        role: (zod_1.z.nativeEnum(RoleEnumType)).optional(),
     }).refine((data) => data.password === data.confirm_password, {
         path: ['confirm_password'],
         message: 'Passwords do not match',

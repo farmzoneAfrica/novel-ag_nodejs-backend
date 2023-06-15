@@ -69,14 +69,19 @@ export const registerUserHandler = async (
 ) => {
   try {
     const hashedPassword = await bcrypt.hash(req.body.password, 12);
-
     const verifyCode = crypto.randomBytes(32).toString('hex');
-
     const verificationCode = crypto
       .createHash('sha256')
       .update(verifyCode)
       .digest('hex');
-
+    
+    if ( getStates().includes(req.body.state) === false ) {
+      return next(new AppError(400, 'Invalid state, please enter a valid state'));
+    }
+    if ( getLGAs(req.body.state).includes(req.body.local_govt) === false ) {
+      return next(new AppError(400, 'Invalid LGA, please enter a valid local government'));
+    }
+    
     const user = await createUser({
       role: req.body.role,
       first_name: req.body.first_name,
@@ -90,24 +95,18 @@ export const registerUserHandler = async (
       marital_status: req.body.marital_status,
       email: req.body.email.toLowerCase(),
       password: hashedPassword,
-      verificationCode,
-  
+      verificationCode
     });
 
-    const userRole = user.role;
-    const phone = user.phone;
     const baseUrl = process.env.BASE_URL;
-    const emailVerificationRedirectUrl = `${baseUrl}/api/auth/verifyemail/${verifyCode}`;
-    const phoneVerificationRedirectUrl = `${baseUrl}/api/auth/verifyphone/:otp`;
+    const emailVerificationRedirectUrl = `${baseUrl}/api/v1/auth/verifyemail/${verifyCode}`;
+    // const phoneVerificationRedirectUrl = `${baseUrl}/api/auth/verifyphone/:otp`;
     // const redirectUrl = `${baseUrl}/api/auth/verifyemail/${verifyCode}`;
 
     try { 
-      const genOtp = Math.floor(Math.random()*1000000).toString();
-
-      userRole === "farmer" ? 
-
-      await sendOtp (phone, genOtp) :
-
+      // const genOtp = Math.floor(Math.random()*1000000).toString();
+      // user.role === "farmer" ? 
+      // await sendOtp (user.phone, genOtp) :
       await new Email(user, emailVerificationRedirectUrl).sendVerificationCode();
       await updateUser({ id: user.id }, { verificationCode });
       res.status(201).json({
