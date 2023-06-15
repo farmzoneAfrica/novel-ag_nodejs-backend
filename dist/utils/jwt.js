@@ -10,7 +10,7 @@ dotenv_1.default.config();
 const signJwt = (payload, keyName, options) => {
     // const privateKey = fs.readFileSync('private_key.pem').toString('ascii');
     const privateKey = 'ab1234';
-    console.log("jwt", 10, privateKey);
+    // console.log("jwt", 10, privateKey);
     return jsonwebtoken_1.default.sign(payload, privateKey, {
     // ...options,
     // algorithm: 'RS256',

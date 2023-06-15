@@ -460,12 +460,10 @@ export const getUsersHandler = async (
   next: NextFunction
 ) => {
   try {
-    const agents = await findAll()
+    const users = await findAll()
     res.status(200).status(200).json({
-      status: 'success',
-      data: {
-        agents,
-      },
+      status: 'Success',
+      users
     });
   } catch (err: any) {
     next(err);
@@ -479,11 +477,11 @@ export const usersPaginationHandler = async (
 ) => {
   try {
     const { pageNo } = req.params as any;
-    const agents = await pagination(pageNo * 10, 10)
+    const users = await pagination(pageNo * 10, 10)
     res.status(200).status(200).json({
       status: 'success',
       data: {
-        agents,
+        users,
       },
     });
   } catch (err: any) {
@@ -498,15 +496,33 @@ export const getUserHandler = async (
 ) => {
   try {
     const { id } = req.params;
-    const agent = await findById({ id: id })
-     if (!agent) {
-      return next(new AppError(401, 'Agent does not exist'));
+    const user = await findById({ id: id })
+     if (!user) {
+      return next(new AppError(401, 'User does not exist'));
     }
     return res.status(200).json({
       status: 'success',
-      data: {
-        agent,
-      },
+      user
+    });
+  } catch (err: any) {
+    next(err);
+  }
+};
+
+export const getFarmerHandler = async (
+  req: Response | any,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { id } = req.params;
+    const user = await findById({ id: id })
+     if (!user) {
+      return next(new AppError(401, 'User does not exist'));
+    }
+    return res.status(200).json({
+      status: 'success',
+      user
     });
   } catch (err: any) {
     next(err);

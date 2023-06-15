@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteUserHandler = exports.updateUserHandler = exports.getUserHandler = exports.usersPaginationHandler = exports.getUsersHandler = exports.resetPasswordHandler = exports.forgotPasswordHandler = exports.verifyOtpHandler = exports.verifyEmailHandler = exports.logoutUserHandler = exports.refreshAccessTokenHandler = exports.loginUserHandler = exports.registerUserHandler = void 0;
+exports.deleteUserHandler = exports.updateUserHandler = exports.getFarmerHandler = exports.getUserHandler = exports.usersPaginationHandler = exports.getUsersHandler = exports.resetPasswordHandler = exports.forgotPasswordHandler = exports.verifyOtpHandler = exports.verifyEmailHandler = exports.logoutUserHandler = exports.refreshAccessTokenHandler = exports.loginUserHandler = exports.registerUserHandler = void 0;
 const crypto_1 = __importDefault(require("crypto"));
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const phoneOtp_1 = require("../utils/phoneOtp");
@@ -321,12 +321,10 @@ const resetPasswordHandler = async (req, res, next) => {
 exports.resetPasswordHandler = resetPasswordHandler;
 const getUsersHandler = async (req, res, next) => {
     try {
-        const agents = await (0, user_service_1.findAll)();
+        const users = await (0, user_service_1.findAll)();
         res.status(200).status(200).json({
-            status: 'success',
-            data: {
-                agents,
-            },
+            status: 'Success',
+            users
         });
     }
     catch (err) {
@@ -337,11 +335,11 @@ exports.getUsersHandler = getUsersHandler;
 const usersPaginationHandler = async (req, res, next) => {
     try {
         const { pageNo } = req.params;
-        const agents = await (0, user_service_1.pagination)(pageNo * 10, 10);
+        const users = await (0, user_service_1.pagination)(pageNo * 10, 10);
         res.status(200).status(200).json({
             status: 'success',
             data: {
-                agents,
+                users,
             },
         });
     }
@@ -353,15 +351,13 @@ exports.usersPaginationHandler = usersPaginationHandler;
 const getUserHandler = async (req, res, next) => {
     try {
         const { id } = req.params;
-        const agent = await (0, user_service_1.findById)({ id: id });
-        if (!agent) {
-            return next(new app_error_1.default(401, 'Agent does not exist'));
+        const user = await (0, user_service_1.findById)({ id: id });
+        if (!user) {
+            return next(new app_error_1.default(401, 'User does not exist'));
         }
         return res.status(200).json({
             status: 'success',
-            data: {
-                agent,
-            },
+            user
         });
     }
     catch (err) {
@@ -369,6 +365,23 @@ const getUserHandler = async (req, res, next) => {
     }
 };
 exports.getUserHandler = getUserHandler;
+const getFarmerHandler = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const user = await (0, user_service_1.findById)({ id: id });
+        if (!user) {
+            return next(new app_error_1.default(401, 'User does not exist'));
+        }
+        return res.status(200).json({
+            status: 'success',
+            user
+        });
+    }
+    catch (err) {
+        next(err);
+    }
+};
+exports.getFarmerHandler = getFarmerHandler;
 const updateUserHandler = async (req, res, next) => {
     try {
         const { id } = req.params;

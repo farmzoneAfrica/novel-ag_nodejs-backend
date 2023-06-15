@@ -10,7 +10,7 @@ export const signJwt = (
 ) => {
   // const privateKey = fs.readFileSync('private_key.pem').toString('ascii');
   const privateKey = 'ab1234'
-  console.log("jwt", 10, privateKey);
+  // console.log("jwt", 10, privateKey);
   return jwt.sign(payload, privateKey, {
     // ...options,
     // algorithm: 'RS256',

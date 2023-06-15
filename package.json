@@ -17,9 +17,9 @@
     "prisma:update": "yarn add  @prisma/client@dev prisma@dev",
     "migrate:dev": "npx prisma migrate dev",
     "db:push": "npx prisma db push",
-    "deploy:test": "",
-    "deploy:stagging": "",
-    "deploy:prod": ""
+    "deploy:test": "#",
+    "deploy:stagging": "#",
+    "deploy:prod": "#"
   },
   "author": "",
   "license": "ISC",

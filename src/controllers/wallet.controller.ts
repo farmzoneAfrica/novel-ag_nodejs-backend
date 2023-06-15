@@ -73,14 +73,14 @@ export const getWalletHandler = async (
 ) => {
   try {
     const { id } = req.params;
-    const warehouse = await findById({ id: id})
-     if (!warehouse) {
-      return next(new AppError(401, 'Warehouse does not exist'));
+    const wallet = await findById({ id: id})
+     if (!wallet) {
+      return next(new AppError(401, 'wallet does not exist'));
     }
       return res.status(200).json({
       status: 'success',
       data: {
-        warehouse,
+        wallet,
       },
     });
   } catch (err: any) {
@@ -104,13 +104,13 @@ export const updateWalletHandler = async (
       ward: req.body.ward,
       status: req.body.status
   }
-    const warehouse = await updateWallet({ id: id }, data);
-     if (!warehouse) 
-      return next(new AppError(401, 'Warehouse does not exist'));
+    const wallet = await updateWallet({ id: id }, data);
+     if (!wallet) 
+      return next(new AppError(401, 'wallet does not exist'));
     
     return res.status(200).json({
       status: 'Success',
-      warehouse,
+      wallet,
     });
   } catch (err: any) {    
     next(err);
@@ -119,14 +119,14 @@ export const updateWalletHandler = async (
 
 export const deleteWalletHandler = async (
   req: Request,
-  res: Response,
+  res: Response, 
   next: NextFunction
 ) => {
   try {
     const { id } = req.params;
-    const warehouse = await findById({id: id});
-    if (!warehouse) 
-      return next(new AppError(401, 'Err! Warehouse not found'));
+    const wallet = await findById({id: id});
+    if (!wallet) 
+      return next(new AppError(401, 'Err! wallet not found'));
     
     const response = await deleteWallet(id)
     return res.status(200).json({
