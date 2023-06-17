@@ -27,7 +27,8 @@ model User {
   address        String?
   marital_status String?
   verified       Boolean? @default(false)
-  superAdmin     Boolean? @default(false)
+  isSuperAdmin   Boolean? @default(false)
+  role          RoleEnumType @default(user)
   
 
   verificationCode   String?   @unique @db.VarChar(90)
@@ -49,12 +50,9 @@ model User {
   farm          Farm[]
   wallet        Wallet[]
 
-  role          RoleEnumType @default(user)
-  roleId String?
-
   @@unique([email, phone, verificationCode, passwordResetToken, phoneVerificationCode])
   @@index([email, verificationCode, passwordResetToken, phoneVerificationCode])
-  @@index([roleId])
+
   @@map(name: "users")
 }
 
@@ -67,51 +65,6 @@ enum RoleEnumType {
   user
   dealer
   logistics
-}
-
-enum PermissionEnumType {
-  create
-  read
-  update
-  delete
-}
-
-model Role {
-  id          String       @id @default(uuid())
-  name        RoleEnumType @default(user)
-  users       User[]
-  permissions Permission[]
-
-  createdAt       DateTime          @default(now())
-  updatedAt       DateTime          @default(now()) @updatedAt
-  RolePermissions RolePermissions[]
-
-  @@map(name: "roles")
-}
-
-model Permission {
-  id   String             @id @default(uuid())
-  name PermissionEnumType @default(read)
-  role Role[]
-
-  createdAt       DateTime          @default(now())
-  updatedAt       DateTime          @default(now()) @updatedAt
-  RolePermissions RolePermissions[]
-
-  @@map(name: "permissions")
-}
-
-model RolePermissions {
-  role       Role       @relation(fields: [roleId], references: [id])
-  permission Permission @relation(fields: [permissionId], references: [id])
-
-  roleId       String
-  permissionId String
-
-  @@id([roleId, permissionId])
-  @@index([roleId])
-  @@index([permissionId])
-  @@map(name: "roles_permissions")
 }
 
 model ProsperityHub {
