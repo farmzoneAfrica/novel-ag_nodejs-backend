@@ -93,8 +93,8 @@ export const adminAuth = async (
 
     const user = await findUniqueUser({ id: JSON.parse(session).id });
     
-      if (user.role !== "admin")
-          return next(new AppError(401, "Fobbitten route, you are not an admin"))
+    // if (user.role !== "admin")
+    //     return next(new AppError(401, "Fobbitten route, you are not an admin"))
 
     if (!user) {
       return next(new AppError(401, `Invalid token or session has expired`));
@@ -148,8 +148,8 @@ export const adminAuth = async (
 
     const user = await findUniqueUser({ id: JSON.parse(session).id });
     
-      if (user.role !== "admin")
-          return next(new AppError(401, "Fobbitten route, you are not an admin"))
+    // if (user.role !== "admin")
+    //     return next(new AppError(401, "Fobbitten route, you are not an admin"))
 
     if (!user) {
       return next(new AppError(401, `Invalid token or session has expired`));

@@ -19,14 +19,16 @@ model User {
   email          String   @unique
   password       String
   gender         String?
-  avatar         String   @default("")
-  nationality    String   @default("")
-  state          String   @default("")
-  local_govt     String   @default("")
-  ward           String   @default("")
-  address        String?  @default("")
-  marital_status String?  @default("")
+  avatar         String?
+  nationality    String?
+  state          String
+  local_govt     String
+  ward           String?
+  address        String?
+  marital_status String?
   verified       Boolean? @default(false)
+  superAdmin     Boolean? @default(false)
+  
 
   verificationCode   String?   @unique @db.VarChar(90)
   verificationCodeAt DateTime?
@@ -45,25 +47,25 @@ model User {
   prosperityHub ProsperityHub[]
   warhouse      Warehouse[]
   farm          Farm[]
-  wallet        Wallet?
+  wallet        Wallet[]
 
-  role          Role?    @relation(fields: [roleId], onDelete: Cascade, references: [id])
-  roleId        String?
-  
+  role          RoleEnumType @default(user)
+  roleId String?
+
   @@unique([email, phone, verificationCode, passwordResetToken, phoneVerificationCode])
   @@index([email, verificationCode, passwordResetToken, phoneVerificationCode])
+  @@index([roleId])
   @@map(name: "users")
 }
 
-
 enum RoleEnumType {
-  user
-  farmer
   admin
+  supervisor
   agent
-  buyer
-  dealer
+  farmer
   aggregator
+  user
+  dealer
   logistics
 }
 
@@ -75,43 +77,42 @@ enum PermissionEnumType {
 }
 
 model Role {
-  id             String  @id @default(uuid())
-  name           RoleEnumType @default(user)
-  users          User[]
-  permissions    Permission[]
+  id          String       @id @default(uuid())
+  name        RoleEnumType @default(user)
+  users       User[]
+  permissions Permission[]
 
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @default(now()) @updatedAt
+  RolePermissions RolePermissions[]
 
   @@map(name: "roles")
 }
 
 model Permission {
-  id             String  @id @default(uuid())
-  name           PermissionEnumType @default(read)
-  role           Role[]
+  id   String             @id @default(uuid())
+  name PermissionEnumType @default(read)
+  role Role[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @default(now()) @updatedAt
+  RolePermissions RolePermissions[]
 
   @@map(name: "permissions")
 }
 
 model RolePermissions {
-  role           Role   @relation(fields: [roleId], references: [id])
-  permission     Permission   @relation(fields: [permissionId], references: [id])
+  role       Role       @relation(fields: [roleId], references: [id])
+  permission Permission @relation(fields: [permissionId], references: [id])
 
-  roleId         String
-  permissionId   String
+  roleId       String
+  permissionId String
 
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @default(now()) @updatedAt
-
-  @@map(name: "roles_permissions")
   @@id([roleId, permissionId])
+  @@index([roleId])
+  @@index([permissionId])
+  @@map(name: "roles_permissions")
 }
-
 
 model ProsperityHub {
   id               String  @id @default(uuid())
@@ -122,11 +123,13 @@ model ProsperityHub {
   local_govt       String
   ward             String?
   status           Boolean @default(false)
-  user             User    @relation(fields: [userId], onDelete: Cascade, references: [id])
+  user             User    @relation(fields: [userId], references: [id])
   userId           String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
+
+  @@index([userId])
 
   @@map(name: "prosperityHubs")
 }
@@ -145,6 +148,8 @@ model Warehouse {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
+
+  @@index([userId])
 
   @@map(name: "warehouses")
 }
@@ -166,6 +171,8 @@ model Farm {
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
 
+  @@index([userId])
+
   @@map(name: "farms")
 }
 
@@ -180,9 +187,10 @@ model Wallet {
   user   User   @relation(fields: [userId], references: [id])
   userId String
 
+  @@index([userId])
+
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
 
   @@map(name: "wallets")
 }
-

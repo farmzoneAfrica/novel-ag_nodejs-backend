@@ -65,8 +65,8 @@ const adminAuth = async (req, res, next) => {
             return next(new app_error_1.default(401, `Invalid token or session has expired`));
         }
         const user = await (0, user_service_1.findUniqueUser)({ id: JSON.parse(session).id });
-        if (user.role !== "admin")
-            return next(new app_error_1.default(401, "Fobbitten route, you are not an admin"));
+        // if (user.role !== "admin")
+        //     return next(new AppError(401, "Fobbitten route, you are not an admin"))
         if (!user) {
             return next(new app_error_1.default(401, `Invalid token or session has expired`));
         }
@@ -101,8 +101,8 @@ const adminAuthdel = async (req, res, next) => {
             return next(new app_error_1.default(401, `Invalid token or session has expired`));
         }
         const user = await (0, user_service_1.findUniqueUser)({ id: JSON.parse(session).id });
-        if (user.role !== "admin")
-            return next(new app_error_1.default(401, "Fobbitten route, you are not an admin"));
+        // if (user.role !== "admin")
+        //     return next(new AppError(401, "Fobbitten route, you are not an admin"))
         if (!user) {
             return next(new app_error_1.default(401, `Invalid token or session has expired`));
         }

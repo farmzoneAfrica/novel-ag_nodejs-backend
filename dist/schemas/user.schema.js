@@ -2,16 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getSingleUserSchema = exports.resetPasswordSchema = exports.forgotPasswordSchema = exports.updateUserSchema = exports.verifyOtpSchema = exports.verifyEmailSchema = exports.loginUserSchema = exports.registerUserSchema = void 0;
 const zod_1 = require("zod");
-var RoleEnumType;
-(function (RoleEnumType) {
-    RoleEnumType["user"] = "user";
-    RoleEnumType["farmer"] = "farmer";
-    RoleEnumType["admin"] = "admin";
-    RoleEnumType["agent"] = "agent";
-    RoleEnumType["buyer"] = "buyer";
-    RoleEnumType["dealer"] = "dealer";
-    RoleEnumType["logistics"] = "logistics";
-})(RoleEnumType || (RoleEnumType = {}));
 exports.registerUserSchema = (0, zod_1.object)({
     body: (0, zod_1.object)({
         first_name: (0, zod_1.string)({
@@ -41,7 +31,6 @@ exports.registerUserSchema = (0, zod_1.object)({
         confirm_password: (0, zod_1.string)({
             required_error: 'Please confirm your password',
         }),
-        role: (zod_1.z.nativeEnum(RoleEnumType)).optional(),
     }).refine((data) => data.password === data.confirm_password, {
         path: ['confirm_password'],
         message: 'Passwords do not match',
@@ -80,7 +69,6 @@ exports.updateUserSchema = (0, zod_1.object)({
             .min(8, 'Password must be more than 8 characters')
             .max(32, 'Password must be less than 32 characters').optional(),
         confirm_password: (0, zod_1.string)({}).optional(),
-        role: zod_1.z.optional(zod_1.z.nativeEnum(RoleEnumType)),
     })
         .partial()
         .refine((data) => data.password === data.confirm_password, {
