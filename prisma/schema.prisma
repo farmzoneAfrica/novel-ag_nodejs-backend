@@ -28,8 +28,6 @@ model User {
   marital_status String?  @default("")
   verified       Boolean? @default(false)
 
-  role RoleEnumType @default(user)
-
   verificationCode   String?   @unique @db.VarChar(90)
   verificationCodeAt DateTime?
 
@@ -47,12 +45,16 @@ model User {
   prosperityHub ProsperityHub[]
   warhouse      Warehouse[]
   farm          Farm[]
-  Wallet        Wallet[]
+  wallet        Wallet?
 
+  role          Role?    @relation(fields: [roleId], onDelete: Cascade, references: [id])
+  roleId        String?
+  
   @@unique([email, phone, verificationCode, passwordResetToken, phoneVerificationCode])
   @@index([email, verificationCode, passwordResetToken, phoneVerificationCode])
   @@map(name: "users")
 }
+
 
 enum RoleEnumType {
   user
@@ -64,6 +66,52 @@ enum RoleEnumType {
   aggregator
   logistics
 }
+
+enum PermissionEnumType {
+  create
+  read
+  update
+  delete
+}
+
+model Role {
+  id             String  @id @default(uuid())
+  name           RoleEnumType @default(user)
+  users          User[]
+  permissions    Permission[]
+
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  @@map(name: "roles")
+}
+
+model Permission {
+  id             String  @id @default(uuid())
+  name           PermissionEnumType @default(read)
+  role           Role[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  @@map(name: "permissions")
+}
+
+model RolePermissions {
+  role           Role   @relation(fields: [roleId], references: [id])
+  permission     Permission   @relation(fields: [permissionId], references: [id])
+
+  roleId         String
+  permissionId   String
+
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @default(now()) @updatedAt
+
+  @@map(name: "roles_permissions")
+  @@id([roleId, permissionId])
+}
+
 
 model ProsperityHub {
   id               String  @id @default(uuid())
@@ -92,7 +140,7 @@ model Warehouse {
   local_govt       String
   ward             String  @default("")
   status           Boolean @default(false)
-  user             User    @relation(fields: [userId], onDelete: Cascade, references: [id])
+  user             User    @relation(fields: [userId], references: [id])
   userId           String
 
   createdAt DateTime @default(now())
@@ -112,7 +160,7 @@ model Farm {
   local_govt       String
   ward             String  @default("")
   status           Boolean @default(false)
-  user             User    @relation(fields: [userId], onDelete: Cascade, references: [id])
+  user             User    @relation(fields: [userId], references: [id])
   userId           String
 
   createdAt DateTime @default(now())
@@ -129,7 +177,7 @@ model Wallet {
   account_name   String?
   status         Boolean @default(false)
 
-  user   User   @relation(fields: [userId], onDelete: Cascade, references: [id])
+  user   User   @relation(fields: [userId], references: [id])
   userId String
 
   createdAt DateTime @default(now())
@@ -137,3 +185,4 @@ model Wallet {
 
   @@map(name: "wallets")
 }
+
