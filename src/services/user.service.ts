@@ -15,7 +15,7 @@ export const excludedFields = [
 
 const prisma = new PrismaClient();
 
-export const createUser = async (input: Prisma.UserCreateInput) => {  
+export const createUser = async (input: Prisma.UserCreateInput ) => {  
   return (await prisma.user.create({
     data: input,
   })) as User;

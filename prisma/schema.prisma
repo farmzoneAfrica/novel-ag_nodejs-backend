@@ -19,16 +19,17 @@ model User {
   email          String   @unique
   password       String
   gender         String?
-  avatar         String   @default("")
-  nationality    String   @default("")
-  state          String   @default("")
-  local_govt     String   @default("")
-  ward           String   @default("")
-  address        String?  @default("")
-  marital_status String?  @default("")
+  avatar         String?
+  nationality    String?
+  state          String
+  local_govt     String
+  ward           String?
+  address        String?
+  marital_status String?
   verified       Boolean? @default(false)
-
-  role RoleEnumType @default(user)
+  isSuperAdmin   Boolean? @default(false)
+  role          RoleEnumType @default(user)
+  
 
   verificationCode   String?   @unique @db.VarChar(90)
   verificationCodeAt DateTime?
@@ -47,21 +48,22 @@ model User {
   prosperityHub ProsperityHub[]
   warhouse      Warehouse[]
   farm          Farm[]
-  Wallet        Wallet[]
+  wallet        Wallet[]
 
   @@unique([email, phone, verificationCode, passwordResetToken, phoneVerificationCode])
   @@index([email, verificationCode, passwordResetToken, phoneVerificationCode])
+
   @@map(name: "users")
 }
 
 enum RoleEnumType {
-  user
-  farmer
   admin
+  supervisor
   agent
-  buyer
-  dealer
+  farmer
   aggregator
+  user
+  dealer
   logistics
 }
 
@@ -74,11 +76,13 @@ model ProsperityHub {
   local_govt       String
   ward             String?
   status           Boolean @default(false)
-  user             User    @relation(fields: [userId], onDelete: Cascade, references: [id])
+  user             User    @relation(fields: [userId], references: [id])
   userId           String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
+
+  @@index([userId])
 
   @@map(name: "prosperityHubs")
 }
@@ -92,11 +96,13 @@ model Warehouse {
   local_govt       String
   ward             String  @default("")
   status           Boolean @default(false)
-  user             User    @relation(fields: [userId], onDelete: Cascade, references: [id])
+  user             User    @relation(fields: [userId], references: [id])
   userId           String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
+
+  @@index([userId])
 
   @@map(name: "warehouses")
 }
@@ -112,11 +118,13 @@ model Farm {
   local_govt       String
   ward             String  @default("")
   status           Boolean @default(false)
-  user             User    @relation(fields: [userId], onDelete: Cascade, references: [id])
+  user             User    @relation(fields: [userId], references: [id])
   userId           String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
+
+  @@index([userId])
 
   @@map(name: "farms")
 }
@@ -129,8 +137,10 @@ model Wallet {
   account_name   String?
   status         Boolean @default(false)
 
-  user   User   @relation(fields: [userId], onDelete: Cascade, references: [id])
+  user   User   @relation(fields: [userId], references: [id])
   userId String
+
+  @@index([userId])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt

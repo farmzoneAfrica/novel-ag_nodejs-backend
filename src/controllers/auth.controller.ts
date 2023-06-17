@@ -83,7 +83,6 @@ export const registerUserHandler = async (
     }
     
     const user = await createUser({
-      role: req.body.role,
       first_name: req.body.first_name,
       last_name: req.body.last_name,
       address: req.body.address,                                                                                                                               
@@ -100,6 +99,7 @@ export const registerUserHandler = async (
 
     const baseUrl = process.env.BASE_URL;
     const emailVerificationRedirectUrl = `${baseUrl}/api/v1/auth/verifyemail/${verifyCode}`;
+    
     // const phoneVerificationRedirectUrl = `${baseUrl}/api/auth/verifyphone/:otp`;
     // const redirectUrl = `${baseUrl}/api/auth/verifyemail/${verifyCode}`;
 

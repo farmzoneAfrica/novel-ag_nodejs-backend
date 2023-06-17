@@ -6,8 +6,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteUserHandler = exports.updateUserHandler = exports.getFarmerHandler = exports.getUserHandler = exports.usersPaginationHandler = exports.getUsersHandler = exports.resetPasswordHandler = exports.forgotPasswordHandler = exports.verifyOtpHandler = exports.verifyEmailHandler = exports.logoutUserHandler = exports.refreshAccessTokenHandler = exports.loginUserHandler = exports.registerUserHandler = void 0;
 const crypto_1 = __importDefault(require("crypto"));
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
-const phoneOtp_1 = require("../utils/phoneOtp");
 const user_service_1 = require("../services/user.service");
+const common_service_1 = require("../services/common.service");
 const client_1 = require("@prisma/client");
 const config_1 = __importDefault(require("config"));
 const app_error_1 = __importDefault(require("../utils/app.error"));
@@ -38,8 +38,13 @@ const registerUserHandler = async (req, res, next) => {
             .createHash('sha256')
             .update(verifyCode)
             .digest('hex');
+        if ((0, common_service_1.getStates)().includes(req.body.state) === false) {
+            return next(new app_error_1.default(400, 'Invalid state, please enter a valid state'));
+        }
+        if ((0, common_service_1.getLGAs)(req.body.state).includes(req.body.local_govt) === false) {
+            return next(new app_error_1.default(400, 'Invalid LGA, please enter a valid local government'));
+        }
         const user = await (0, user_service_1.createUser)({
-            role: req.body.role,
             first_name: req.body.first_name,
             last_name: req.body.last_name,
             address: req.body.address,
@@ -51,19 +56,17 @@ const registerUserHandler = async (req, res, next) => {
             marital_status: req.body.marital_status,
             email: req.body.email.toLowerCase(),
             password: hashedPassword,
-            verificationCode,
+            verificationCode
         });
-        const userRole = user.role;
-        const phone = user.phone;
         const baseUrl = process.env.BASE_URL;
-        const emailVerificationRedirectUrl = `${baseUrl}/api/auth/verifyemail/${verifyCode}`;
-        const phoneVerificationRedirectUrl = `${baseUrl}/api/auth/verifyphone/:otp`;
+        const emailVerificationRedirectUrl = `${baseUrl}/api/v1/auth/verifyemail/${verifyCode}`;
+        // const phoneVerificationRedirectUrl = `${baseUrl}/api/auth/verifyphone/:otp`;
         // const redirectUrl = `${baseUrl}/api/auth/verifyemail/${verifyCode}`;
         try {
-            const genOtp = Math.floor(Math.random() * 1000000).toString();
-            userRole === "farmer" ?
-                await (0, phoneOtp_1.sendOtp)(phone, genOtp) :
-                await new email_1.default(user, emailVerificationRedirectUrl).sendVerificationCode();
+            // const genOtp = Math.floor(Math.random()*1000000).toString();
+            // user.role === "farmer" ? 
+            // await sendOtp (user.phone, genOtp) :
+            await new email_1.default(user, emailVerificationRedirectUrl).sendVerificationCode();
             await (0, user_service_1.updateUser)({ id: user.id }, { verificationCode });
             res.status(201).json({
                 status: 'success',
