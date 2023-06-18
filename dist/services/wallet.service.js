@@ -27,7 +27,7 @@ const findById = async (where) => {
 };
 exports.findById = findById;
 const findUniqueWarehouse = async (where, select) => {
-    return (await prisma.warehouse.findUnique({
+    return (await prisma.wallet.findUnique({
         where,
         select,
     }));

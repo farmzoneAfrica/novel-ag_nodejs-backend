@@ -97,9 +97,11 @@ export const registerUserHandler = async (
       verificationCode
     });
 
+    console.log(user)
+    
     const baseUrl = process.env.BASE_URL;
     const emailVerificationRedirectUrl = `${baseUrl}/api/v1/auth/verifyemail/${verifyCode}`;
-    
+
     // const phoneVerificationRedirectUrl = `${baseUrl}/api/auth/verifyphone/:otp`;
     // const redirectUrl = `${baseUrl}/api/auth/verifyemail/${verifyCode}`;
 

@@ -27,9 +27,7 @@ model User {
   address        String?
   marital_status String?
   verified       Boolean? @default(false)
-  isSuperAdmin   Boolean? @default(false)
-  role          RoleEnumType @default(user)
-  
+  isSuperAdmin   Boolean  @default(false)
 
   verificationCode   String?   @unique @db.VarChar(90)
   verificationCodeAt DateTime?
@@ -50,9 +48,12 @@ model User {
   farm          Farm[]
   wallet        Wallet[]
 
+  role   Role? @relation(fields: [roleId], onDelete: Cascade, references: [id])
+  roleId Int?
+
   @@unique([email, phone, verificationCode, passwordResetToken, phoneVerificationCode])
   @@index([email, verificationCode, passwordResetToken, phoneVerificationCode])
-
+  @@index([roleId])
   @@map(name: "users")
 }
 
@@ -67,8 +68,32 @@ enum RoleEnumType {
   logistics
 }
 
+enum PermissionEnumType {
+  read
+  create
+  update
+  delete
+}
+
+model Role {
+  id          Int          @id @default(autoincrement())
+  name        String       @unique @default("user")
+  permissions Permission[]
+  users       User[]
+
+  @@map(name: "roles")
+}
+
+model Permission {
+  id   Int    @id @default(autoincrement())
+  name String @unique @default("read")
+  role Role[]
+
+  @@map(name: "permissions")
+}
+
 model ProsperityHub {
-  id               String  @id @default(uuid())
+  id               String     @id @default(uuid())
   name             String  @unique
   location         String
   closest_landmark String?
@@ -83,12 +108,11 @@ model ProsperityHub {
   updatedAt DateTime @default(now()) @updatedAt
 
   @@index([userId])
-
   @@map(name: "prosperityHubs")
 }
 
 model Warehouse {
-  id               String  @id @default(uuid())
+  id               String     @id @default(uuid())
   name             String  @unique
   location         String
   closest_landmark String  @default("")
@@ -103,12 +127,11 @@ model Warehouse {
   updatedAt DateTime @default(now()) @updatedAt
 
   @@index([userId])
-
   @@map(name: "warehouses")
 }
 
 model Farm {
-  id               String  @id @default(uuid())
+  id               String     @id @default(uuid())
   name             String  @unique
   size             String
   location         String
@@ -125,7 +148,6 @@ model Farm {
   updatedAt DateTime @default(now()) @updatedAt
 
   @@index([userId])
-
   @@map(name: "farms")
 }
 
@@ -140,10 +162,9 @@ model Wallet {
   user   User   @relation(fields: [userId], references: [id])
   userId String
 
-  @@index([userId])
-
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
 
+  @@index([userId])
   @@map(name: "wallets")
 }

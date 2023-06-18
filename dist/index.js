@@ -21,6 +21,7 @@ const prosperity_hub_routes_1 = __importDefault(require("./routes/prosperity.hub
 const warehouse_routes_1 = __importDefault(require("./routes/warehouse.routes"));
 const farm_routes_1 = __importDefault(require("./routes/farm.routes"));
 const wallet_route_1 = __importDefault(require("./routes/wallet.route"));
+const role_permission_route_1 = __importDefault(require("./routes/role.permission.route"));
 (0, validateEnv_1.default)();
 const app = (0, express_1.default)();
 const prisma = new client_1.PrismaClient();
@@ -49,6 +50,7 @@ app.use('/api/v1/prosperity-hub', prosperity_hub_routes_1.default);
 app.use('/api/v1/warehouse', warehouse_routes_1.default);
 app.use('/api/v1/farm', farm_routes_1.default);
 app.use('/api/v1/wallet', wallet_route_1.default);
+app.use('/api/v1/assign', role_permission_route_1.default);
 app.all('*', (req, res, next) => {
     next(new app_error_1.default(404, `Route ${req.originalUrl} not found`));
 });

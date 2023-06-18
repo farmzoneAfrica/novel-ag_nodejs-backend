@@ -34,7 +34,7 @@ export const findUniqueWarehouse = async (
   where: Prisma.WalletWhereUniqueInput,
   select?: Prisma.WalletSelect
 ) => {
-  return (await prisma.warehouse.findUnique({
+  return (await prisma.wallet.findUnique({
     where,
     select,
   })) as Wallet;
