@@ -1,8 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getSingleUserSchema = exports.resetPasswordSchema = exports.forgotPasswordSchema = exports.updateUserSchema = exports.verifyOtpSchema = exports.verifyEmailSchema = exports.loginUserSchema = exports.registerUserSchema = void 0;
+exports.getSingleUserSchema = exports.resetPasswordSchema = exports.forgotPasswordSchema = exports.updateUserSchema = exports.verifyOtpSchema = exports.verifyEmailSchema = exports.loginUserSchema = exports.createUserSchema = void 0;
 const zod_1 = require("zod");
-exports.registerUserSchema = (0, zod_1.object)({
+var GenderEnumType;
+(function (GenderEnumType) {
+    GenderEnumType["Male"] = "Male";
+    GenderEnumType["Female"] = "Female";
+})(GenderEnumType || (GenderEnumType = {}));
+exports.createUserSchema = (0, zod_1.object)({
     body: (0, zod_1.object)({
         first_name: (0, zod_1.string)({
             required_error: 'first_name is required',
@@ -15,18 +20,21 @@ exports.registerUserSchema = (0, zod_1.object)({
         email: (0, zod_1.string)({
             required_error: 'Email address is required',
         }).email('Invalid email address'),
-        gender: (0, zod_1.string)().optional(),
-        avatar: (0, zod_1.string)().optional(),
+        code: (0, zod_1.string)().optional(),
+        ip: (0, zod_1.string)().optional(),
+        gender: (zod_1.z.nativeEnum(GenderEnumType)),
+        profile_picture: (0, zod_1.string)().optional(),
         nationality: (0, zod_1.string)().optional(),
-        state: (0, zod_1.string)(),
-        local_govt: (0, zod_1.string)(),
-        ward: (0, zod_1.string)().optional(),
+        staff_id: (0, zod_1.number)().optional(),
+        state_id: (0, zod_1.number)().optional(),
+        local_govt_id: (0, zod_1.number)().optional(),
+        ward_id: (0, zod_1.number)().optional(),
         address: (0, zod_1.string)().optional(),
         marital_status: (0, zod_1.string)().optional(),
         password: (0, zod_1.string)({
             required_error: 'Password is required',
         })
-            .min(6, 'Password must be more than 8 characters')
+            .min(6, 'Password must be more than 5 characters')
             .max(32, 'Password must be less than 32 characters'),
         confirm_password: (0, zod_1.string)({
             required_error: 'Please confirm your password',
@@ -61,7 +69,7 @@ exports.updateUserSchema = (0, zod_1.object)({
     body: (0, zod_1.object)({
         first_name: (0, zod_1.string)({}),
         last_name: (0, zod_1.string)({}),
-        gender: (0, zod_1.string)({}),
+        gender: (0, zod_1.string)({}).optional(),
         state: (0, zod_1.string)({}),
         local_govt: (0, zod_1.string)({}),
         marital_status: (0, zod_1.string)({}),

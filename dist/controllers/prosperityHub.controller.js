@@ -5,7 +5,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteProsperityHubHandler = exports.updateProsperityHubHandler = exports.getProsperityHubHandler = exports.getProsperityHubsHandler = exports.createProsperityHubHandler = void 0;
 const prosperityHub_service_1 = require("../services/prosperityHub.service");
-const common_service_1 = require("../services/common.service");
 const app_error_1 = __importDefault(require("../utils/app.error"));
 const client_1 = require("@prisma/client");
 // import agentRouter from '../routes/agent.routes';
@@ -21,17 +20,16 @@ const createProsperityHubHandler = async (req, res, next) => {
             ward: req.body.ward,
             status: req.body.status
         });
-        console.log(prosperityHub);
-        const inputState = prosperityHub.state;
-        const inputLGA = prosperityHub.local_govt;
-        const states = await (0, common_service_1.getStates)();
-        const LGAs = await (0, common_service_1.getLGAs)(inputState);
-        if (states.includes(inputState) === false) {
-            return next(new app_error_1.default(400, 'Invalid state, please enter a valid state'));
-        }
-        if (LGAs.includes(inputLGA) === false) {
-            return next(new app_error_1.default(400, 'Invalid LGA, please enter a valid local government'));
-        }
+        // const inputState = prosperityHub.state;
+        // const inputLGA = prosperityHub.local_govt;
+        // const states = await getStates();
+        // const LGAs = await getLGAs(inputState);
+        // if ( states.includes(inputState) === false ) {
+        //   return next(new AppError(400, 'Invalid state, please enter a valid state'));
+        // }
+        // if ( LGAs.includes(inputLGA) === false ) {
+        //   return next(new AppError(400, 'Invalid LGA, please enter a valid local government'));
+        // }
         return res.status(201).json({
             status: "success",
             prosperityHub

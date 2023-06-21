@@ -665,28 +665,25 @@
                 }
             }
         },
-        "/api/v1/wallet/": {
-            "post": {
+        "/api/v1/utils/states": {
+            "get": {
                 "description": "",
-                "parameters": [
-                    {
-                        "name": "authorization",
-                        "in": "header",
-                        "type": "string"
-                    }
-                ],
+                "parameters": [],
                 "responses": {
-                    "400": {
-                        "description": "Bad Request"
+                    "200": {
+                        "description": "OK"
                     }
                 }
-            },
+            }
+        },
+        "/api/v1/utils/lags/{id}": {
             "get": {
                 "description": "",
                 "parameters": [
                     {
-                        "name": "authorization",
-                        "in": "header",
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
                         "type": "string"
                     }
                 ],
@@ -697,64 +694,10 @@
                 }
             }
         },
-        "/api/v1/wallet/{id}": {
+        "/api/v1/utils/wards": {
             "get": {
                 "description": "",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "type": "string"
-                    },
-                    {
-                        "name": "authorization",
-                        "in": "header",
-                        "type": "string"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK"
-                    }
-                }
-            },
-            "patch": {
-                "description": "",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "type": "string"
-                    },
-                    {
-                        "name": "authorization",
-                        "in": "header",
-                        "type": "string"
-                    }
-                ],
-                "responses": {
-                    "400": {
-                        "description": "Bad Request"
-                    }
-                }
-            },
-            "delete": {
-                "description": "",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "type": "string"
-                    },
-                    {
-                        "name": "authorization",
-                        "in": "header",
-                        "type": "string"
-                    }
-                ],
+                "parameters": [],
                 "responses": {
                     "200": {
                         "description": "OK"

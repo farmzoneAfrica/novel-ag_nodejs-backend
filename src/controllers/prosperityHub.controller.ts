@@ -10,15 +10,17 @@ import {
 import { 
   getStates,
   getLGAs
-} from '../services/common.service';
+} from '../services/utils.service';
  
 import AppError from '../utils/app.error';
+
 import {
   CreateProsperityHubInput,
   UpdateProsperityHubInput
 } from "../schemas/prosperity.hub.schema";
 
 import { Prisma } from '@prisma/client';
+
 // import agentRouter from '../routes/agent.routes';
 // import { userInfo } from 'os';
 
@@ -37,19 +39,20 @@ export const createProsperityHubHandler = async (
       ward: req.body.ward,
       status: req.body.status
     });
-    console.log(prosperityHub);
     
-    const inputState = prosperityHub.state;
-    const inputLGA = prosperityHub.local_govt;
-    const states = await getStates();
-    const LGAs = await getLGAs(inputState);
+    // const inputState = prosperityHub.state;
+    // const inputLGA = prosperityHub.local_govt;
 
-    if ( states.includes(inputState) === false ) {
-      return next(new AppError(400, 'Invalid state, please enter a valid state'));
-    }
-    if ( LGAs.includes(inputLGA) === false ) {
-      return next(new AppError(400, 'Invalid LGA, please enter a valid local government'));
-    }
+    // const states = await getStates();
+    // const LGAs = await getLGAs(inputState);
+
+    // if ( states.includes(inputState) === false ) {
+    //   return next(new AppError(400, 'Invalid state, please enter a valid state'));
+    // }
+    // if ( LGAs.includes(inputLGA) === false ) {
+    //   return next(new AppError(400, 'Invalid LGA, please enter a valid local government'));
+    // }
+
     return res.status(201).json({
       status: "success",
       prosperityHub
@@ -66,7 +69,6 @@ export const createProsperityHubHandler = async (
     next(err);
   }
 };
-
 
 export const getProsperityHubsHandler = async (
   req: Request,

@@ -21,7 +21,7 @@ import { validate } from '../middleware/validate';
 import {
   forgotPasswordSchema,
   loginUserSchema,
-  registerUserSchema,
+  createUserSchema,
   resetPasswordSchema,
   verifyEmailSchema,
   verifyOtpSchema,
@@ -30,7 +30,7 @@ import {
 
 const authRouter = express.Router();
 
-authRouter.post( '/register', validate(registerUserSchema), registerUserHandler);
+authRouter.post( '/register', validate(createUserSchema), registerUserHandler);
 authRouter.get( '/users', auth, getUsersHandler);
 authRouter.get( '/user/:id', auth, requireUser, getUserHandler);
 authRouter.get( '/users/:pageNumber', usersPaginationHandler);

@@ -18,7 +18,7 @@ import farmerRouter from "./routes/farmer.routes";
 import prosperityHubRouter from "./routes/prosperity.hub.routes";
 import warehouseRouter from "./routes/warehouse.routes";
 import farmRouter from "./routes/farm.routes";
-import walletRouter from "./routes/wallet.route";
+import utilsRouter from "./routes/utils.route";
 import rolesAndPermissions from "./routes/role.permission.route";
 
 validateEnv()
@@ -55,7 +55,7 @@ const prisma = new PrismaClient();
   app.use('/api/v1/prosperity-hub', prosperityHubRouter);
   app.use('/api/v1/warehouse', warehouseRouter);
   app.use('/api/v1/farm', farmRouter);
-  app.use('/api/v1/wallet', walletRouter);
+  app.use('/api/v1/utils', utilsRouter);
   app.use('/api/v1/assign', rolesAndPermissions);
 
   app.all('*', (req: Request, res: Response, next: NextFunction) => {

@@ -11,7 +11,7 @@ import {
 import { 
   getStates,
   getLGAs
- } from '../services/common.service';
+ } from '../services/utils.service';
 
 import AppError from '../utils/app.error';
 import {
@@ -40,13 +40,13 @@ export const createWarehouseHandler = async (
       userId: userId
     }
 
-    if ( getStates().includes(data.state) === false ) {
-      return next(new AppError(400, 'Invalid state, please enter a valid state'));
-    }
+    // if ( getStates().includes(data.state) === false ) {
+    //   return next(new AppError(400, 'Invalid state, please enter a valid state'));
+    // }
 
-    if ( getLGAs(data.state).includes(data.local_govt) === false ) {
-      return next(new AppError(400, 'Invalid LGA, please enter a valid local government'));
-    }
+    // if ( getLGAs(data.state).includes(data.local_govt) === false ) {
+    //   return next(new AppError(400, 'Invalid LGA, please enter a valid local government'));
+    // }
 
     const warehouse = await createWarehouse(data);
     return res.status(201).json({

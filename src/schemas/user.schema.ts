@@ -1,6 +1,11 @@
-import { object, string, TypeOf, z } from 'zod';
+import { number, object, string, TypeOf, z } from 'zod';
 
-export const registerUserSchema = object({
+enum GenderEnumType {
+  Male = 'Male',
+  Female = 'Female',
+}
+
+export const createUserSchema = object({
   body: object({
     first_name: string({
       required_error: 'first_name is required',
@@ -13,18 +18,21 @@ export const registerUserSchema = object({
     email: string({
       required_error: 'Email address is required',
     }).email('Invalid email address'),
-    gender: string().optional(),
-    avatar: string().optional(),
+    code: string().optional(),
+    ip: string().optional(),
+    gender: (z.nativeEnum(GenderEnumType)),
+    profile_picture: string().optional(),
     nationality: string().optional(),
-    state: string(),
-    local_govt: string(),
-    ward: string().optional(),
+    staff_id: number().optional(),
+    state_id: number().optional(),
+    local_govt_id: number().optional(),
+    ward_id: number().optional(),
     address: string().optional(),
     marital_status: string().optional(),
     password: string({
       required_error: 'Password is required',
     })
-      .min(6, 'Password must be more than 8 characters')
+      .min(6, 'Password must be more than 5 characters')
       .max(32, 'Password must be less than 32 characters'),
     confirm_password: string({
       required_error: 'Please confirm your password',
@@ -64,7 +72,7 @@ export const updateUserSchema = object({
   body: object({
     first_name: string({}),
     last_name: string({}),
-    gender: string({}),
+    gender: string({}).optional(),
     state: string({}),
     local_govt: string({}),
     marital_status: string({}),
@@ -112,7 +120,7 @@ export const getSingleUserSchema = object({
 })
 
 export type RegisterUserInput = Omit<
-  TypeOf<typeof registerUserSchema>['body'],
+  TypeOf<typeof createUserSchema>['body'],
   'confirm_password'
 >;
 

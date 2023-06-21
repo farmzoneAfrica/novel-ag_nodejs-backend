@@ -28,8 +28,9 @@ import {
 
 import { 
   getStates,
+  getState,
   getLGAs
-} from '../services/common.service';
+} from '../services/utils.service';
  
 import { Prisma } from '@prisma/client';
 import config from 'config';
@@ -70,31 +71,37 @@ export const registerUserHandler = async (
   try {
     const hashedPassword = await bcrypt.hash(req.body.password, 12);
     const verifyCode = crypto.randomBytes(32).toString('hex');
-    const verificationCode = crypto
+
+    const email_verification_code = crypto
       .createHash('sha256')
       .update(verifyCode)
       .digest('hex');
     
-    if ( getStates().includes(req.body.state) === false ) {
-      return next(new AppError(400, 'Invalid state, please enter a valid state'));
-    }
-    if ( getLGAs(req.body.state).includes(req.body.local_govt) === false ) {
-      return next(new AppError(400, 'Invalid LGA, please enter a valid local government'));
-    }
+    // if ( getStates().includes(req.body.state) === false ) {
+    //   return next(new AppError(400, 'Invalid state, please enter a valid state'));
+    // }
+    // if ( getLGAs(req.body.state).includes(req.body.local_govt) === false ) {
+    //   return next(new AppError(400, 'Invalid LGA, please enter a valid local government'));
+    // }
+    // const state_id = getStates();
+    console.log(getStates())
     
     const user = await createUser({
       first_name: req.body.first_name,
       last_name: req.body.last_name,
       address: req.body.address,                                                                                                                               
       phone: req.body.phone,
-      avatar: req.body.avatar,
+      code: req.body.code,
+      ip: req.body.ip,
+      profile_picture: req.body.profile_picture,
       gender: req.body.gender,
-      state: req.body.state,
-      local_govt: req.body.local_govt,
+      state_id: req.body.state_id,
+      local_govt_id: req.body.local_govt_id,
+      ward_id: req.body.ward_id,
       marital_status: req.body.marital_status,
       email: req.body.email.toLowerCase(),
       password: hashedPassword,
-      verificationCode
+      email_verification_code
     });
 
     console.log(user)
@@ -110,7 +117,7 @@ export const registerUserHandler = async (
       // user.role === "farmer" ? 
       // await sendOtp (user.phone, genOtp) :
       await new Email(user, emailVerificationRedirectUrl).sendVerificationCode();
-      await updateUser({ id: user.id }, { verificationCode });
+      await updateUser({ id: user.id }, { email_verification_code });
       res.status(201).json({
         status: 'success',
         message:
@@ -118,7 +125,7 @@ export const registerUserHandler = async (
         user
       });
     } catch (error) {
-      await updateUser({ id: user.id }, { verificationCode: null });
+      await updateUser({ id: user.id }, { email_verification_code: null });
       return res.status(500).json({
         status: 'error',
         message: 'There was an error sending email, please try again',
@@ -261,14 +268,14 @@ export const verifyEmailHandler = async (
   next: NextFunction
 ) => {
   try {
-    const verificationCode = crypto
+    const email_verification_code = crypto
       .createHash('sha256')
       .update(req.params.verificationCode)
       .digest('hex');
 
     const user = await updateUser(
-      { verificationCode },
-      { verified: true, verificationCode: null },
+      { email_verification_code },
+      { verified: true, email_verification_code: null },
       { email: true }
     );
 
@@ -298,11 +305,11 @@ export const verifyOtpHandler = async (
 ) => {
   try {
   
-    const phoneVerificationCode = Math.floor(Math.random()*1000000).toString();
+    const phone_verification_code = Math.floor(Math.random()*1000000).toString();
 
     const user = await updateUser(
-      { phoneVerificationCode },
-      { verified: true, phoneVerificationCode: null },
+      { phone_verification_code },
+      { verified: true, phone_verification_code: null },
       { email: true }
     );
 
@@ -363,7 +370,7 @@ export const forgotPasswordHandler = async (
       });
     }
     const resetToken = crypto.randomBytes(32).toString('hex');
-    const passwordResetToken = crypto
+    const password_reset_token = crypto
       .createHash('sha256')
       .update(resetToken)
       .digest('hex');
@@ -371,8 +378,8 @@ export const forgotPasswordHandler = async (
     await updateUser(
       { id: user.id },
       {
-        passwordResetToken,
-        passwordResetAt: new Date(Date.now() + 10 * 60 * 1000),
+        password_reset_token,
+        password_reset_at: new Date(Date.now() + 10 * 60 * 1000),
       },
       { email: true }
     );
@@ -389,7 +396,7 @@ export const forgotPasswordHandler = async (
     } catch (err: any) {
       await updateUser(
         { id: user.id },
-        { passwordResetToken: null, passwordResetAt: null },
+        { password_reset_token: null, password_reset_at: null },
         {}
       );
       return res.status(500).json({
@@ -413,14 +420,14 @@ export const resetPasswordHandler = async (
 ) => {
   try {
     // Get the user from the collection
-    const passwordResetToken = crypto
+    const password_reset_token = crypto
       .createHash('sha256')
       .update(req.params.resetToken)
       .digest('hex');
 
     const user = await findUser({
-      passwordResetToken,
-      passwordResetAt: Date.now().toString(),
+      password_reset_token,
+      password_reset_at: Date.now().toString(),
       
     });
 
@@ -439,8 +446,8 @@ export const resetPasswordHandler = async (
       },
       {
         password: hashedPassword,
-        passwordResetToken: null,
-        passwordResetAt: null,
+        password_reset_token: null,
+        password_reset_at: null,
       },
       { email: true }
     );

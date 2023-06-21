@@ -54,9 +54,6 @@ export const auth = async (
   }
 };
 
-
-
-
  export const adminAuth = async (
   req: Request|any,
   res: Response,
@@ -94,7 +91,7 @@ export const auth = async (
     }
 
     const user = await findUniqueUser({ id: JSON.parse(session).id });
-    console.log(user.roleId)
+    console.log(user.role_id)
     
     if (user.isSuperAdmin !== true)
         return next(new AppError(403, "Fobbitten route, you are not a super admin"))

@@ -5,7 +5,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteWarehouseHandler = exports.updateWarehouseHandler = exports.getWarehouseHandler = exports.getWarehousesHandler = exports.createWarehouseHandler = void 0;
 const warehouse_service_1 = require("../services/warehouse.service");
-const common_service_1 = require("../services/common.service");
 const app_error_1 = __importDefault(require("../utils/app.error"));
 const client_1 = require("@prisma/client");
 const createWarehouseHandler = async (req, res, next) => {
@@ -21,12 +20,12 @@ const createWarehouseHandler = async (req, res, next) => {
             status: req.body.status,
             userId: userId
         };
-        if ((0, common_service_1.getStates)().includes(data.state) === false) {
-            return next(new app_error_1.default(400, 'Invalid state, please enter a valid state'));
-        }
-        if ((0, common_service_1.getLGAs)(data.state).includes(data.local_govt) === false) {
-            return next(new app_error_1.default(400, 'Invalid LGA, please enter a valid local government'));
-        }
+        // if ( getStates().includes(data.state) === false ) {
+        //   return next(new AppError(400, 'Invalid state, please enter a valid state'));
+        // }
+        // if ( getLGAs(data.state).includes(data.local_govt) === false ) {
+        //   return next(new AppError(400, 'Invalid LGA, please enter a valid local government'));
+        // }
         const warehouse = await (0, warehouse_service_1.createWarehouse)(data);
         return res.status(201).json({
             status: "Sucess",

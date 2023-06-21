@@ -1,4 +1,31 @@
 # Novel-AG NODE BACKEND
+
+### On demand endpoint
+List Of Agent endpoints:
+DASHBOARD/FARMER(TAB)
+ 1. POST:: Create Farmer. - done
+ 2. POST:: Login - done
+ 3. GET:: Get State, LGA & Ward.
+ 4. GET:: Get All Farmers.
+ 5. GET:: Get the Number of farmers.
+ 6. GET:: Get the Number of farms.
+ 7. PUT:: Edit Farmer.
+ 8. GET:: Single Farmer.
+ 9. DELETE:: Drop Farmer.
+ 10. PATCH:: Create a Farm.
+ 11. PUT/PATCH:: Edit farm.
+ 12. PUT/PATCH:: Deactivate Farm/Farmer.(I guess) 
+ 13. POST:: Logout.
+ 
+ DASHBOARD/USER-MANAGEMENT(TAB)
+ 1. GET:: All users,(i don’t know if this is a super admin functionality)
+ 2. GET:: Authenticated User.
+ 3. GET:: All super Admins/All smart Agents/All Supervisors.
+4. GET:: View another user.
+5. PUT/PATCH:: Edit A user.
+6. DELETE:: Delete a user.
+
+
 ## SCRIPTS
 - Run `yarn dev` to start development server on `localhost:5000`
 - Run `yarn compile` to install npm packages 
