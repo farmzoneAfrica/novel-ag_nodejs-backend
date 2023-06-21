@@ -5,8 +5,8 @@ List Of Agent endpoints:
 DASHBOARD/FARMER(TAB)
  1. POST:: Create Farmer. - done
  2. POST:: Login - done
- 3. GET:: Get State, LGA & Ward.
- 4. GET:: Get All Farmers.
+ 3. GET:: Get State, LGA & Ward. - state
+ 4. GET:: Get All Farmers. - 
  5. GET:: Get the Number of farmers.
  6. GET:: Get the Number of farms.
  7. PUT:: Edit Farmer.

@@ -62,7 +62,7 @@ export const getFarmsHandler = async (
 ) => {
   try {
     const farm = await getFarms()
-      return res.status(200).status(200).json({
+      return res.status(200).json({
       status: 'Success',
       data: {
         farm,

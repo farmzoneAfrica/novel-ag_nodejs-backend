@@ -1,4 +1,4 @@
-import { PrismaClient, Prisma, State, LocalGovt, Ward } from '@prisma/client';
+import { PrismaClient, Prisma, State, LocalGovt, Ward, Role } from '@prisma/client';
 
 import statesData from '../utils/statesAndLga.json'
 import prisma from '../utils/prismaClient';
@@ -10,31 +10,64 @@ export const getStates = async () => {
 }
 
 export const getState = async (
-  where: Prisma.LocalGovtWhereInput
+  where: Partial<Prisma.StateWhereInput>,
+  select?: Prisma.StateSelect
 ) => {
-  return await prisma.state.findMany();
-}
+  return (await prisma.state.findFirst({
+    where,
+    select,
+  })) as State;
+};
 
 export const getLGAs = async () => {
   return await (prisma.localGovt.findMany());
 }
 
 export const getLGA = async (
-  where: Prisma.LocalGovtWhereInput
-  ) => {
-  return (await prisma.localGovt.findMany({
-    where
-  }));
-}
+  where: Partial<Prisma.LocalGovtWhereInput>,
+  select?: Prisma.LocalGovtSelect
+) => {
+  return (await prisma.localGovt.findFirst({
+    where,
+    select,
+  })) as LocalGovt;
+};
 
-// const localGovernments = await prisma.local_governments.findMany({
-//   where: {
-//     state_id: "7"
-//   }
-// });
+export async function getLocalGovtByStateId (
+  state_id: number): Promise<LocalGovt[]> {
+    return ( await prisma.localGovt.findMany({
+          where: {
+            state_id: state_id,
+          },
+        }))
+      }
 
 export const getWards = async () => {
   return await prisma.ward.findMany();
 }
+
+export const getWard = async (
+  where: Partial<Prisma.WardWhereInput>,
+  select?: Prisma.WardSelect
+) => {
+  return (await prisma.ward.findFirst({
+    where,
+    select,
+  })) as Ward;
+};
+
+export const getRoles = async () => {
+  return await prisma.role.findMany();
+}
+
+export const getRole = async (
+  where: Partial<Prisma.RoleWhereInput>,
+  select?: Prisma.RoleSelect
+) => {
+  return (await prisma.role.findFirst({
+    where,
+    select,
+  })) as Role;
+};
 
 
