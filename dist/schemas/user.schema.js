@@ -7,8 +7,19 @@ var GenderEnumType;
     GenderEnumType["Male"] = "Male";
     GenderEnumType["Female"] = "Female";
 })(GenderEnumType || (GenderEnumType = {}));
+var RoleEnumType;
+(function (RoleEnumType) {
+    RoleEnumType["Super_Admin"] = "Super_Admin";
+    RoleEnumType["Admin"] = "Admin";
+    RoleEnumType["Supervisor"] = "supervisor";
+    RoleEnumType["Farmer"] = "Farmer";
+    RoleEnumType["User"] = "User";
+    RoleEnumType["Aggregator"] = "Aggregator";
+    RoleEnumType["Logistics"] = "Logistics";
+})(RoleEnumType || (RoleEnumType = {}));
 exports.createUserSchema = (0, zod_1.object)({
     body: (0, zod_1.object)({
+        role: (zod_1.z.nativeEnum(RoleEnumType)),
         first_name: (0, zod_1.string)({
             required_error: 'first_name is required',
         }),
@@ -22,10 +33,14 @@ exports.createUserSchema = (0, zod_1.object)({
         }).email('Invalid email address'),
         code: (0, zod_1.string)().optional(),
         ip: (0, zod_1.string)().optional(),
-        gender: (zod_1.z.nativeEnum(GenderEnumType)),
+        gender: (0, zod_1.string)(),
         profile_picture: (0, zod_1.string)().optional(),
         nationality: (0, zod_1.string)().optional(),
         staff_id: (0, zod_1.number)().optional(),
+        role_id: (0, zod_1.number)(),
+        state: (0, zod_1.string)({
+            required_error: 'State is required',
+        }),
         state_id: (0, zod_1.number)().optional(),
         local_govt_id: (0, zod_1.number)().optional(),
         ward_id: (0, zod_1.number)().optional(),

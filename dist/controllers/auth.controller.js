@@ -7,7 +7,6 @@ exports.deleteUserHandler = exports.updateUserHandler = exports.getFarmerHandler
 const crypto_1 = __importDefault(require("crypto"));
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const user_service_1 = require("../services/user.service");
-const utils_service_1 = require("../services/utils.service");
 const client_1 = require("@prisma/client");
 const config_1 = __importDefault(require("config"));
 const app_error_1 = __importDefault(require("../utils/app.error"));
@@ -38,15 +37,9 @@ const registerUserHandler = async (req, res, next) => {
             .createHash('sha256')
             .update(verifyCode)
             .digest('hex');
-        // if ( getStates().includes(req.body.state) === false ) {
-        //   return next(new AppError(400, 'Invalid state, please enter a valid state'));
-        // }
-        // if ( getLGAs(req.body.state).includes(req.body.local_govt) === false ) {
-        //   return next(new AppError(400, 'Invalid LGA, please enter a valid local government'));
-        // }
-        // const state_id = getStates();
-        console.log((0, utils_service_1.getStates)());
-        const user = await (0, user_service_1.createUser)({
+        const userData = {
+            role_id: req.body.role_id,
+            role: req.body.role,
             first_name: req.body.first_name,
             last_name: req.body.last_name,
             address: req.body.address,
@@ -62,16 +55,11 @@ const registerUserHandler = async (req, res, next) => {
             email: req.body.email.toLowerCase(),
             password: hashedPassword,
             email_verification_code
-        });
-        console.log(user);
+        };
+        const user = await (0, user_service_1.createUser)(userData);
         const baseUrl = process.env.BASE_URL;
         const emailVerificationRedirectUrl = `${baseUrl}/api/v1/auth/verifyemail/${verifyCode}`;
-        // const phoneVerificationRedirectUrl = `${baseUrl}/api/auth/verifyphone/:otp`;
-        // const redirectUrl = `${baseUrl}/api/auth/verifyemail/${verifyCode}`;
         try {
-            // const genOtp = Math.floor(Math.random()*1000000).toString();
-            // user.role === "farmer" ? 
-            // await sendOtp (user.phone, genOtp) :
             await new email_1.default(user, emailVerificationRedirectUrl).sendVerificationCode();
             await (0, user_service_1.updateUser)({ id: user.id }, { email_verification_code });
             res.status(201).json({

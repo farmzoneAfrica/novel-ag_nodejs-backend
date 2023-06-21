@@ -94,8 +94,6 @@ export const getLocalGovtinStateHandler = async (
 ) => {
   try {
     const id  = +req.params.id; 
-    console.log(id);
-    
     const lgas = await getLocalGovtByStateId(id)
      if (!lgas) {
       return next(new AppError(401, 'Local Government does not exist'));
@@ -132,14 +130,14 @@ export const getRoleHandler = async (
   next: NextFunction
 ) => {
   try {
-    const id  = +req.params.id   
-    const lga = await getRole({ id: id})
-     if (!lga) {
-      return next(new AppError(401, 'Local Government does not exist'));
+    const id  = +req.params.id; 
+    const role = await getRole({ id: id})
+     if (!role) {
+      return next(new AppError(401, 'Role does not exist'));
     }
       return res.status(200).json({
       status: 'Success',
-      lga
+      role
     });
   } catch (err: any) {
     next(err);

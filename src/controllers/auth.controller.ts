@@ -76,17 +76,10 @@ export const registerUserHandler = async (
       .createHash('sha256')
       .update(verifyCode)
       .digest('hex');
-    
-    // if ( getStates().includes(req.body.state) === false ) {
-    //   return next(new AppError(400, 'Invalid state, please enter a valid state'));
-    // }
-    // if ( getLGAs(req.body.state).includes(req.body.local_govt) === false ) {
-    //   return next(new AppError(400, 'Invalid LGA, please enter a valid local government'));
-    // }
-    // const state_id = getStates();
-    console.log(getStates())
-    
-    const user = await createUser({
+
+    const userData = {
+      role_id: req.body.role_id,
+      role: req.body.role,
       first_name: req.body.first_name,
       last_name: req.body.last_name,
       address: req.body.address,                                                                                                                               
@@ -102,20 +95,14 @@ export const registerUserHandler = async (
       email: req.body.email.toLowerCase(),
       password: hashedPassword,
       email_verification_code
-    });
-
-    console.log(user)
+    }
+   
+    const user = await createUser(userData);
     
     const baseUrl = process.env.BASE_URL;
     const emailVerificationRedirectUrl = `${baseUrl}/api/v1/auth/verifyemail/${verifyCode}`;
 
-    // const phoneVerificationRedirectUrl = `${baseUrl}/api/auth/verifyphone/:otp`;
-    // const redirectUrl = `${baseUrl}/api/auth/verifyemail/${verifyCode}`;
-
     try { 
-      // const genOtp = Math.floor(Math.random()*1000000).toString();
-      // user.role === "farmer" ? 
-      // await sendOtp (user.phone, genOtp) :
       await new Email(user, emailVerificationRedirectUrl).sendVerificationCode();
       await updateUser({ id: user.id }, { email_verification_code });
       res.status(201).json({

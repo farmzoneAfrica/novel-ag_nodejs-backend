@@ -5,8 +5,19 @@ enum GenderEnumType {
   Female = 'Female',
 }
 
+enum RoleEnumType {
+  Super_Admin = "Super_Admin",
+  Admin = "Admin",
+  Supervisor ="supervisor",
+  Farmer = "Farmer",
+  User = "User",
+  Aggregator = "Aggregator",
+  Logistics = "Logistics"
+}
+
 export const createUserSchema = object({
   body: object({
+    role: (z.nativeEnum(RoleEnumType)),
     first_name: string({
       required_error: 'first_name is required',
     }),
@@ -20,10 +31,14 @@ export const createUserSchema = object({
     }).email('Invalid email address'),
     code: string().optional(),
     ip: string().optional(),
-    gender: (z.nativeEnum(GenderEnumType)),
+    gender: string(),
     profile_picture: string().optional(),
     nationality: string().optional(),
     staff_id: number().optional(),
+    role_id: number(),
+    state: string({
+      required_error: 'State is required',
+    }),
     state_id: number().optional(),
     local_govt_id: number().optional(),
     ward_id: number().optional(),

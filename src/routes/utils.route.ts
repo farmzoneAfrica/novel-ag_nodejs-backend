@@ -19,6 +19,6 @@ utilsRouter.get( '/lgas', getLGAsHandler );
 utilsRouter.get( '/lgas-state/:id', getLocalGovtinStateHandler );
 utilsRouter.get( '/lgas/:id', getLocalGovtHandler );
 utilsRouter.get( '/roles', getRolesHandler);                                                             
-utilsRouter.get( '/roles', getRoleHandler);                                                             
+utilsRouter.get( '/roles/:id', getRoleHandler);                                                             
 
 export default utilsRouter;
