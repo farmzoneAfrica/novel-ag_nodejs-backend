@@ -676,7 +676,7 @@
         }
       }
     },
-    "/api/v1/utils/lags/{id}": {
+    "/api/v1/utils/states/{id}": {
       "get": {
         "description": "",
         "parameters": [
@@ -694,7 +694,54 @@
         }
       }
     },
-    "/api/v1/utils/wards": {
+    "/api/v1/utils/lgas": {
+      "get": {
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/utils/lgas-state/{id}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/utils/lgas/{id}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/utils/roles": {
       "get": {
         "description": "",
         "parameters": [],

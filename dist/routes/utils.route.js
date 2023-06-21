@@ -8,7 +8,11 @@ const express_1 = __importDefault(require("express"));
 const utils_controller_1 = require("../controllers/utils.controller");
 const utilsRouter = express_1.default.Router();
 utilsRouter.get('/states', utils_controller_1.getStatesHandler);
-// utilsRouter.get( '/lags/:id', getLgaHandler );
-// utilsRouter.get( '/wards', getWardsHandler);
+utilsRouter.get('/states/:id', utils_controller_1.getStateHandler);
+utilsRouter.get('/lgas', utils_controller_1.getLGAsHandler);
+utilsRouter.get('/lgas-state/:id', utils_controller_1.getLocalGovtinStateHandler);
+utilsRouter.get('/lgas/:id', utils_controller_1.getLocalGovtHandler);
+utilsRouter.get('/roles', utils_controller_1.getRolesHandler);
+utilsRouter.get('/roles', utils_controller_1.getRoleHandler);
 exports.default = utilsRouter;
 //# sourceMappingURL=utils.route.js.map
