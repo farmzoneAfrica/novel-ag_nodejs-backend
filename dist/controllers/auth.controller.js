@@ -7,7 +7,7 @@ exports.deleteUserHandler = exports.updateUserHandler = exports.getFarmerHandler
 const crypto_1 = __importDefault(require("crypto"));
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const user_service_1 = require("../services/user.service");
-const common_service_1 = require("../services/common.service");
+const utils_service_1 = require("../services/utils.service");
 const client_1 = require("@prisma/client");
 const config_1 = __importDefault(require("config"));
 const app_error_1 = __importDefault(require("../utils/app.error"));
@@ -34,30 +34,36 @@ const registerUserHandler = async (req, res, next) => {
     try {
         const hashedPassword = await bcryptjs_1.default.hash(req.body.password, 12);
         const verifyCode = crypto_1.default.randomBytes(32).toString('hex');
-        const verificationCode = crypto_1.default
+        const email_verification_code = crypto_1.default
             .createHash('sha256')
             .update(verifyCode)
             .digest('hex');
-        if ((0, common_service_1.getStates)().includes(req.body.state) === false) {
-            return next(new app_error_1.default(400, 'Invalid state, please enter a valid state'));
-        }
-        if ((0, common_service_1.getLGAs)(req.body.state).includes(req.body.local_govt) === false) {
-            return next(new app_error_1.default(400, 'Invalid LGA, please enter a valid local government'));
-        }
+        // if ( getStates().includes(req.body.state) === false ) {
+        //   return next(new AppError(400, 'Invalid state, please enter a valid state'));
+        // }
+        // if ( getLGAs(req.body.state).includes(req.body.local_govt) === false ) {
+        //   return next(new AppError(400, 'Invalid LGA, please enter a valid local government'));
+        // }
+        // const state_id = getStates();
+        console.log((0, utils_service_1.getStates)());
         const user = await (0, user_service_1.createUser)({
             first_name: req.body.first_name,
             last_name: req.body.last_name,
             address: req.body.address,
             phone: req.body.phone,
-            avatar: req.body.avatar,
+            code: req.body.code,
+            ip: req.body.ip,
+            profile_picture: req.body.profile_picture,
             gender: req.body.gender,
-            state: req.body.state,
-            local_govt: req.body.local_govt,
+            state_id: req.body.state_id,
+            local_govt_id: req.body.local_govt_id,
+            ward_id: req.body.ward_id,
             marital_status: req.body.marital_status,
             email: req.body.email.toLowerCase(),
             password: hashedPassword,
-            verificationCode
+            email_verification_code
         });
+        console.log(user);
         const baseUrl = process.env.BASE_URL;
         const emailVerificationRedirectUrl = `${baseUrl}/api/v1/auth/verifyemail/${verifyCode}`;
         // const phoneVerificationRedirectUrl = `${baseUrl}/api/auth/verifyphone/:otp`;
@@ -67,7 +73,7 @@ const registerUserHandler = async (req, res, next) => {
             // user.role === "farmer" ? 
             // await sendOtp (user.phone, genOtp) :
             await new email_1.default(user, emailVerificationRedirectUrl).sendVerificationCode();
-            await (0, user_service_1.updateUser)({ id: user.id }, { verificationCode });
+            await (0, user_service_1.updateUser)({ id: user.id }, { email_verification_code });
             res.status(201).json({
                 status: 'success',
                 message: 'An email with a verification code has been sent to your email',
@@ -75,7 +81,7 @@ const registerUserHandler = async (req, res, next) => {
             });
         }
         catch (error) {
-            await (0, user_service_1.updateUser)({ id: user.id }, { verificationCode: null });
+            await (0, user_service_1.updateUser)({ id: user.id }, { email_verification_code: null });
             return res.status(500).json({
                 status: 'error',
                 message: 'There was an error sending email, please try again',
@@ -183,11 +189,11 @@ const logoutUserHandler = async (req, res, next) => {
 exports.logoutUserHandler = logoutUserHandler;
 const verifyEmailHandler = async (req, res, next) => {
     try {
-        const verificationCode = crypto_1.default
+        const email_verification_code = crypto_1.default
             .createHash('sha256')
             .update(req.params.verificationCode)
             .digest('hex');
-        const user = await (0, user_service_1.updateUser)({ verificationCode }, { verified: true, verificationCode: null }, { email: true });
+        const user = await (0, user_service_1.updateUser)({ email_verification_code }, { verified: true, email_verification_code: null }, { email: true });
         if (!user) {
             return next(new app_error_1.default(401, 'Could not verify email'));
         }
@@ -209,8 +215,8 @@ const verifyEmailHandler = async (req, res, next) => {
 exports.verifyEmailHandler = verifyEmailHandler;
 const verifyOtpHandler = async (req, res, next) => {
     try {
-        const phoneVerificationCode = Math.floor(Math.random() * 1000000).toString();
-        const user = await (0, user_service_1.updateUser)({ phoneVerificationCode }, { verified: true, phoneVerificationCode: null }, { email: true });
+        const phone_verification_code = Math.floor(Math.random() * 1000000).toString();
+        const user = await (0, user_service_1.updateUser)({ phone_verification_code }, { verified: true, phone_verification_code: null }, { email: true });
         if (!user) {
             return next(new app_error_1.default(401, 'Could not verify phone number'));
         }
@@ -256,13 +262,13 @@ const forgotPasswordHandler = async (req, res, next) => {
             });
         }
         const resetToken = crypto_1.default.randomBytes(32).toString('hex');
-        const passwordResetToken = crypto_1.default
+        const password_reset_token = crypto_1.default
             .createHash('sha256')
             .update(resetToken)
             .digest('hex');
         await (0, user_service_1.updateUser)({ id: user.id }, {
-            passwordResetToken,
-            passwordResetAt: new Date(Date.now() + 10 * 60 * 1000),
+            password_reset_token,
+            password_reset_at: new Date(Date.now() + 10 * 60 * 1000),
         }, { email: true });
         try {
             const baseUrl = process.env.BASE_URL;
@@ -274,7 +280,7 @@ const forgotPasswordHandler = async (req, res, next) => {
             });
         }
         catch (err) {
-            await (0, user_service_1.updateUser)({ id: user.id }, { passwordResetToken: null, passwordResetAt: null }, {});
+            await (0, user_service_1.updateUser)({ id: user.id }, { password_reset_token: null, password_reset_at: null }, {});
             return res.status(500).json({
                 status: 'error',
                 message: 'There was an error sending email',
@@ -289,13 +295,13 @@ exports.forgotPasswordHandler = forgotPasswordHandler;
 const resetPasswordHandler = async (req, res, next) => {
     try {
         // Get the user from the collection
-        const passwordResetToken = crypto_1.default
+        const password_reset_token = crypto_1.default
             .createHash('sha256')
             .update(req.params.resetToken)
             .digest('hex');
         const user = await (0, user_service_1.findUser)({
-            passwordResetToken,
-            passwordResetAt: Date.now().toString(),
+            password_reset_token,
+            password_reset_at: Date.now().toString(),
         });
         if (!user) {
             return res.status(403).json({
@@ -308,8 +314,8 @@ const resetPasswordHandler = async (req, res, next) => {
             id: user.id,
         }, {
             password: hashedPassword,
-            passwordResetToken: null,
-            passwordResetAt: null,
+            password_reset_token: null,
+            password_reset_at: null,
         }, { email: true });
         logout(res);
         res.status(200).json({

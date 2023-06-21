@@ -43,7 +43,7 @@ const getFarmsHandler = async (req, res, next) => {
     try {
         const farm = await (0, farm_service_1.getFarms)();
         return res.status(200).status(200).json({
-            status: 'success',
+            status: 'Success',
             data: {
                 farm,
             },

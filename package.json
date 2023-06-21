@@ -13,7 +13,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "eslint:fix": "eslint --fix",
     "prisma": "prisma generate",
-    "migrate": "npx prisma migrate dev --name user_table_created --create-only && yarn prisma generate",
+    "migrate": "npx prisma migrate dev --name first_migration --create-only && yarn prisma generate",
     "prisma:update": "yarn add  @prisma/client@dev prisma@dev",
     "prisma:format": "npx prisma format",
     "migrate:dev": "npx prisma migrate dev",

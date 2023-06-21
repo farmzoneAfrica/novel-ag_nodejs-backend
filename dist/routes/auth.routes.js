@@ -10,7 +10,7 @@ const requireUser_1 = require("../middleware/requireUser");
 const validate_1 = require("../middleware/validate");
 const user_schema_1 = require("../schemas/user.schema");
 const authRouter = express_1.default.Router();
-authRouter.post('/register', (0, validate_1.validate)(user_schema_1.registerUserSchema), auth_controller_1.registerUserHandler);
+authRouter.post('/register', (0, validate_1.validate)(user_schema_1.createUserSchema), auth_controller_1.registerUserHandler);
 authRouter.get('/users', deserializeUser_1.auth, auth_controller_1.getUsersHandler);
 authRouter.get('/user/:id', deserializeUser_1.auth, requireUser_1.requireUser, auth_controller_1.getUserHandler);
 authRouter.get('/users/:pageNumber', auth_controller_1.usersPaginationHandler);

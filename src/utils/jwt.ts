@@ -1,6 +1,6 @@
 import dotenv from "dotenv";
 import jwt, { SignOptions } from 'jsonwebtoken';
-import fs from 'fs';
+// import fs from 'fs';
 dotenv.config();
 
 export const signJwt = (

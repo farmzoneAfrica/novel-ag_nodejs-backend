@@ -12,9 +12,9 @@ const jwt_1 = require("../utils/jwt");
 exports.excludedFields = [
     "password",
     "verified",
-    "verificationCode",
-    "passwordResetAt",
-    "passwordResetToken",
+    "verification_code",
+    "password_reset_at",
+    "password_reset_token",
 ];
 const prisma = new client_1.PrismaClient();
 const createUser = async (input) => {

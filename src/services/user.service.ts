@@ -4,18 +4,19 @@ import config from 'config';
 import redisClient from '../utils/connect.redis';
 import { signJwt } from '../utils/jwt';
 import { number } from 'zod';
+import { AnyNaptrRecord } from 'dns';
 
 export const excludedFields = [
   "password",
   "verified",
-  "verificationCode",
-  "passwordResetAt",
-  "passwordResetToken",
+  "verification_code",
+  "password_reset_at",
+  "password_reset_token",
 ];
 
 const prisma = new PrismaClient();
 
-export const createUser = async (input: Prisma.UserCreateInput ) => {  
+export const createUser = async (input: Prisma.UserCreateInput | any ) => {  
   return (await prisma.user.create({
     data: input,
   })) as User;

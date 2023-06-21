@@ -10,7 +10,7 @@ import {
 import { 
   getStates,
   getLGAs
- } from '../services/common.service';
+ } from '../services/utils.service';
 
 import AppError from '../utils/app.error';
 import {
@@ -63,7 +63,7 @@ export const getFarmsHandler = async (
   try {
     const farm = await getFarms()
       return res.status(200).status(200).json({
-      status: 'success',
+      status: 'Success',
       data: {
         farm,
       },

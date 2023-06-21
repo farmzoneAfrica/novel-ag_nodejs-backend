@@ -12,59 +12,134 @@ datasource db {
 }
 
 model User {
-  id             String   @id @default(uuid())
-  first_name     String
-  last_name      String?
-  phone          String   @unique
-  email          String   @unique
-  password       String
-  gender         String?
-  avatar         String?
-  nationality    String?
-  state          String
-  local_govt     String
-  ward           String?
-  address        String?
-  marital_status String?
-  verified       Boolean? @default(false)
-  isSuperAdmin   Boolean? @default(false)
-  role          RoleEnumType @default(user)
-  
+  id              String  @id @default(uuid())
+  user_type_id    Int?
+  role_id         Int?
+  first_name      String
+  last_name       String?
+  phone           String  @unique
+  email           String  @unique
+  password        String  @default("12345678")
+  staff_id        String?
+  code            String?
+  gender          String?
+  profile_picture String?
+  nationality     String?
+  state_id        Int?
+  local_govt_id   Int?
+  ward_id         Int?
+  ip              String?
+  address         String?
+  verified        Boolean @default(false)
+  isSuperAdmin    Boolean @default(false)
 
-  verificationCode   String?   @unique @db.VarChar(90)
-  verificationCodeAt DateTime?
+  email_verification_code String?   @unique @db.VarChar(90)
+  email_verification_at   DateTime?
 
-  phoneVerificationCode String?   @unique @db.VarChar(90)
-  phoneVerificationAt   DateTime?
+  phone_verification_code String?   @unique @db.VarChar(90)
+  phone_verification_at   DateTime?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
 
   provider String?
 
-  passwordResetToken String?
-  passwordResetAt    DateTime?
+  password_reset_token String?
+  password_reset_at    DateTime?
 
   prosperityHub ProsperityHub[]
   warhouse      Warehouse[]
   farm          Farm[]
-  wallet        Wallet[]
 
-  @@unique([email, phone, verificationCode, passwordResetToken, phoneVerificationCode])
-  @@index([email, verificationCode, passwordResetToken, phoneVerificationCode])
+  user_type  UserType?  @relation(fields: [user_type_id], onDelete: Cascade, references: [id])
+  state      State?     @relation(fields: [state_id], onDelete: Cascade, references: [id])
+  local_govt LocalGovt? @relation(fields: [local_govt_id], onDelete: Cascade, references: [id])
+  ward       Ward?      @relation(fields: [ward_id], onDelete: Cascade, references: [id])
+  role       Role?      @relation(fields: [role_id], onDelete: Cascade, references: [id])
 
+  @@unique([email, phone, email_verification_code, password_reset_token, phone_verification_code])
+  @@index([email_verification_code, password_reset_token, phone_verification_code])
+  @@index([user_type_id])
+  @@index([role_id])
+  @@index([state_id])
+  @@index([local_govt_id])
+  @@index([ward_id])
   @@map(name: "users")
 }
 
-enum RoleEnumType {
-  admin
-  supervisor
-  agent
-  farmer
-  aggregator
-  user
-  dealer
-  logistics
+model UserType {
+  id       Int     @id @default(autoincrement())
+  name     String  @unique
+  is_admin Boolean @default(false)
+  users    User[]
+
+  @@map(name: "user_types")
+}
+
+model State {
+  id         Int         @id @default(autoincrement())
+  name       String      @unique
+  users      User[]
+  local_govt LocalGovt[]
+
+  @@map(name: "states")
+}
+
+model LocalGovt {
+  id       Int    @id @default(autoincrement())
+  name     String @unique
+  state_id Int
+  users    User[]
+  ward     Ward[]
+
+  state State? @relation(fields: [state_id], onDelete: Cascade, references: [id])
+
+  @@index([state_id])
+  @@map(name: "local_governments")
+}
+
+model Ward {
+  id                  Int    @id @default(autoincrement())
+  name                String @unique
+  local_government_id Int
+  users               User[]
+
+  local_govt LocalGovt @relation(fields: [local_government_id], onDelete: Cascade, references: [id])
+
+  @@index([local_government_id])
+  @@map(name: "wards")
+}
+
+model Role {
+  id                  Int                 @id @default(autoincrement())
+  name                String              @unique @default("user")
+  permissions         Permission[]
+  users               User[]
+  role_has_permission RoleHasPermission[]
+
+  @@map(name: "roles")
+}
+
+model Permission {
+  id                  Int                 @id @default(autoincrement())
+  name                String              @unique @default("read")
+  role                Role[]
+  role_has_permission RoleHasPermission[]
+
+  @@map(name: "permissions")
+}
+
+model RoleHasPermission {
+  id            Int @id @default(autoincrement())
+  role_id       Int
+  permission_id Int
+
+  role       Role       @relation(fields: [role_id], references: [id])
+  permission Permission @relation(fields: [permission_id], references: [id])
+
+  @@index([role_id])
+  @@index([permission_id])
+  @@map(name: "role_has_permissions")
 }
 
 model ProsperityHub {
@@ -76,15 +151,14 @@ model ProsperityHub {
   local_govt       String
   ward             String?
   status           Boolean @default(false)
-  user             User    @relation(fields: [userId], references: [id])
-  userId           String
+  user             User    @relation(fields: [user_id], references: [id])
+  user_id          String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
 
-  @@index([userId])
-
-  @@map(name: "prosperityHubs")
+  @@index([user_id])
+  @@map(name: "prosperity-hubs")
 }
 
 model Warehouse {
@@ -96,54 +170,36 @@ model Warehouse {
   local_govt       String
   ward             String  @default("")
   status           Boolean @default(false)
-  user             User    @relation(fields: [userId], references: [id])
-  userId           String
+  user             User    @relation(fields: [user_id], references: [id])
+  user_id          String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
 
-  @@index([userId])
-
+  @@index([user_id])
   @@map(name: "warehouses")
 }
 
 model Farm {
-  id               String  @id @default(uuid())
-  name             String  @unique
-  size             String
-  location         String
-  closest_landmark String?
-  crop             String?
-  state            String
-  local_govt       String
-  ward             String  @default("")
-  status           Boolean @default(false)
-  user             User    @relation(fields: [userId], references: [id])
-  userId           String
+  id         String  @id @default(uuid())
+  name       String  @unique
+  latitude   String
+  longitude  String
+  landmark   String?
+  size       String
+  location   String
+  crop       String?
+  state      String
+  local_govt String
+  ward       String  @default("")
+  status     Boolean @default(false)
+  user_id    String
+
+  user User @relation(fields: [user_id], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
 
-  @@index([userId])
-
+  @@index([user_id])
   @@map(name: "farms")
-}
-
-model Wallet {
-  id             String  @id @default(uuid())
-  bvn            String  @unique
-  bank           String
-  account_number String
-  account_name   String?
-  status         Boolean @default(false)
-
-  user   User   @relation(fields: [userId], references: [id])
-  userId String
-
-  @@index([userId])
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
-
-  @@map(name: "wallets")
 }
