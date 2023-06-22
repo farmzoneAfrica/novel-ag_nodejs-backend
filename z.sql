@@ -7,7 +7,7 @@ INSERT INTO roles (id, name) VALUES
 (6, 'Aggregator' ),
 (7, 'Buyer' );
 
-DELETE FROM roless WHERE name='Staff';
+DELETE FROM roles WHERE name='Staff';
 
 select * from local_governments where state_id="7";
 

@@ -24,4 +24,4 @@ authRouter.get('/logout', deserializeUser_1.auth, requireUser_1.requireUser, aut
 authRouter.post('/forgotpassword', (0, validate_1.validate)(user_schema_1.forgotPasswordSchema), auth_controller_1.forgotPasswordHandler);
 authRouter.patch('/resetpassword/:resetToken', (0, validate_1.validate)(user_schema_1.resetPasswordSchema), auth_controller_1.resetPasswordHandler);
 exports.default = authRouter;
-//# sourceMappingURL=auth.routes.js.map
+//# sourceMappingURL=user.route.js.map

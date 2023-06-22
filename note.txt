@@ -1,19 +1,25 @@
-curl -X POST "https://verify.twilio.com/v2/Services/VA9c7fc2650bcdef97adda0c4e99d33727/Verifications" \
-  --data-urlencode "To=+2349018515257" \
-  --data-urlencode "Channel=sms" \
-  -u "AC515c59af4659fc81ba8881610617dcc5:4d42c988d23169a9a97fa8f80120ebbf"
 
-echo
-echo -n "Please enter the OTP:"
-read OTP_CODE
-
-curl -X POST "https://verify.twilio.com/v2/Services/VA9c7fc2650bcdef97adda0c4e99d33727/VerificationCheck" \
-  --data-urlencode "To=+2349018515257" \
-  --data-urlencode "Code=$OTP_CODE" \
-  -u "AC515c59af4659fc81ba8881610617dcc5:4d42c988d23169a9a97fa8f80120ebbf"
-
-email: mustapha.adi@farmzoneafrica.com
-password: -+~NJHsWdeF9
-
-email: emaduka@farmzoneafrica.com
-password: Iwe%)bKxiz3P
+### On demand endpoint
+List Of Agent endpoints:
+DASHBOARD/FARMER(TAB)
+ 1. POST:: Create Farmer. - done
+ 2. POST:: Login - done
+ 3. GET:: Get State, LGA & Ward. - state
+ 4. GET:: Get All Farmers. - 
+ 5. GET:: Get the Number of farmers.
+ 6. GET:: Get the Number of farms.
+ 7. PUT:: Edit Farmer.
+ 8. GET:: Single Farmer.
+ 9. DELETE:: Drop Farmer.
+ 10. PATCH:: Create a Farm.
+ 11. PUT/PATCH:: Edit farm.
+ 12. PUT/PATCH:: Deactivate Farm/Farmer.(I guess) 
+ 13. POST:: Logout.
+ 
+ DASHBOARD/USER-MANAGEMENT(TAB)
+ 1. GET:: All users,(i don’t know if this is a super admin functionality)
+ 2. GET:: Authenticated User.
+ 3. GET:: All super Admins/All smart Agents/All Supervisors.
+4. GET:: View another user.
+5. PUT/PATCH:: Edit A user.
+6. DELETE:: Delete a user

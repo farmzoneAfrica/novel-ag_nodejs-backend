@@ -52,15 +52,16 @@ const registerUserHandler = async (req, res, next) => {
             local_govt_id: req.body.local_govt_id,
             ward_id: req.body.ward_id,
             marital_status: req.body.marital_status,
-            email: req.body.email.toLowerCase(),
+            email: req.body.email,
             password: hashedPassword,
             email_verification_code
         };
         const user = await (0, user_service_1.createUser)(userData);
         const baseUrl = process.env.BASE_URL;
         const emailVerificationRedirectUrl = `${baseUrl}/api/v1/auth/verifyemail/${verifyCode}`;
+        await new email_1.default(user, emailVerificationRedirectUrl).sendVerificationCode();
+        // if (user.role != "Farmer") {}
         try {
-            await new email_1.default(user, emailVerificationRedirectUrl).sendVerificationCode();
             await (0, user_service_1.updateUser)({ id: user.id }, { email_verification_code });
             res.status(201).json({
                 status: 'success',
@@ -81,7 +82,7 @@ const registerUserHandler = async (req, res, next) => {
             if (err.code === 'P2002') {
                 return res.status(409).json({
                     status: 'fail',
-                    message: 'Email or Phone number already exist, please check and try again',
+                    msg: 'Email or Phone number already exist, please check and try again',
                 });
             }
         }

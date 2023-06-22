@@ -65,7 +65,7 @@ const refreshTokenCookieOptions: CookieOptions = {
 };
 
 export const registerUserHandler = async (
-  req: Request<{}, {}, RegisterUserInput>,
+  req: Request<{}, {}, RegisterUserInput> | any,
   res: Response,
   next: NextFunction
 ) => {
@@ -93,7 +93,7 @@ export const registerUserHandler = async (
       local_govt_id: req.body.local_govt_id,
       ward_id: req.body.ward_id,
       marital_status: req.body.marital_status,
-      email: req.body.email.toLowerCase(),
+      email: req.body.email,
       password: hashedPassword,
       email_verification_code
     }
@@ -102,30 +102,33 @@ export const registerUserHandler = async (
     
     const baseUrl = process.env.BASE_URL;
     const emailVerificationRedirectUrl = `${baseUrl}/api/v1/auth/verifyemail/${verifyCode}`;
+    
+    await new Email(user, emailVerificationRedirectUrl).sendVerificationCode();
+    // if (user.role != "Farmer") {}
+      try { 
+        await updateUser({ id: user.id }, { email_verification_code });
+        res.status(201).json({
+          status: 'success',
+          message:
+            'An email with a verification code has been sent to your email',
+          user
+        });
+      } catch (error) {
+        await updateUser({ id: user.id }, { email_verification_code: null });
+        return res.status(500).json({
+          status: 'error',
+          message: 'There was an error sending email, please try again',
+        });
+      }
+    
 
-    try { 
-      await new Email(user, emailVerificationRedirectUrl).sendVerificationCode();
-      await updateUser({ id: user.id }, { email_verification_code });
-      res.status(201).json({
-        status: 'success',
-        message:
-          'An email with a verification code has been sent to your email',
-        user
-      });
-    } catch (error) {
-      await updateUser({ id: user.id }, { email_verification_code: null });
-      return res.status(500).json({
-        status: 'error',
-        message: 'There was an error sending email, please try again',
-      });
-    }
 
   } catch (err: any) {   
     if (err instanceof Prisma.PrismaClientKnownRequestError) {
       if (err.code === 'P2002') {
         return res.status(409).json({
           status: 'fail',
-          message: 'Email or Phone number already exist, please check and try again',
+          msg: 'Email or Phone number already exist, please check and try again',
         });
       }
     }
