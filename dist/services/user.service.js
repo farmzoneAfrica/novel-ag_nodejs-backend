@@ -51,7 +51,8 @@ const findById = async (where) => {
         where,
         include: {
             prosperityHub: true,
-            warhouse: true
+            warhouse: true,
+            farm: true
         }
     }));
 };

@@ -6,9 +6,10 @@ enum GenderEnumType {
 }
 
 enum RoleEnumType {
-  Super_Admin = "Super_Admin",
+  SuperAdmin = "SuperAdmin",
   Admin = "Admin",
-  Supervisor ="supervisor",
+  Supervisor ="Supervisor",
+  Agent ="Agent",
   Farmer = "Farmer",
   User = "User",
   Aggregator = "Aggregator",
@@ -87,7 +88,11 @@ export const updateUserSchema = object({
   body: object({
     first_name: string({}),
     last_name: string({}),
-    gender: string({}).optional(),
+    gender: string({}),
+    phone: string({}),
+    staff_id: string({}),
+    role: string({}),
+    profile_picture: string().optional(),
     state: string({}),
     local_govt: string({}),
     marital_status: string({}),

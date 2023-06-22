@@ -8,7 +8,8 @@ import {
   RegisterUserInput,
   ResetPasswordInput,
   VerifyEmailInput,
-  VerifyOtpInput
+  VerifyOtpInput,
+  UpdateUserInput
 } from '../schemas/user.schema';
 
 import { sendOtp } from '../utils/phoneOtp'
@@ -525,43 +526,32 @@ export const getFarmerHandler = async (
 };
 
 export const updateUserHandler = async (
-  req: Response | any,
+  req: Request < {}, {}, UpdateUserInput > | any,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const { id } = req.params;
-    const findUser = await findById({id: id});
-    if (!findUser) 
-      return next(new AppError(401, 'User not found in database'));
-    const body: Array<string> = (Object.keys(req.body));    
-  const data = {
-    first_name: req.body.firstName,
-    last_name: req.body.lastName,
-    address: req.body.address,
-    gender: req.body.gender,
-    marital_status: req.body.maritalStatus,
-    phone: req.body.phone,
-    avatar: req.body.avatar,
-    state: req.body.state,
-    local_govt: req.body.localGovt,
-    password: req.body.password,
-  }
-  
-  const dataKeys: Array<string> = Object.keys(data);
-    
-  if (dataKeys.includes(body.toString()) === false ) {
-    return next(new AppError(401, 'Wrong input value'));
-  }
-  const user = await updateUser({ id: id }, data);
-     if (!user) {
-      return next(new AppError(401, 'User does not exist'));
+    const data = {
+      first_name: req.body.first_name,
+      last_name: req.body.last_name,
+      role: req.body.role,
+      gender: req.body.gender,
+      phone: req.body.phone,
+      staff_id: req.body.staff_id,
+      marital_status: req.body.marital_status,
+      profile_picture: req.body.profile_picture,
+      state: req.body.state,
+      password: req.body.password,
     }
-    return res.status(200).json({
-      status: 'success',
-      data: {
-        user,
-      },
+    const { id } = req.params;
+ 
+  const user = await updateUser({ id: id }, data);
+  if (!user) 
+      return next(new AppError(401, 'User not found in database'));
+   
+    return res.status(201).json({
+      status: 'Success',
+      user 
     });
   } catch (err: any) {
     next(err);

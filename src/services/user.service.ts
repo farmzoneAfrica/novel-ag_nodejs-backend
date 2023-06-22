@@ -59,7 +59,8 @@ export const findById = async (
     where,
     include: {
       prosperityHub: true,
-      warhouse: true
+      warhouse: true,
+      farm: true
     }
   }))
 };

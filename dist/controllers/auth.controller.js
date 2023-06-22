@@ -381,36 +381,25 @@ const getFarmerHandler = async (req, res, next) => {
 exports.getFarmerHandler = getFarmerHandler;
 const updateUserHandler = async (req, res, next) => {
     try {
-        const { id } = req.params;
-        const findUser = await (0, user_service_1.findById)({ id: id });
-        if (!findUser)
-            return next(new app_error_1.default(401, 'User not found in database'));
-        const body = (Object.keys(req.body));
         const data = {
-            first_name: req.body.firstName,
-            last_name: req.body.lastName,
-            address: req.body.address,
+            first_name: req.body.first_name,
+            last_name: req.body.last_name,
+            role: req.body.role,
             gender: req.body.gender,
-            marital_status: req.body.maritalStatus,
             phone: req.body.phone,
-            avatar: req.body.avatar,
+            staff_id: req.body.staff_id,
+            marital_status: req.body.marital_status,
+            profile_picture: req.body.profile_picture,
             state: req.body.state,
-            local_govt: req.body.localGovt,
             password: req.body.password,
         };
-        const dataKeys = Object.keys(data);
-        if (dataKeys.includes(body.toString()) === false) {
-            return next(new app_error_1.default(401, 'Wrong input value'));
-        }
+        const { id } = req.params;
         const user = await (0, user_service_1.updateUser)({ id: id }, data);
-        if (!user) {
-            return next(new app_error_1.default(401, 'User does not exist'));
-        }
-        return res.status(200).json({
-            status: 'success',
-            data: {
-                user,
-            },
+        if (!user)
+            return next(new app_error_1.default(401, 'User not found in database'));
+        return res.status(201).json({
+            status: 'Success',
+            user
         });
     }
     catch (err) {

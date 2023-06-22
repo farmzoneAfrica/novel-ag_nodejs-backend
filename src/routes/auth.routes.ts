@@ -31,11 +31,12 @@ import {
 const authRouter = express.Router();
 
 authRouter.post( '/register', validate(createUserSchema), registerUserHandler);
-authRouter.get( '/users', auth, getUsersHandler);
+authRouter.get( '/users', auth, adminAuth, getUsersHandler);
 authRouter.get( '/user/:id', auth, requireUser, getUserHandler);
 authRouter.get( '/users/:pageNumber', usersPaginationHandler);
-authRouter.patch( '/user:id', validate(updateUserSchema), auth, updateUserHandler );
-authRouter.delete( '/user:id', auth, adminAuth, deleteUserHandler );
+authRouter.patch( '/user/:id', validate(updateUserSchema), auth, adminAuth, updateUserHandler );
+// authRouter.patch( '/user/:id', validate(updateUserSchema), auth, updateUserHandler );
+authRouter.delete( '/user/:id', auth, adminAuth, deleteUserHandler );
 authRouter.post( '/login', validate(loginUserSchema), loginUserHandler);
 authRouter.get( '/refresh', refreshAccessTokenHandler);
 authRouter.get( '/verifyemail/:verificationCode', validate(verifyEmailSchema), verifyEmailHandler );
@@ -43,5 +44,19 @@ authRouter.post( '/otp', validate(verifyOtpSchema), verifyOtpHandler );
 authRouter.get( '/logout', auth, requireUser, logoutUserHandler );
 authRouter.post( '/forgotpassword', validate(forgotPasswordSchema), forgotPasswordHandler );
 authRouter.patch( '/resetpassword/:resetToken', validate(resetPasswordSchema), resetPasswordHandler );
+
+// authRouter.post( '/register', validate(createUserSchema), registerUserHandler);
+// authRouter.get( '/users', auth, getUsersHandler);
+// authRouter.get( '/user/:id', auth, requireUser, getUserHandler);
+// authRouter.get( '/users/:pageNumber', usersPaginationHandler);
+// authRouter.patch( '/user:id', validate(updateUserSchema), auth, updateUserHandler );
+// authRouter.delete( '/user:id', auth, adminAuth, deleteUserHandler );
+// authRouter.post( '/login', validate(loginUserSchema), loginUserHandler);
+// authRouter.get( '/refresh', refreshAccessTokenHandler);
+// authRouter.get( '/verifyemail/:verificationCode', validate(verifyEmailSchema), verifyEmailHandler );
+// authRouter.post( '/otp', validate(verifyOtpSchema), verifyOtpHandler );
+// authRouter.get( '/logout', auth, requireUser, logoutUserHandler );
+// authRouter.post( '/forgotpassword', validate(forgotPasswordSchema), forgotPasswordHandler );
+// authRouter.patch( '/resetpassword/:resetToken', validate(resetPasswordSchema), resetPasswordHandler );
 
 export default authRouter;

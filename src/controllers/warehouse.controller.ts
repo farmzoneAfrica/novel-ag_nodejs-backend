@@ -124,7 +124,7 @@ export const updateWarehouseHandler = async (
      if (!warehouse) 
       return next(new AppError(401, 'Warehouse does not exist'));
     
-    return res.status(200).json({
+    return res.status(201).json({
       status: 'Success',
       warehouse,
     });

@@ -42,6 +42,7 @@ model User {
   ip              String?
   address         String?
   verified        Boolean @default(false)
+  status          String @default("Inactive")
   isSuperAdmin    Boolean @default(false)
 
   email_verification_code String?   @unique @db.VarChar(90)

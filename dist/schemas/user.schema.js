@@ -9,9 +9,10 @@ var GenderEnumType;
 })(GenderEnumType || (GenderEnumType = {}));
 var RoleEnumType;
 (function (RoleEnumType) {
-    RoleEnumType["Super_Admin"] = "Super_Admin";
+    RoleEnumType["SuperAdmin"] = "SuperAdmin";
     RoleEnumType["Admin"] = "Admin";
-    RoleEnumType["Supervisor"] = "supervisor";
+    RoleEnumType["Supervisor"] = "Supervisor";
+    RoleEnumType["Agent"] = "Agent";
     RoleEnumType["Farmer"] = "Farmer";
     RoleEnumType["User"] = "User";
     RoleEnumType["Aggregator"] = "Aggregator";
@@ -84,7 +85,11 @@ exports.updateUserSchema = (0, zod_1.object)({
     body: (0, zod_1.object)({
         first_name: (0, zod_1.string)({}),
         last_name: (0, zod_1.string)({}),
-        gender: (0, zod_1.string)({}).optional(),
+        gender: (0, zod_1.string)({}),
+        phone: (0, zod_1.string)({}),
+        staff_id: (0, zod_1.string)({}),
+        role: (0, zod_1.string)({}),
+        profile_picture: (0, zod_1.string)().optional(),
         state: (0, zod_1.string)({}),
         local_govt: (0, zod_1.string)({}),
         marital_status: (0, zod_1.string)({}),

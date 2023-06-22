@@ -65,9 +65,9 @@ const adminAuth = async (req, res, next) => {
             return next(new app_error_1.default(401, `Invalid token or session has expired`));
         }
         const user = await (0, user_service_1.findUniqueUser)({ id: JSON.parse(session).id });
-        console.log(user.role_id);
-        if (user.isSuperAdmin !== true)
-            return next(new app_error_1.default(403, "Fobbitten route, you are not a super admin"));
+        const permissionRoles = ["Admin", "SuperAdmin", "Agent", "Supervisor"];
+        if (permissionRoles.includes(user.role) !== true)
+            return next(new app_error_1.default(403, "Fobbitten route. Acess Denied. You are not an admin"));
         if (!user) {
             return next(new app_error_1.default(401, `Invalid token or session has expired`));
         }
