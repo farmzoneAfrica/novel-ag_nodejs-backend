@@ -11,12 +11,12 @@ const validate_1 = require("../middleware/validate");
 const user_schema_1 = require("../schemas/user.schema");
 const userRouter = express_1.default.Router();
 userRouter.get('/', deserializeUser_1.auth, deserializeUser_1.adminAuth, user_controller_1.getUsersHandler);
-userRouter.get('/no', deserializeUser_1.auth, deserializeUser_1.adminAuth, user_controller_1.getUsersHandler);
+userRouter.get('/no', user_controller_1.getNoOfTotalUsersHandler);
 userRouter.get('/me/:id', deserializeUser_1.auth, requireUser_1.requireUser, user_controller_1.getUserHandler);
 userRouter.get('/:pageNo', user_controller_1.usersPaginationHandler);
 userRouter.patch('/:id', (0, validate_1.validate)(user_schema_1.updateUserSchema), deserializeUser_1.auth, deserializeUser_1.adminAuth, user_controller_1.updateUserHandler);
 userRouter.delete('/:id', deserializeUser_1.auth, deserializeUser_1.adminAuth, user_controller_1.deleteUserHandler);
-userRouter.get('/farmers/', deserializeUser_1.auth, deserializeUser_1.adminAuth, user_controller_1.getUsersHandler);
-userRouter.get('/farmers/no', user_controller_1.getUsersHandler);
+userRouter.get('/:roles', user_controller_1.getUsersByRoleHandler);
+userRouter.get('/:role/no', user_controller_1.getUserByRoleNoHandler);
 exports.default = userRouter;
-//# sourceMappingURL=user.route.js.map
+//# sourceMappingURL=user.routes.js.map

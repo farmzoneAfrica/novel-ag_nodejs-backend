@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteUser = exports.signTokens = exports.updateUser = exports.findUniqueUser = exports.findById = exports.findUser1 = exports.findUser = exports.pagination = exports.findAll = exports.createUser = exports.excludedFields = void 0;
+exports.UserService = exports.deleteUser = exports.signTokens = exports.updateUser = exports.findUniqueUser = exports.findById = exports.findUser1 = exports.findUser = exports.pagination = exports.getUsersByRole1 = exports.findAll = exports.createUser = exports.excludedFields = void 0;
 const client_1 = require("@prisma/client");
 const lodash_1 = require("lodash");
 const config_1 = __importDefault(require("config"));
@@ -27,6 +27,17 @@ const findAll = async () => {
     return await prisma.user.findMany();
 };
 exports.findAll = findAll;
+// export const findUserByUserTypeService = async () => {
+//   return await prisma.user.findMany();
+// }
+const getUsersByRole1 = async (role) => {
+    return (await prisma.user.findMany({
+        where: {
+            role: role,
+        }
+    }));
+};
+exports.getUsersByRole1 = getUsersByRole1;
 const pagination = async (skip, take) => {
     return await prisma.user.findMany({
         skip,
@@ -85,4 +96,15 @@ const deleteUser = async (id) => {
     return await prisma.user.delete({ where: { id } });
 };
 exports.deleteUser = deleteUser;
+class UserService {
+    async getUsersByRole(role) {
+        return prisma.user.findMany({
+            where: {
+                role: role,
+            },
+        });
+    }
+}
+exports.UserService = UserService;
+// export default UserService;
 //# sourceMappingURL=user.service.js.map

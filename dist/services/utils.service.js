@@ -27,13 +27,21 @@ const getLGA = async (where, select) => {
     }));
 };
 exports.getLGA = getLGA;
-async function getLocalGovtByStateId(state_id) {
+// export async function getLocalGovtByStateId (
+//   state_id: number): Promise<LocalGovt[]> {
+//     return ( await prisma.localGovt.findMany({
+//           where: {
+//             state_id: state_id,
+//           },
+//         }))
+//       }
+const getLocalGovtByStateId = async (state_id) => {
     return (await prismaClient_1.default.localGovt.findMany({
         where: {
             state_id: state_id,
         },
     }));
-}
+};
 exports.getLocalGovtByStateId = getLocalGovtByStateId;
 const getWards = async () => {
     return await prismaClient_1.default.ward.findMany();

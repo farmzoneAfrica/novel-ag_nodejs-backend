@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getUserTyoeSchema = exports.getSingleUserSchema = exports.resetPasswordSchema = exports.forgotPasswordSchema = exports.updateUserSchema = exports.verifyOtpSchema = exports.verifyEmailSchema = exports.loginUserSchema = exports.createUserSchema = void 0;
+exports.getSingleUserSchema = exports.resetPasswordSchema = exports.forgotPasswordSchema = exports.updateUserSchema = exports.verifyOtpSchema = exports.verifyEmailSchema = exports.loginUserSchema = exports.createUserSchema = void 0;
 const zod_1 = require("zod");
 var GenderEnumType;
 (function (GenderEnumType) {
@@ -132,9 +132,4 @@ exports.getSingleUserSchema = (0, zod_1.object)({
         id: (0, zod_1.string)()
     })
 });
-exports.getUserTyoeSchema = (0, zod_1.object)({
-    params: (0, zod_1.object)({
-        user_type: (0, zod_1.string)()
-    })
-});
-//# sourceMappingURL=user.schema.js.map
+//# sourceMappingURL=auth.schema.js.map

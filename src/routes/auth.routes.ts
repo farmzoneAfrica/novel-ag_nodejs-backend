@@ -8,11 +8,6 @@ import {
   resetPasswordHandler,
   verifyEmailHandler,
   verifyOtpHandler,
-  getUsersHandler,
-  getUserHandler,
-  usersPaginationHandler,
-  updateUserHandler,
-  deleteUserHandler
 } from '../controllers/auth.controller';
 
 import { auth, adminAuth } from '../middleware/deserializeUser';
@@ -24,19 +19,12 @@ import {
   createUserSchema,
   resetPasswordSchema,
   verifyEmailSchema,
-  verifyOtpSchema,
-  updateUserSchema
+  verifyOtpSchema
 } from '../schemas/user.schema';
 
 const authRouter = express.Router();
 
 authRouter.post( '/register', validate(createUserSchema), registerUserHandler);
-
-authRouter.get( '/users', auth, adminAuth, getUsersHandler);
-authRouter.get( '/user/:id', auth, requireUser, getUserHandler);
-authRouter.get( '/users/:pageNumber', usersPaginationHandler);
-authRouter.patch( '/user/:id', validate(updateUserSchema), auth, adminAuth, updateUserHandler );
-authRouter.delete( '/user/:id', auth, adminAuth, deleteUserHandler );
 
 authRouter.post( '/login', validate(loginUserSchema), loginUserHandler);
 authRouter.get( '/refresh', refreshAccessTokenHandler);

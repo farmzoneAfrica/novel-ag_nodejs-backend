@@ -139,6 +139,12 @@ export const getSingleUserSchema = object({
   })
 })
 
+export const getUserTyoeSchema = object({
+  params: object({
+    user_type: string()
+  })
+})
+
 export type RegisterUserInput = Omit<
   TypeOf<typeof createUserSchema>['body'],
   'confirm_password'
@@ -151,4 +157,4 @@ export type UpdateUserInput = TypeOf<typeof updateUserSchema>['body'];
 export type ForgotPasswordInput = TypeOf<typeof forgotPasswordSchema>['body'];
 export type ResetPasswordInput = TypeOf<typeof resetPasswordSchema>;
 export type GetSingleUserInput = TypeOf<typeof getSingleUserSchema>['params'];
-
+export type GetUserTypeInput = TypeOf<typeof getUserTyoeSchema>['params'];

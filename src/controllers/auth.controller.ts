@@ -2,46 +2,31 @@ import crypto from 'crypto';
 import { CookieOptions, NextFunction, Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import {
-
   ForgotPasswordInput,
   LoginUserInput,
   RegisterUserInput,
   ResetPasswordInput,
   VerifyEmailInput,
   VerifyOtpInput,
-  UpdateUserInput
 } from '../schemas/user.schema';
 
 import { sendOtp } from '../utils/phoneOtp'
 
 import {
   createUser,
-  findAll,
-  pagination,
-  findById,
   findUniqueUser,
   findUser,
   findUser1,
   signTokens,
   updateUser,
-  deleteUser,
 } from '../services/user.service';
 
-import { 
-  getStates,
-  getState,
-  getLGAs
-} from '../services/utils.service';
- 
 import { Prisma } from '@prisma/client';
 import config from 'config';
 import AppError from '../utils/app.error';
 import redisClient from '../utils/connect.redis';
 import { signJwt, verifyJwt } from '../utils/jwt';
 import Email from '../utils/email';
-import { log } from 'console';
-// import { date } from 'zod';
-// import { log } from 'console';
 
 const cookiesOptions: CookieOptions = {
   httpOnly: true,
@@ -453,131 +438,3 @@ export const resetPasswordHandler = async (
   }
 };
 
-export const getUsersHandler = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const users = await findAll()
-    res.status(200).status(200).json({
-      status: 'Success',
-      users
-    });
-  } catch (err: any) {
-    next(err);
-  }
-};
-
-export const usersPaginationHandler = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const { pageNo } = req.params as any;
-    const users = await pagination(pageNo * 10, 10)
-    res.status(200).status(200).json({
-      status: 'success',
-      data: {
-        users,
-      },
-    });
-  } catch (err: any) {
-    next(err);
-  }
-};
-
-export const getUserHandler = async (
-  req: Response | any,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const { id } = req.params;
-    const user = await findById({ id: id })
-     if (!user) {
-      return next(new AppError(401, 'User does not exist'));
-    }
-    return res.status(200).json({
-      status: 'success',
-      user
-    });
-  } catch (err: any) {
-    next(err);
-  }
-};
-
-export const getFarmerHandler = async (
-  req: Response | any,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const { id } = req.params;
-    const user = await findById({ id: id })
-     if (!user) {
-      return next(new AppError(401, 'User does not exist'));
-    }
-    return res.status(200).json({
-      status: 'success',
-      user
-    });
-  } catch (err: any) {
-    next(err);
-  }
-};
-
-export const updateUserHandler = async (
-  req: Request < {}, {}, UpdateUserInput > | any,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const data = {
-      first_name: req.body.first_name,
-      last_name: req.body.last_name,
-      role: req.body.role,
-      gender: req.body.gender,
-      phone: req.body.phone,
-      staff_id: req.body.staff_id,
-      marital_status: req.body.marital_status,
-      profile_picture: req.body.profile_picture,
-      state: req.body.state,
-      password: req.body.password,
-    }
-    const { id } = req.params;
- 
-  const user = await updateUser({ id: id }, data);
-  if (!user) 
-      return next(new AppError(401, 'User not found in database'));
-   
-    return res.status(201).json({
-      status: 'Success',
-      user 
-    });
-  } catch (err: any) {
-    next(err);
-  }
-};
-
-export const deleteUserHandler = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const { id } = req.params;
-    const agent = await findById({id: id});
-    if (!agent) 
-      return next(new AppError(401, 'Agent not found in database'));
-    
-    const response = await deleteUser(id)
-    return res.status(200).json({
-      status: 'success',
-      response
-    });
-  } catch (err: any) {
-    next(err);
-  }
-};

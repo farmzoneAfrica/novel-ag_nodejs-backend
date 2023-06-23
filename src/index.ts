@@ -14,6 +14,7 @@ import swaggerUi from 'swagger-ui-express';
 import swaggerFile from './swagger-output.json';
 
 import authRouter from "./routes/auth.routes";
+import userRouter from "./routes/user.routes";
 import farmerRouter from "./routes/farmer.routes";
 import prosperityHubRouter from "./routes/prosperity.hub.routes";
 import warehouseRouter from "./routes/warehouse.routes";
@@ -51,6 +52,7 @@ const prisma = new PrismaClient();
   });
 
   app.use('/api/v1/auth', authRouter);
+  app.use('/api/v1/users', userRouter);
   app.use('/api/v1/farmer', farmerRouter);
   app.use('/api/v1/prosperity-hub', prosperityHubRouter);
   app.use('/api/v1/warehouse', warehouseRouter);

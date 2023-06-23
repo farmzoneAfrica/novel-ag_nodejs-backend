@@ -33,8 +33,15 @@ export const getLGA = async (
   })) as LocalGovt;
 };
 
-export async function getLocalGovtByStateId (
-  state_id: number): Promise<LocalGovt[]> {
+// export async function getLocalGovtByStateId (
+//   state_id: number): Promise<LocalGovt[]> {
+//     return ( await prisma.localGovt.findMany({
+//           where: {
+//             state_id: state_id,
+//           },
+//         }))
+//       }
+export const getLocalGovtByStateId = async (state_id: number) => {
     return ( await prisma.localGovt.findMany({
           where: {
             state_id: state_id,
