@@ -3,7 +3,7 @@ import { Prisma } from '@prisma/client';
 
 export default class Email {
   #first_name: string;
-  #to: string;
+  #to: string | any;
   #from: string;
   constructor(private user: Prisma.UserCreateInput, private url: string) {
     this.#first_name = user.first_name.split(' ')[0];

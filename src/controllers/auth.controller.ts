@@ -2,45 +2,31 @@ import crypto from 'crypto';
 import { CookieOptions, NextFunction, Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import {
-
   ForgotPasswordInput,
   LoginUserInput,
   RegisterUserInput,
   ResetPasswordInput,
   VerifyEmailInput,
-  VerifyOtpInput
+  VerifyOtpInput,
 } from '../schemas/user.schema';
 
 import { sendOtp } from '../utils/phoneOtp'
 
 import {
   createUser,
-  findAll,
-  pagination,
-  findById,
   findUniqueUser,
   findUser,
   findUser1,
   signTokens,
   updateUser,
-  deleteUser,
 } from '../services/user.service';
 
-import { 
-  getStates,
-  getState,
-  getLGAs
-} from '../services/utils.service';
- 
 import { Prisma } from '@prisma/client';
 import config from 'config';
 import AppError from '../utils/app.error';
 import redisClient from '../utils/connect.redis';
 import { signJwt, verifyJwt } from '../utils/jwt';
 import Email from '../utils/email';
-import { log } from 'console';
-// import { date } from 'zod';
-// import { log } from 'console';
 
 const cookiesOptions: CookieOptions = {
   httpOnly: true,
@@ -64,7 +50,7 @@ const refreshTokenCookieOptions: CookieOptions = {
 };
 
 export const registerUserHandler = async (
-  req: Request<{}, {}, RegisterUserInput>,
+  req: Request<{}, {}, RegisterUserInput> | any,
   res: Response,
   next: NextFunction
 ) => {
@@ -76,17 +62,10 @@ export const registerUserHandler = async (
       .createHash('sha256')
       .update(verifyCode)
       .digest('hex');
-    
-    // if ( getStates().includes(req.body.state) === false ) {
-    //   return next(new AppError(400, 'Invalid state, please enter a valid state'));
-    // }
-    // if ( getLGAs(req.body.state).includes(req.body.local_govt) === false ) {
-    //   return next(new AppError(400, 'Invalid LGA, please enter a valid local government'));
-    // }
-    // const state_id = getStates();
-    console.log(getStates())
-    
-    const user = await createUser({
+
+    const userData = {
+      role_id: req.body.role_id,
+      role: req.body.role,
       first_name: req.body.first_name,
       last_name: req.body.last_name,
       address: req.body.address,                                                                                                                               
@@ -99,45 +78,42 @@ export const registerUserHandler = async (
       local_govt_id: req.body.local_govt_id,
       ward_id: req.body.ward_id,
       marital_status: req.body.marital_status,
-      email: req.body.email.toLowerCase(),
+      email: req.body.email,
       password: hashedPassword,
       email_verification_code
-    });
-
-    console.log(user)
+    }
+   
+    const user = await createUser(userData);
     
     const baseUrl = process.env.BASE_URL;
     const emailVerificationRedirectUrl = `${baseUrl}/api/v1/auth/verifyemail/${verifyCode}`;
+    
+    await new Email(user, emailVerificationRedirectUrl).sendVerificationCode();
+    // if (user.role != "Farmer") {}
+      try { 
+        await updateUser({ id: user.id }, { email_verification_code });
+        res.status(201).json({
+          status: 'success',
+          message:
+            'An email with a verification code has been sent to your email',
+          user
+        });
+      } catch (error) {
+        await updateUser({ id: user.id }, { email_verification_code: null });
+        return res.status(500).json({
+          status: 'error',
+          message: 'There was an error sending email, please try again',
+        });
+      }
+    
 
-    // const phoneVerificationRedirectUrl = `${baseUrl}/api/auth/verifyphone/:otp`;
-    // const redirectUrl = `${baseUrl}/api/auth/verifyemail/${verifyCode}`;
-
-    try { 
-      // const genOtp = Math.floor(Math.random()*1000000).toString();
-      // user.role === "farmer" ? 
-      // await sendOtp (user.phone, genOtp) :
-      await new Email(user, emailVerificationRedirectUrl).sendVerificationCode();
-      await updateUser({ id: user.id }, { email_verification_code });
-      res.status(201).json({
-        status: 'success',
-        message:
-          'An email with a verification code has been sent to your email',
-        user
-      });
-    } catch (error) {
-      await updateUser({ id: user.id }, { email_verification_code: null });
-      return res.status(500).json({
-        status: 'error',
-        message: 'There was an error sending email, please try again',
-      });
-    }
 
   } catch (err: any) {   
     if (err instanceof Prisma.PrismaClientKnownRequestError) {
       if (err.code === 'P2002') {
         return res.status(409).json({
           status: 'fail',
-          message: 'Email or Phone number already exist, please check and try again',
+          msg: 'Email or Phone number already exist, please check and try again',
         });
       }
     }
@@ -462,142 +438,3 @@ export const resetPasswordHandler = async (
   }
 };
 
-export const getUsersHandler = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const users = await findAll()
-    res.status(200).status(200).json({
-      status: 'Success',
-      users
-    });
-  } catch (err: any) {
-    next(err);
-  }
-};
-
-export const usersPaginationHandler = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const { pageNo } = req.params as any;
-    const users = await pagination(pageNo * 10, 10)
-    res.status(200).status(200).json({
-      status: 'success',
-      data: {
-        users,
-      },
-    });
-  } catch (err: any) {
-    next(err);
-  }
-};
-
-export const getUserHandler = async (
-  req: Response | any,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const { id } = req.params;
-    const user = await findById({ id: id })
-     if (!user) {
-      return next(new AppError(401, 'User does not exist'));
-    }
-    return res.status(200).json({
-      status: 'success',
-      user
-    });
-  } catch (err: any) {
-    next(err);
-  }
-};
-
-export const getFarmerHandler = async (
-  req: Response | any,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const { id } = req.params;
-    const user = await findById({ id: id })
-     if (!user) {
-      return next(new AppError(401, 'User does not exist'));
-    }
-    return res.status(200).json({
-      status: 'success',
-      user
-    });
-  } catch (err: any) {
-    next(err);
-  }
-};
-
-export const updateUserHandler = async (
-  req: Response | any,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const { id } = req.params;
-    const findUser = await findById({id: id});
-    if (!findUser) 
-      return next(new AppError(401, 'User not found in database'));
-    const body: Array<string> = (Object.keys(req.body));    
-  const data = {
-    first_name: req.body.firstName,
-    last_name: req.body.lastName,
-    address: req.body.address,
-    gender: req.body.gender,
-    marital_status: req.body.maritalStatus,
-    phone: req.body.phone,
-    avatar: req.body.avatar,
-    state: req.body.state,
-    local_govt: req.body.localGovt,
-    password: req.body.password,
-  }
-  
-  const dataKeys: Array<string> = Object.keys(data);
-    
-  if (dataKeys.includes(body.toString()) === false ) {
-    return next(new AppError(401, 'Wrong input value'));
-  }
-  const user = await updateUser({ id: id }, data);
-     if (!user) {
-      return next(new AppError(401, 'User does not exist'));
-    }
-    return res.status(200).json({
-      status: 'success',
-      data: {
-        user,
-      },
-    });
-  } catch (err: any) {
-    next(err);
-  }
-};
-
-export const deleteUserHandler = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const { id } = req.params;
-    const agent = await findById({id: id});
-    if (!agent) 
-      return next(new AppError(401, 'Agent not found in database'));
-    
-    const response = await deleteUser(id)
-    return res.status(200).json({
-      status: 'success',
-      response
-    });
-  } catch (err: any) {
-    next(err);
-  }
-};

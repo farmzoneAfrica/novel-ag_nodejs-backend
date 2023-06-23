@@ -16,6 +16,7 @@ const cors_1 = __importDefault(require("cors"));
 const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
 const swagger_output_json_1 = __importDefault(require("./swagger-output.json"));
 const auth_routes_1 = __importDefault(require("./routes/auth.routes"));
+const user_routes_1 = __importDefault(require("./routes/user.routes"));
 const farmer_routes_1 = __importDefault(require("./routes/farmer.routes"));
 const prosperity_hub_routes_1 = __importDefault(require("./routes/prosperity.hub.routes"));
 const warehouse_routes_1 = __importDefault(require("./routes/warehouse.routes"));
@@ -45,6 +46,7 @@ app.get('/api/healthchecker', (_, res) => {
     });
 });
 app.use('/api/v1/auth', auth_routes_1.default);
+app.use('/api/v1/users', user_routes_1.default);
 app.use('/api/v1/farmer', farmer_routes_1.default);
 app.use('/api/v1/prosperity-hub', prosperity_hub_routes_1.default);
 app.use('/api/v1/warehouse', warehouse_routes_1.default);

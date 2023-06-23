@@ -5,8 +5,20 @@ enum GenderEnumType {
   Female = 'Female',
 }
 
+enum RoleEnumType {
+  SuperAdmin = "SuperAdmin",
+  Admin = "Admin",
+  Supervisor ="Supervisor",
+  Agent ="Agent",
+  Farmer = "Farmer",
+  User = "User",
+  Aggregator = "Aggregator",
+  Logistics = "Logistics"
+}
+
 export const createUserSchema = object({
   body: object({
+    role: (z.nativeEnum(RoleEnumType)),
     first_name: string({
       required_error: 'first_name is required',
     }),
@@ -20,10 +32,14 @@ export const createUserSchema = object({
     }).email('Invalid email address'),
     code: string().optional(),
     ip: string().optional(),
-    gender: (z.nativeEnum(GenderEnumType)),
+    gender: string(),
     profile_picture: string().optional(),
     nationality: string().optional(),
     staff_id: number().optional(),
+    role_id: number(),
+    state: string({
+      required_error: 'State is required',
+    }),
     state_id: number().optional(),
     local_govt_id: number().optional(),
     ward_id: number().optional(),
@@ -72,7 +88,11 @@ export const updateUserSchema = object({
   body: object({
     first_name: string({}),
     last_name: string({}),
-    gender: string({}).optional(),
+    gender: string({}),
+    phone: string({}),
+    staff_id: string({}),
+    role: string({}),
+    profile_picture: string().optional(),
     state: string({}),
     local_govt: string({}),
     marital_status: string({}),
@@ -119,6 +139,12 @@ export const getSingleUserSchema = object({
   })
 })
 
+export const getUserTyoeSchema = object({
+  params: object({
+    user_type: string()
+  })
+})
+
 export type RegisterUserInput = Omit<
   TypeOf<typeof createUserSchema>['body'],
   'confirm_password'
@@ -131,4 +157,4 @@ export type UpdateUserInput = TypeOf<typeof updateUserSchema>['body'];
 export type ForgotPasswordInput = TypeOf<typeof forgotPasswordSchema>['body'];
 export type ResetPasswordInput = TypeOf<typeof resetPasswordSchema>;
 export type GetSingleUserInput = TypeOf<typeof getSingleUserSchema>['params'];
-
+export type GetUserTypeInput = TypeOf<typeof getUserTyoeSchema>['params'];

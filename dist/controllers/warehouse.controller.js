@@ -92,7 +92,7 @@ const updateWarehouseHandler = async (req, res, next) => {
         const warehouse = await (0, warehouse_service_1.updateWarehouse)({ id: id }, data);
         if (!warehouse)
             return next(new app_error_1.default(401, 'Warehouse does not exist'));
-        return res.status(200).json({
+        return res.status(201).json({
             status: 'Success',
             warehouse,
         });

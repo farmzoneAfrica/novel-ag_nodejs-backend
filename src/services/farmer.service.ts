@@ -17,6 +17,15 @@ const prisma = new PrismaClient();
 
 // adjust logic to bring out farmers only
 
+// export async function getFarmersService (
+//   user_role: string): Promise<User[]> {
+//     return ( await prisma.user.findMany({
+//           where: {
+//             user_role: user_role,
+//           },
+//         }))
+//       }
+
 export const findAllFarmers = async () => {
   return await prisma.user.findMany();
 }
@@ -39,45 +48,3 @@ export const findFarmer = async (
   }))
 };
 
-export const findUser1 = async(
-  where: Prisma.UserCreateInput | any,
-) => { 
-  return (await prisma.user.findUnique({
-    where
-  }))
-}
-
-export const findFarmerById = async (
-  where: Prisma.UserWhereUniqueInput,
-) => {
-  return (await prisma.user.findUnique({
-    where,
-    include: {
-      prosperityHub: true,
-      warhouse: true
-    }
-  }))
-};
-
-export const findUniqueFarmer = async (
-  where: Prisma.UserWhereUniqueInput,
-  select?: Prisma.UserSelect
-) => {
-  return (await prisma.user.findUnique({
-    where,
-    select,
-  })) as User;
-};
-
-export const updateUser = async (
-  where: Partial<Prisma.UserWhereUniqueInput>,
-  data: Prisma.UserUpdateInput,
-  select?: Prisma.UserSelect
-) => {
-  return (await prisma.user.update({ where, data, select })) as User;
-};
-
-
-export const deleteFarm = async (id: string) => {
-  return await prisma.user.delete({where:{id}});
-}

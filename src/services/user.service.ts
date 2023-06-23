@@ -25,6 +25,17 @@ export const createUser = async (input: Prisma.UserCreateInput | any ) => {
 export const findAll = async () => {
   return await prisma.user.findMany();
 }
+// export const findUserByUserTypeService = async () => {
+//   return await prisma.user.findMany();
+// }
+
+export const getUsersByRole1 = async (role: string ) => {
+  return ( await prisma.user.findMany({
+        where: {
+          role: role,
+        }
+      })) 
+    }
 
 export const pagination = async (
   skip: number, 
@@ -49,7 +60,7 @@ export const findUser1 = async(
 ) => { 
   return (await prisma.user.findUnique({
     where
-  }))
+  })) 
 }
 
 export const findById = async (
@@ -59,7 +70,8 @@ export const findById = async (
     where,
     include: {
       prosperityHub: true,
-      warhouse: true
+      warhouse: true,
+      farm: true
     }
   }))
 };
@@ -101,3 +113,14 @@ export const deleteUser = async (id: string) => {
   return await prisma.user.delete({where:{id}});
 }
 
+export class UserService {
+  async getUsersByRole(role: string): Promise<User[]> {
+    return prisma.user.findMany({
+      where: {
+        role: role,
+      },
+    });
+  }
+}
+
+// export default UserService;

@@ -3,19 +3,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteUserHandler = exports.updateUserHandler = exports.getFarmerHandler = exports.getUserHandler = exports.usersPaginationHandler = exports.getUsersHandler = exports.resetPasswordHandler = exports.forgotPasswordHandler = exports.verifyOtpHandler = exports.verifyEmailHandler = exports.logoutUserHandler = exports.refreshAccessTokenHandler = exports.loginUserHandler = exports.registerUserHandler = void 0;
+exports.resetPasswordHandler = exports.forgotPasswordHandler = exports.verifyOtpHandler = exports.verifyEmailHandler = exports.logoutUserHandler = exports.refreshAccessTokenHandler = exports.loginUserHandler = exports.registerUserHandler = void 0;
 const crypto_1 = __importDefault(require("crypto"));
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const user_service_1 = require("../services/user.service");
-const utils_service_1 = require("../services/utils.service");
 const client_1 = require("@prisma/client");
 const config_1 = __importDefault(require("config"));
 const app_error_1 = __importDefault(require("../utils/app.error"));
 const connect_redis_1 = __importDefault(require("../utils/connect.redis"));
 const jwt_1 = require("../utils/jwt");
 const email_1 = __importDefault(require("../utils/email"));
-// import { date } from 'zod';
-// import { log } from 'console';
 const cookiesOptions = {
     httpOnly: true,
     sameSite: 'lax',
@@ -38,15 +35,9 @@ const registerUserHandler = async (req, res, next) => {
             .createHash('sha256')
             .update(verifyCode)
             .digest('hex');
-        // if ( getStates().includes(req.body.state) === false ) {
-        //   return next(new AppError(400, 'Invalid state, please enter a valid state'));
-        // }
-        // if ( getLGAs(req.body.state).includes(req.body.local_govt) === false ) {
-        //   return next(new AppError(400, 'Invalid LGA, please enter a valid local government'));
-        // }
-        // const state_id = getStates();
-        console.log((0, utils_service_1.getStates)());
-        const user = await (0, user_service_1.createUser)({
+        const userData = {
+            role_id: req.body.role_id,
+            role: req.body.role,
             first_name: req.body.first_name,
             last_name: req.body.last_name,
             address: req.body.address,
@@ -59,20 +50,16 @@ const registerUserHandler = async (req, res, next) => {
             local_govt_id: req.body.local_govt_id,
             ward_id: req.body.ward_id,
             marital_status: req.body.marital_status,
-            email: req.body.email.toLowerCase(),
+            email: req.body.email,
             password: hashedPassword,
             email_verification_code
-        });
-        console.log(user);
+        };
+        const user = await (0, user_service_1.createUser)(userData);
         const baseUrl = process.env.BASE_URL;
         const emailVerificationRedirectUrl = `${baseUrl}/api/v1/auth/verifyemail/${verifyCode}`;
-        // const phoneVerificationRedirectUrl = `${baseUrl}/api/auth/verifyphone/:otp`;
-        // const redirectUrl = `${baseUrl}/api/auth/verifyemail/${verifyCode}`;
+        await new email_1.default(user, emailVerificationRedirectUrl).sendVerificationCode();
+        // if (user.role != "Farmer") {}
         try {
-            // const genOtp = Math.floor(Math.random()*1000000).toString();
-            // user.role === "farmer" ? 
-            // await sendOtp (user.phone, genOtp) :
-            await new email_1.default(user, emailVerificationRedirectUrl).sendVerificationCode();
             await (0, user_service_1.updateUser)({ id: user.id }, { email_verification_code });
             res.status(201).json({
                 status: 'success',
@@ -93,7 +80,7 @@ const registerUserHandler = async (req, res, next) => {
             if (err.code === 'P2002') {
                 return res.status(409).json({
                     status: 'fail',
-                    message: 'Email or Phone number already exist, please check and try again',
+                    msg: 'Email or Phone number already exist, please check and try again',
                 });
             }
         }
@@ -328,123 +315,4 @@ const resetPasswordHandler = async (req, res, next) => {
     }
 };
 exports.resetPasswordHandler = resetPasswordHandler;
-const getUsersHandler = async (req, res, next) => {
-    try {
-        const users = await (0, user_service_1.findAll)();
-        res.status(200).status(200).json({
-            status: 'Success',
-            users
-        });
-    }
-    catch (err) {
-        next(err);
-    }
-};
-exports.getUsersHandler = getUsersHandler;
-const usersPaginationHandler = async (req, res, next) => {
-    try {
-        const { pageNo } = req.params;
-        const users = await (0, user_service_1.pagination)(pageNo * 10, 10);
-        res.status(200).status(200).json({
-            status: 'success',
-            data: {
-                users,
-            },
-        });
-    }
-    catch (err) {
-        next(err);
-    }
-};
-exports.usersPaginationHandler = usersPaginationHandler;
-const getUserHandler = async (req, res, next) => {
-    try {
-        const { id } = req.params;
-        const user = await (0, user_service_1.findById)({ id: id });
-        if (!user) {
-            return next(new app_error_1.default(401, 'User does not exist'));
-        }
-        return res.status(200).json({
-            status: 'success',
-            user
-        });
-    }
-    catch (err) {
-        next(err);
-    }
-};
-exports.getUserHandler = getUserHandler;
-const getFarmerHandler = async (req, res, next) => {
-    try {
-        const { id } = req.params;
-        const user = await (0, user_service_1.findById)({ id: id });
-        if (!user) {
-            return next(new app_error_1.default(401, 'User does not exist'));
-        }
-        return res.status(200).json({
-            status: 'success',
-            user
-        });
-    }
-    catch (err) {
-        next(err);
-    }
-};
-exports.getFarmerHandler = getFarmerHandler;
-const updateUserHandler = async (req, res, next) => {
-    try {
-        const { id } = req.params;
-        const findUser = await (0, user_service_1.findById)({ id: id });
-        if (!findUser)
-            return next(new app_error_1.default(401, 'User not found in database'));
-        const body = (Object.keys(req.body));
-        const data = {
-            first_name: req.body.firstName,
-            last_name: req.body.lastName,
-            address: req.body.address,
-            gender: req.body.gender,
-            marital_status: req.body.maritalStatus,
-            phone: req.body.phone,
-            avatar: req.body.avatar,
-            state: req.body.state,
-            local_govt: req.body.localGovt,
-            password: req.body.password,
-        };
-        const dataKeys = Object.keys(data);
-        if (dataKeys.includes(body.toString()) === false) {
-            return next(new app_error_1.default(401, 'Wrong input value'));
-        }
-        const user = await (0, user_service_1.updateUser)({ id: id }, data);
-        if (!user) {
-            return next(new app_error_1.default(401, 'User does not exist'));
-        }
-        return res.status(200).json({
-            status: 'success',
-            data: {
-                user,
-            },
-        });
-    }
-    catch (err) {
-        next(err);
-    }
-};
-exports.updateUserHandler = updateUserHandler;
-const deleteUserHandler = async (req, res, next) => {
-    try {
-        const { id } = req.params;
-        const agent = await (0, user_service_1.findById)({ id: id });
-        if (!agent)
-            return next(new app_error_1.default(401, 'Agent not found in database'));
-        const response = await (0, user_service_1.deleteUser)(id);
-        return res.status(200).json({
-            status: 'success',
-            response
-        });
-    }
-    catch (err) {
-        next(err);
-    }
-};
-exports.deleteUserHandler = deleteUserHandler;
 //# sourceMappingURL=auth.controller.js.map

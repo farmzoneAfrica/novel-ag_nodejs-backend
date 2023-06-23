@@ -91,10 +91,9 @@ export const auth = async (
     }
 
     const user = await findUniqueUser({ id: JSON.parse(session).id });
-    console.log(user.role_id)
-    
-    if (user.isSuperAdmin !== true)
-        return next(new AppError(403, "Fobbitten route, you are not a super admin"))
+  const permissionRoles = ["Admin", "SuperAdmin", "Agent", "Supervisor"]  
+    if (permissionRoles.includes(user.role) !== true)
+        return next(new AppError(403, "Fobbitten route. Acess Denied. You are not an admin"))
 
     if (!user) {
       return next(new AppError(401, `Invalid token or session has expired`));

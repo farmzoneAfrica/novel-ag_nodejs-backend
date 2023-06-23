@@ -69,7 +69,6 @@ exports.getLocalGovtHandler = getLocalGovtHandler;
 const getLocalGovtinStateHandler = async (req, res, next) => {
     try {
         const id = +req.params.id;
-        console.log(id);
         const lgas = await (0, utils_service_1.getLocalGovtByStateId)(id);
         if (!lgas) {
             return next(new app_error_1.default(401, 'Local Government does not exist'));
@@ -100,13 +99,13 @@ exports.getRolesHandler = getRolesHandler;
 const getRoleHandler = async (req, res, next) => {
     try {
         const id = +req.params.id;
-        const lga = await (0, utils_service_1.getRole)({ id: id });
-        if (!lga) {
-            return next(new app_error_1.default(401, 'Local Government does not exist'));
+        const role = await (0, utils_service_1.getRole)({ id: id });
+        if (!role) {
+            return next(new app_error_1.default(401, 'Role does not exist'));
         }
         return res.status(200).json({
             status: 'Success',
-            lga
+            role
         });
     }
     catch (err) {

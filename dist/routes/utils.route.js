@@ -13,6 +13,6 @@ utilsRouter.get('/lgas', utils_controller_1.getLGAsHandler);
 utilsRouter.get('/lgas-state/:id', utils_controller_1.getLocalGovtinStateHandler);
 utilsRouter.get('/lgas/:id', utils_controller_1.getLocalGovtHandler);
 utilsRouter.get('/roles', utils_controller_1.getRolesHandler);
-utilsRouter.get('/roles', utils_controller_1.getRoleHandler);
+utilsRouter.get('/roles/:id', utils_controller_1.getRoleHandler);
 exports.default = utilsRouter;
 //# sourceMappingURL=utils.route.js.map
