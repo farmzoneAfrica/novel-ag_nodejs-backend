@@ -23,7 +23,7 @@ import { validate } from '../middleware/validate';
 
 const farmRouter = express.Router();
 
-farmRouter.post( '/', validate(createFarmSchema), auth, requireUser, createFarmHandler);
+farmRouter.post( '/:farmer_id', validate(createFarmSchema), auth, requireUser, createFarmHandler);
 farmRouter.get( '/', auth, getFarmsHandler);
 farmRouter.get( '/:id', auth, getFarmHandler);
 farmRouter.patch( '/:id', validate(updateFarmSchema), auth, updateFarmHandler);

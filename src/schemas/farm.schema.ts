@@ -5,20 +5,14 @@ export const createFarmSchema = object({
     name: string({
       required_error: 'Farm name is required',
     }),
-    size: string({
-      required_error: 'Farm size is required',
-    }),
+    size: string().optional(),
     location: string({
       required_error: 'Farm location is required',
     }),
-    closest_landmark: string().optional(),
+    landmark: string().optional(),
     crop: string().optional(),
-    state: string({
-        required_error: 'State is required',
-      }),
-    local_govt: string({
-    required_error: 'Local government is required',
-    }),
+    state: string().optional(),
+    local_govt: string().optional(),
     ward: string().optional(),
   })
 });
@@ -28,7 +22,7 @@ export const updateFarmSchema = object({
     name: string().optional(),
     size: string().optional(),
     location: string().optional(),
-    closest_landmark: string().optional(),
+    landmark: string().optional(),
     crop: string().optional(),
     state: string().optional(),
     local_govt: string().optional(),

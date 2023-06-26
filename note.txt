@@ -23,3 +23,30 @@ DASHBOARD/FARMER(TAB)
 4. GET:: View another user.
 5. PUT/PATCH:: Edit A user.
 6. DELETE:: Delete a user
+
+
+state
+local_govt
+Ward
+
+
+Dear HR Officer,
+
+I am writing to express my strong interest in an intern position as a Front End Web Developer at 0footprint Tech Services. As a Nigerian-based software developer with a passion for creating innovative and visually appealing web experiences, I am eager to contribute my skills and knowledge to your esteemed organization.
+
+With a solid foundation in frontend development and testing, I possess a diverse skill set that includes HTML, CSS, JavaScript, Bootstrap, Tailwind, Material UI, React, Redux, NextJS, Angular, WordPress, Git and GitHub, as well as testing with Cypress. I have honed my abilities through various projects, both independently and within collaborative teams, which have allowed me to gain practical experience and foster a deep understanding of industry best practices.
+
+Aside from technical proficiency, I also possess exceptional soft skills and project management capabilities. Having worked in Agile environments, I am well-versed in Agile Methodology and have a firm grasp on Enterprise Design Thinking principles. My verbal and written communication skills, coupled with my natural leadership abilities, enable me to effectively communicate ideas, coordinate teams, and deliver successful outcomes. Furthermore, I am proficient in utilizing project management tools such as Jira and Asana to ensure efficient project execution and timely delivery.
+
+What sets me apart is my strong dedication to continuous learning and growth within the field of web development. I am always eager to expand my knowledge and stay up-to-date with the latest industry trends and technologies. This drive, coupled with my adaptability and enthusiasm, allows me to quickly learn new frameworks and tools as required.
+
+As an intern at 0footprint Tech Services, I am confident that I will be able to contribute to your team's success while further developing my skills and gaining invaluable industry experience. I am particularly drawn to your company's commitment to sustainability and environmental consciousness, which aligns perfectly with my personal values.
+
+I would welcome the opportunity to discuss how my skills and qualifications align with your company's goals during an interview. Thank you for considering my application. I have attached my resume for your reference, and I look forward to the possibility of joining the 0footprint Tech Services team and making a meaningful contribution as a Front End Web Developer intern.
+
+Thank you for your time and consideration.
+
+Sincerely,
+
+Ushahemba Shir
++234 9018515257
