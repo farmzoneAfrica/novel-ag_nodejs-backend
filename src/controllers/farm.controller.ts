@@ -25,17 +25,15 @@ export const createFarmHandler = async (
   next: NextFunction
 ) => {
   try {
-    const userId = req.user.sub
+    const {farmerId} = req.params;
     const farm = await createFarm({
       name: req.body.name,
-      size: req.body.size,
       location: req.body.location,
-      closest_landmark: req.body.closest_landmark,
-      crop: req.body.crop,
+      landmark: req.body.closest_landmark,
       state: req.body.state,
       local_govt: req.body.local_govt,
       ward: req.body.ward, 
-      userId: userId
+      user_id: farmerId
     });
 
     return res.status(201).json({
@@ -43,6 +41,7 @@ export const createFarmHandler = async (
       farm
     })
   } catch (err: any) { 
+    console.log(err)
       if (err instanceof Prisma.PrismaClientKnownRequestError) {
       if (err.code === 'P2002') {
         return res.status(409).json({
@@ -64,9 +63,7 @@ export const getFarmsHandler = async (
     const farm = await getFarms()
       return res.status(200).json({
       status: 'Success',
-      data: {
-        farm,
-      },
+      farm
     });
   } catch (err: any) {
     next(err);

@@ -27,19 +27,17 @@ export const createUserSchema = object({
       required_error: 'phone number is required',
     }).min(7, 'Number must be more than 6 characters')
       .max(15, 'Password must be less than 15 characters'),
-    email: string({
-      required_error: 'Email address is required',
-    }).email('Invalid email address'),
+    email: string().email('Invalid email address').optional(),
     code: string().optional(),
     ip: string().optional(),
-    gender: string(),
+    gender: string().optional(),
     profile_picture: string().optional(),
     nationality: string().optional(),
     staff_id: number().optional(),
-    role_id: number(),
-    state: string({
-      required_error: 'State is required',
-    }),
+    role_id: number().optional(),
+    state: string().optional(),
+    local_govt: string().optional(),
+    ward: string().optional(),
     state_id: number().optional(),
     local_govt_id: number().optional(),
     ward_id: number().optional(),
@@ -87,15 +85,15 @@ export const verifyOtpSchema = object({
 export const updateUserSchema = object({
   body: object({
     first_name: string({}),
-    last_name: string({}),
-    gender: string({}),
+    last_name: string({}).optional(),
+    gender: string({}).optional(),
     phone: string({}),
-    staff_id: string({}),
-    role: string({}),
+    staff_id: string({}).optional(),
+    role: string({}).optional(),
     profile_picture: string().optional(),
-    state: string({}),
-    local_govt: string({}),
-    marital_status: string({}),
+    state: string({}).optional(),
+    local_govt: string({}).optional(),
+    marital_status: string({}).optional(),
     password: string({})
       .min(8, 'Password must be more than 8 characters')
       .max(32, 'Password must be less than 32 characters').optional(),

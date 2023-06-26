@@ -23,17 +23,21 @@ enum RoleEnumType {
 
 model User {
   id              String  @id @default(uuid())
-  user_type_id    Int?
-  role            String
-  role_id         Int?
-  first_name      String
-  last_name       String?
   phone           String  @unique
   email           String  @unique
-  password        String  @default("12345678")
-  staff_id        String? @unique
-  code            String?
   gender          String?
+  first_name      String
+  last_name       String?
+  pin             String?
+  state           String?
+  local_govt      String?
+  ward            String?
+  password        String  @default("pass1234")
+  role            String  @default("Farmer")
+  staff_id        String? @unique
+  user_type_id    Int?
+  role_id         Int?
+  code            String?
   profile_picture String?
   nationality     String?
   state_id        Int?
@@ -42,7 +46,7 @@ model User {
   ip              String?
   address         String?
   verified        Boolean @default(false)
-  status          String @default("Inactive")
+  status          String  @default("Inactive")
   isSuperAdmin    Boolean @default(false)
 
   email_verification_code String?   @unique @db.VarChar(90)
@@ -63,10 +67,10 @@ model User {
   warhouse      Warehouse[]
   farm          Farm[]
 
-  user_type  UserType?  @relation(fields: [user_type_id], onDelete: Cascade, references: [id])
+  user_type   UserType?  @relation(fields: [user_type_id], onDelete: Cascade, references: [id])
   state_      State?     @relation(fields: [state_id], onDelete: Cascade, references: [id])
-  local_govt LocalGovt? @relation(fields: [local_govt_id], onDelete: Cascade, references: [id])
-  ward       Ward?      @relation(fields: [ward_id], onDelete: Cascade, references: [id])
+  local_govt_ LocalGovt? @relation(fields: [local_govt_id], onDelete: Cascade, references: [id])
+  ward_       Ward?      @relation(fields: [ward_id], onDelete: Cascade, references: [id])
   role_       Role?      @relation(fields: [role_id], onDelete: Cascade, references: [id])
 
   @@unique([email, phone, email_verification_code, password_reset_token, phone_verification_code])
@@ -77,6 +81,31 @@ model User {
   @@index([local_govt_id])
   @@index([ward_id])
   @@map(name: "users")
+}
+
+model Farm {
+  id             String  @id @default(uuid())
+  name           String  @unique
+  location       String
+  landmark       String?
+  latitude       String?
+  longitude      String?
+  size           String?
+  crop           String?
+  state          String?
+  local_govt     String?
+  prosperity_hub String?
+  ward           String  @default("")
+  status         Boolean @default(false)
+  user_id        String
+
+  user User @relation(fields: [user_id], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  @@index([user_id])
+  @@map(name: "farms")
 }
 
 model UserType {
@@ -190,28 +219,4 @@ model Warehouse {
 
   @@index([user_id])
   @@map(name: "warehouses")
-}
-
-model Farm {
-  id         String  @id @default(uuid())
-  name       String  @unique
-  latitude   String
-  longitude  String
-  landmark   String?
-  size       String
-  location   String
-  crop       String?
-  state      String
-  local_govt String
-  ward       String  @default("")
-  status     Boolean @default(false)
-  user_id    String
-
-  user User @relation(fields: [user_id], references: [id])
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
-
-  @@index([user_id])
-  @@map(name: "farms")
 }

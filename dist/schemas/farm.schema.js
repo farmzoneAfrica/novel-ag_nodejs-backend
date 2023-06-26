@@ -7,20 +7,14 @@ exports.createFarmSchema = (0, zod_1.object)({
         name: (0, zod_1.string)({
             required_error: 'Farm name is required',
         }),
-        size: (0, zod_1.string)({
-            required_error: 'Farm size is required',
-        }),
+        size: (0, zod_1.string)().optional(),
         location: (0, zod_1.string)({
             required_error: 'Farm location is required',
         }),
-        closest_landmark: (0, zod_1.string)().optional(),
+        landmark: (0, zod_1.string)().optional(),
         crop: (0, zod_1.string)().optional(),
-        state: (0, zod_1.string)({
-            required_error: 'State is required',
-        }),
-        local_govt: (0, zod_1.string)({
-            required_error: 'Local government is required',
-        }),
+        state: (0, zod_1.string)().optional(),
+        local_govt: (0, zod_1.string)().optional(),
         ward: (0, zod_1.string)().optional(),
     })
 });
@@ -29,7 +23,7 @@ exports.updateFarmSchema = (0, zod_1.object)({
         name: (0, zod_1.string)().optional(),
         size: (0, zod_1.string)().optional(),
         location: (0, zod_1.string)().optional(),
-        closest_landmark: (0, zod_1.string)().optional(),
+        landmark: (0, zod_1.string)().optional(),
         crop: (0, zod_1.string)().optional(),
         state: (0, zod_1.string)().optional(),
         local_govt: (0, zod_1.string)().optional(),

@@ -288,11 +288,19 @@
             "in": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "role",
+            "in": "query",
+            "type": "string"
           }
         ],
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }
@@ -612,10 +620,16 @@
         }
       }
     },
-    "/api/v1/farm/": {
+    "/api/v1/farm/{farmer_id}": {
       "post": {
         "description": "",
         "parameters": [
+          {
+            "name": "farmer_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
           {
             "name": "authorization",
             "in": "header",
@@ -627,7 +641,9 @@
             "description": "Bad Request"
           }
         }
-      },
+      }
+    },
+    "/api/v1/farm/": {
       "get": {
         "description": "",
         "parameters": [
