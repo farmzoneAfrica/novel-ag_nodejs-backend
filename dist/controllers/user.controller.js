@@ -10,7 +10,7 @@ const userService = new user_service_1.UserService();
 const getUsersHandler = async (req, res, next) => {
     try {
         const users = await (0, user_service_1.findAll)();
-        res.status(200).status(200).json({
+        res.status(200).json({
             status: 'Success',
             users
         });

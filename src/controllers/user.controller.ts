@@ -27,7 +27,7 @@ export const getUsersHandler = async (
   ) => {
     try {
       const users = await findAll()
-      res.status(200).status(200).json({
+      res.status(200).json({
         status: 'Success',
         users
       });
