@@ -5,20 +5,19 @@ enum GenderEnumType {
   Female = 'Female',
 }
 
-enum RoleEnumType {
-  SuperAdmin = "SuperAdmin",
-  Admin = "Admin",
-  Supervisor ="Supervisor",
-  Agent ="Agent",
-  Farmer = "Farmer",
-  User = "User",
-  Aggregator = "Aggregator",
-  Logistics = "Logistics"
-}
+// enum RoleEnumType {
+//   SuperAdmin = "SuperAdmin",
+//   Admin = "Admin",
+//   Supervisor ="Supervisor",
+//   Agent ="Agent",
+//   Farmer = "Farmer",
+//   User = "User",
+//   Aggregator = "Aggregator",
+//   Logistics = "Logistics"
+// }
 
 export const createUserSchema = object({
   body: object({
-    // role: (z.nativeEnum(RoleEnumType)),
     role: string().optional(),
     first_name: string({
       required_error: 'first_name is required',
