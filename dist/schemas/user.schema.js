@@ -7,20 +7,18 @@ var GenderEnumType;
     GenderEnumType["Male"] = "Male";
     GenderEnumType["Female"] = "Female";
 })(GenderEnumType || (GenderEnumType = {}));
-var RoleEnumType;
-(function (RoleEnumType) {
-    RoleEnumType["SuperAdmin"] = "SuperAdmin";
-    RoleEnumType["Admin"] = "Admin";
-    RoleEnumType["Supervisor"] = "Supervisor";
-    RoleEnumType["Agent"] = "Agent";
-    RoleEnumType["Farmer"] = "Farmer";
-    RoleEnumType["User"] = "User";
-    RoleEnumType["Aggregator"] = "Aggregator";
-    RoleEnumType["Logistics"] = "Logistics";
-})(RoleEnumType || (RoleEnumType = {}));
+// enum RoleEnumType {
+//   SuperAdmin = "SuperAdmin",
+//   Admin = "Admin",
+//   Supervisor ="Supervisor",
+//   Agent ="Agent",
+//   Farmer = "Farmer",
+//   User = "User",
+//   Aggregator = "Aggregator",
+//   Logistics = "Logistics"
+// }
 exports.createUserSchema = (0, zod_1.object)({
     body: (0, zod_1.object)({
-        // role: (z.nativeEnum(RoleEnumType)),
         role: (0, zod_1.string)().optional(),
         first_name: (0, zod_1.string)({
             required_error: 'first_name is required',
