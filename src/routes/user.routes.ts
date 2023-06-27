@@ -19,12 +19,19 @@ import {
 
 const userRouter = express.Router();
 
-userRouter.get( '/', auth, adminAuth, getUsersHandler);
+userRouter.get( '/', auth, getUsersHandler);
 userRouter.get( '/no', getNoOfTotalUsersHandler);
-userRouter.get( '/me/:id', auth, requireUser, getUserHandler);
+userRouter.get( '/me/:id', auth, getUserHandler);
 userRouter.get( '/:pageNo', usersPaginationHandler);
 userRouter.patch( '/:id', validate(updateUserSchema), auth, adminAuth, updateUserHandler );
-userRouter.delete( '/:id', auth, adminAuth, deleteUserHandler );
+userRouter.delete( '/:id', auth, deleteUserHandler );
+
+// userRouter.get( '/', auth, adminAuth, getUsersHandler);
+// userRouter.get( '/no', getNoOfTotalUsersHandler);
+// userRouter.get( '/me/:id', auth, requireUser, getUserHandler);
+// userRouter.get( '/:pageNo', usersPaginationHandler);
+// userRouter.patch( '/:id', validate(updateUserSchema), auth, adminAuth, updateUserHandler );
+// userRouter.delete( '/:id', auth, adminAuth, deleteUserHandler );
 
 
 userRouter.get( '/:roles', getUsersByRoleHandler );
