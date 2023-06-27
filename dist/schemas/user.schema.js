@@ -20,7 +20,8 @@ var RoleEnumType;
 })(RoleEnumType || (RoleEnumType = {}));
 exports.createUserSchema = (0, zod_1.object)({
     body: (0, zod_1.object)({
-        role: (zod_1.z.nativeEnum(RoleEnumType)),
+        // role: (z.nativeEnum(RoleEnumType)),
+        role: (0, zod_1.string)().optional(),
         first_name: (0, zod_1.string)({
             required_error: 'first_name is required',
         }),
