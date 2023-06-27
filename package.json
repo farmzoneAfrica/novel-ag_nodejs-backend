@@ -41,7 +41,7 @@
     "morgan": "^1.10.0",
     "mysql": "^2.18.1",
     "nodemailer": "^6.9.1",
-    "prisma": "^4.15.0",
+    "prisma": "^4.16.1",
     "redis": "^4.6.5",
     "swagger-autogen": "^2.23.1",
     "swagger-ui-express": "^4.6.2",
@@ -53,7 +53,7 @@
     "zod": "^3.21.4"
   },
   "devDependencies": {
-    "@prisma/client": "^4.13.0-dev.35",
+    "@prisma/client": "^4.16.1",
     "@types/bcrypt": "^5.0.0",
     "@types/bcryptjs": "^2.4.2",
     "@types/config": "^3.3.0",
