@@ -18,7 +18,8 @@ enum RoleEnumType {
 
 export const createUserSchema = object({
   body: object({
-    role: (z.nativeEnum(RoleEnumType)),
+    // role: (z.nativeEnum(RoleEnumType)),
+    role: string().optional(),
     first_name: string({
       required_error: 'first_name is required',
     }),
