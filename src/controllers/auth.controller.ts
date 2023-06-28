@@ -148,6 +148,8 @@ export const loginUserHandler = async (
 
     const { access_token, refresh_token } = await signTokens(user);
 
+    // console.log(access_token);
+    
     res.cookie('access_token', access_token, accessTokenCookieOptions);
     res.cookie('refresh_token', refresh_token, refreshTokenCookieOptions);
     res.cookie('logged_in', true, {
