@@ -92,5 +92,5 @@ const prisma = new PrismaClient();
   const PORT = process.env.PORT;
 console.clear()
   app.listen(PORT, () => {
-    console.log(`Server listening on port ${PORT}.`);
+    // console.log(`Server listening on port ${PORT}.`);
   });

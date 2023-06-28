@@ -76,6 +76,6 @@ app.use(function (err, req, res) {
 const PORT = process.env.PORT;
 console.clear();
 app.listen(PORT, () => {
-    console.log(`Server listening on port ${PORT}.`);
+    // console.log(`Server listening on port ${PORT}.`);
 });
 //# sourceMappingURL=index.js.map
