@@ -13,7 +13,7 @@ const connectRedis = async () => {
     }
     catch (error) {
         console.log(error);
-        setTimeout(connectRedis, 500000);
+        setTimeout(connectRedis, 5000);
     }
 };
 connectRedis();

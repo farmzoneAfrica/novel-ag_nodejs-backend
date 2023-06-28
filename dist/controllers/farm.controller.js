@@ -9,8 +9,7 @@ const app_error_1 = __importDefault(require("../utils/app.error"));
 const client_1 = require("@prisma/client");
 const createFarmHandler = async (req, res, next) => {
     try {
-        // const {farmerId} = req.params;
-        const farmerId = req.user.sub;
+        const farmerId = req.params.user_id;
         const farm = await (0, farm_service_1.createFarm)({
             name: req.body.name,
             location: req.body.location,
@@ -26,7 +25,6 @@ const createFarmHandler = async (req, res, next) => {
         });
     }
     catch (err) {
-        console.log(err);
         if (err instanceof client_1.Prisma.PrismaClientKnownRequestError) {
             if (err.code === 'P2002') {
                 return res.status(409).json({
@@ -83,7 +81,7 @@ const updateFarmHandler = async (req, res, next) => {
             size: req.body.size,
         });
         if (!farm)
-            return next(new app_error_1.default(401, 'Warehouse does not exist'));
+            return next(new app_error_1.default(401, 'Farm does not exist'));
         return res.status(200).json({
             status: 'Success',
             farm,

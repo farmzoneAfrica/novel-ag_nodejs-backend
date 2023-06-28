@@ -99,6 +99,7 @@ const loginUserHandler = async (req, res, next) => {
             return next(new app_error_1.default(400, 'Invalid email or password'));
         }
         const { access_token, refresh_token } = await (0, user_service_1.signTokens)(user);
+        // console.log(access_token);
         res.cookie('access_token', access_token, accessTokenCookieOptions);
         res.cookie('refresh_token', refresh_token, refreshTokenCookieOptions);
         res.cookie('logged_in', true, {

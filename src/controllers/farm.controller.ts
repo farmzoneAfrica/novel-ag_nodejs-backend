@@ -25,8 +25,7 @@ export const createFarmHandler = async (
   next: NextFunction
 ) => {
   try {
-    // const {farmerId} = req.params;
-    const farmerId = req.user.sub;
+    const farmerId = req.params.user_id;
     const farm = await createFarm({
       name: req.body.name,
       location: req.body.location,
@@ -42,7 +41,6 @@ export const createFarmHandler = async (
       farm
     })
   } catch (err: any) { 
-    console.log(err)
       if (err instanceof Prisma.PrismaClientKnownRequestError) {
       if (err.code === 'P2002') {
         return res.status(409).json({
@@ -111,7 +109,7 @@ export const updateFarmHandler = async (
             size: req.body.size,
           });
      if (!farm) 
-      return next(new AppError(401, 'Warehouse does not exist'));
+      return next(new AppError(401, 'Farm does not exist'));
     
     return res.status(200).json({
       status: 'Success',
