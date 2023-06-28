@@ -13,7 +13,7 @@ const connectRedis = async () => {
     redisClient.set('try', 'Hello Welcome to Express with TypeORM');
   } catch (error) {
     // console.log(error);
-    setTimeout(connectRedis, 50000000000);
+    setTimeout(connectRedis, 50000);
   }
 };
 
