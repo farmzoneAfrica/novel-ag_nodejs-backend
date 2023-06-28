@@ -29,6 +29,14 @@ const prisma = new PrismaClient();
 
   app.use(express.json({limit: '10kb' }));
   app.use(cookieParser());
+  // Allow requests from any origin
+  app.use((req: Request, res: Response, next) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+    res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+    next();
+  });
+
   app.use(cors({
       origin: [config.get<string>('origin')],
       credentials: true,
