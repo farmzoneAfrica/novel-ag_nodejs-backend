@@ -1,6 +1,5 @@
 import dotenv from "dotenv";
 import jwt, { SignOptions } from 'jsonwebtoken';
-// import fs from 'fs';
 dotenv.config();
 
 export const signJwt = (
@@ -8,12 +7,9 @@ export const signJwt = (
   keyName: 'ab1234' | 'ab1234',
   options: SignOptions
 ) => {
-  // const privateKey = fs.readFileSync('private_key.pem').toString('ascii');
   const privateKey = 'ab1234'
-  // console.log("jwt", 10, privateKey);
   return jwt.sign(payload, privateKey, {
-    // ...options,
-    // algorithm: 'RS256',
+
   });
 };
 

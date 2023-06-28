@@ -23,17 +23,12 @@ import { validate } from '../middleware/validate';
 
 const farmRouter = express.Router();
 
-// farmRouter.post( '/:farmer_id', validate(createFarmSchema), auth, requireUser, createFarmHandler);
-farmRouter.post( '/:farmer_id', validate(createFarmSchema), createFarmHandler);
-farmRouter.get( '/', getFarmsHandler);
-farmRouter.get( '/:id', getFarmHandler);
-farmRouter.patch( '/:id', validate(updateFarmSchema), updateFarmHandler);
-farmRouter.delete( '/:id', deleteFarmHandler);
-
-// farmRouter.post( '/:farmer_id', validate(createFarmSchema), auth, createFarmHandler);
-// farmRouter.get( '/', auth, getFarmsHandler);
-// farmRouter.get( '/:id', auth, getFarmHandler);
-// farmRouter.patch( '/:id', validate(updateFarmSchema), auth, updateFarmHandler);
+farmRouter.post( '/:farmer_id', validate(createFarmSchema), auth, createFarmHandler);
+farmRouter.get( '/', auth, getFarmsHandler);
+farmRouter.get( '/:id', auth, getFarmHandler);
+farmRouter.patch( '/:id', validate(updateFarmSchema), auth, updateFarmHandler);
+farmRouter.delete( '/:id', auth, adminAuth, deleteFarmHandler);
 // farmRouter.delete( '/:id', auth, adminAuth, deleteFarmHandler);
+farmRouter.delete( '/:id', auth, deleteFarmHandler);
 
 export default farmRouter;
