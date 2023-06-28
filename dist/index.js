@@ -46,12 +46,12 @@ app.get('/api/healthchecker', (_, res) => {
     });
 });
 app.use('/api/v1/auth', auth_routes_1.default);
-app.use('/api/v1/users', user_routes_1.default);
+app.use('/api/v1/user', user_routes_1.default);
 app.use('/api/v1/farmer', farmer_routes_1.default);
 app.use('/api/v1/prosperity-hub', prosperity_hub_routes_1.default);
 app.use('/api/v1/warehouse', warehouse_routes_1.default);
 app.use('/api/v1/farm', farm_routes_1.default);
-app.use('/api/v1/utils', utils_route_1.default);
+app.use('/api/v1/util', utils_route_1.default);
 app.use('/api/v1/assign', role_permission_route_1.default);
 app.all('*', (req, res, next) => {
     next(new app_error_1.default(404, `Route ${req.originalUrl} not found`));

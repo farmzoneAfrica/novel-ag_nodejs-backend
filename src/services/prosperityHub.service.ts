@@ -1,6 +1,6 @@
 import { PrismaClient, Prisma, User, ProsperityHub } from '@prisma/client';
 import config from 'config';
-import redisClient from '../utils/connect.redis';
+// import redisClient from '../utils/connect.redis';
 
 const prisma = new PrismaClient();
 

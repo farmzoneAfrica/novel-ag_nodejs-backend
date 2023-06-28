@@ -25,7 +25,8 @@ export const createFarmHandler = async (
   next: NextFunction
 ) => {
   try {
-    const {farmerId} = req.params;
+    // const {farmerId} = req.params;
+    const farmerId = req.user.sub;
     const farm = await createFarm({
       name: req.body.name,
       location: req.body.location,
@@ -83,9 +84,7 @@ export const getFarmHandler = async (
     }
       return res.status(200).status(200).json({
       status: 'success',
-      data: {
-        farm,
-      },
+      farm
     });
   } catch (err: any) {
     next(err);
@@ -104,13 +103,12 @@ export const updateFarmHandler = async (
         { id: id }, 
         {
             name: req.body.name,
-            size: req.body.size,
             location: req.body.location,
-            closest_landmark: req.body.closest_landmark,
-            crop: req.body.crop,
+            landmark: req.body.closest_landmark,
             state: req.body.state,
             local_govt: req.body.local_govt,
             ward: req.body.ward, 
+            size: req.body.size,
           });
      if (!farm) 
       return next(new AppError(401, 'Warehouse does not exist'));

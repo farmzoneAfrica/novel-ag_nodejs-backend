@@ -14,7 +14,7 @@ export function sendOtp (phoneNumber: string, otp: string): void {
     to: '+234' + phoneNumber.slice(1, phoneNumber.length)
   })
   .then((message: any) => {
-    console.log(`OTP sent successfully. Message ID: ${message.sid}`);
+    // console.log(`OTP sent successfully. Message ID: ${message.sid}`);
   })
   .catch((error: any) => {
     console.error(`Error sending OTP: ${error}`);
