@@ -5,7 +5,7 @@
         "title": "REST API",
         "description": ""
     },
-    "host": "https://novel-ag-node-v1.onrender.com",
+    "host": "novel-ag-node-v1.onrender.com",
     "basePath": "/",
     "schemes": [
         "https"
