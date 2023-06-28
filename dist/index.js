@@ -28,6 +28,13 @@ const app = (0, express_1.default)();
 const prisma = new client_1.PrismaClient();
 app.use(express_1.default.json({ limit: '10kb' }));
 app.use((0, cookie_parser_1.default)());
+// Allow requests from any origin
+app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+    res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+    next();
+});
 app.use((0, cors_1.default)({
     origin: [config_1.default.get('origin')],
     credentials: true,
