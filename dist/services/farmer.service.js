@@ -5,9 +5,9 @@ const client_1 = require("@prisma/client");
 exports.excludedFields = [
     "password",
     "verified",
-    "verificationCode",
-    "passwordResetAt",
-    "passwordResetToken",
+    "verification_code",
+    "password_reset_at",
+    "password_reset_token",
 ];
 const prisma = new client_1.PrismaClient();
 // adjust logic to bring out farmers only

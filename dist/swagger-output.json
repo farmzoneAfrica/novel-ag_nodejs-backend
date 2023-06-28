@@ -166,7 +166,7 @@
                 }
             }
         },
-        "/api/v1/users/": {
+        "/api/v1/user/": {
             "get": {
                 "description": "",
                 "parameters": [
@@ -183,7 +183,7 @@
                 }
             }
         },
-        "/api/v1/users/no": {
+        "/api/v1/user/no": {
             "get": {
                 "description": "",
                 "parameters": [],
@@ -194,7 +194,7 @@
                 }
             }
         },
-        "/api/v1/users/me/{id}": {
+        "/api/v1/user/me/{id}": {
             "get": {
                 "description": "",
                 "parameters": [
@@ -217,7 +217,7 @@
                 }
             }
         },
-        "/api/v1/users/{pageNo}": {
+        "/api/v1/user/{pageNo}": {
             "get": {
                 "description": "",
                 "parameters": [
@@ -235,7 +235,7 @@
                 }
             }
         },
-        "/api/v1/users/{id}": {
+        "/api/v1/user/{id}": {
             "patch": {
                 "description": "",
                 "parameters": [
@@ -279,7 +279,7 @@
                 }
             }
         },
-        "/api/v1/users/{roles}": {
+        "/api/v1/user/{roles}": {
             "get": {
                 "description": "",
                 "parameters": [
@@ -305,7 +305,7 @@
                 }
             }
         },
-        "/api/v1/users/{role}/no": {
+        "/api/v1/user/{role}/no": {
             "get": {
                 "description": "",
                 "parameters": [
@@ -725,7 +725,7 @@
                 }
             }
         },
-        "/api/v1/utils/states": {
+        "/api/v1/util/states": {
             "get": {
                 "description": "",
                 "parameters": [],
@@ -736,7 +736,7 @@
                 }
             }
         },
-        "/api/v1/utils/states/{id}": {
+        "/api/v1/util/states/{id}": {
             "get": {
                 "description": "",
                 "parameters": [
@@ -754,7 +754,7 @@
                 }
             }
         },
-        "/api/v1/utils/lgas": {
+        "/api/v1/util/lgas": {
             "get": {
                 "description": "",
                 "parameters": [],
@@ -765,7 +765,7 @@
                 }
             }
         },
-        "/api/v1/utils/lgas-state/{id}": {
+        "/api/v1/util/lgas-state/{id}": {
             "get": {
                 "description": "",
                 "parameters": [
@@ -783,7 +783,7 @@
                 }
             }
         },
-        "/api/v1/utils/lgas/{id}": {
+        "/api/v1/util/lgas/{id}": {
             "get": {
                 "description": "",
                 "parameters": [
@@ -801,7 +801,7 @@
                 }
             }
         },
-        "/api/v1/utils/roles": {
+        "/api/v1/util/roles": {
             "get": {
                 "description": "",
                 "parameters": [],
@@ -812,7 +812,7 @@
                 }
             }
         },
-        "/api/v1/utils/roles/{id}": {
+        "/api/v1/util/roles/{id}": {
             "get": {
                 "description": "",
                 "parameters": [

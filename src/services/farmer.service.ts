@@ -1,16 +1,16 @@
 import { PrismaClient, Prisma, User } from '@prisma/client';
 import { omit } from 'lodash';
 import config from 'config';
-import redisClient from '../utils/connect.redis';
+// import redisClient from '../utils/connect.redis';
 import { signJwt } from '../utils/jwt';
 import { number } from 'zod';
 
 export const excludedFields = [
   "password",
   "verified",
-  "verificationCode",
-  "passwordResetAt",
-  "passwordResetToken",
+  "verification_code",
+  "password_reset_at",
+  "password_reset_token",
 ];
 
 const prisma = new PrismaClient();

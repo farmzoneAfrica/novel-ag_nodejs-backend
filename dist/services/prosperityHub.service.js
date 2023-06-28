@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteProsperityHub = exports.updateProsperityHub = exports.findById = exports.findProsperityHub = exports.getAllProsperityHubs = exports.createProsperityHub = void 0;
 const client_1 = require("@prisma/client");
+// import redisClient from '../utils/connect.redis';
 const prisma = new client_1.PrismaClient();
 const createProsperityHub = async (input) => {
     return (await prisma.prosperityHub.create({

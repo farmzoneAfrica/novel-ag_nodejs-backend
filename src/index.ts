@@ -52,12 +52,12 @@ const prisma = new PrismaClient();
   });
 
   app.use('/api/v1/auth', authRouter);
-  app.use('/api/v1/users', userRouter);
+  app.use('/api/v1/user', userRouter);
   app.use('/api/v1/farmer', farmerRouter);
   app.use('/api/v1/prosperity-hub', prosperityHubRouter);
   app.use('/api/v1/warehouse', warehouseRouter);
   app.use('/api/v1/farm', farmRouter);
-  app.use('/api/v1/utils', utilsRouter);
+  app.use('/api/v1/util', utilsRouter);
   app.use('/api/v1/assign', rolesAndPermissions);
 
   app.all('*', (req: Request, res: Response, next: NextFunction) => {

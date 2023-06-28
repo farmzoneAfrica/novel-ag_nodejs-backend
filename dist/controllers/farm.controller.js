@@ -9,7 +9,8 @@ const app_error_1 = __importDefault(require("../utils/app.error"));
 const client_1 = require("@prisma/client");
 const createFarmHandler = async (req, res, next) => {
     try {
-        const { farmerId } = req.params;
+        // const {farmerId} = req.params;
+        const farmerId = req.user.sub;
         const farm = await (0, farm_service_1.createFarm)({
             name: req.body.name,
             location: req.body.location,
@@ -60,9 +61,7 @@ const getFarmHandler = async (req, res, next) => {
         }
         return res.status(200).status(200).json({
             status: 'success',
-            data: {
-                farm,
-            },
+            farm
         });
     }
     catch (err) {
@@ -76,13 +75,12 @@ const updateFarmHandler = async (req, res, next) => {
         const { id } = req.params;
         const farm = await (0, farm_service_1.updateFarm)({ id: id }, {
             name: req.body.name,
-            size: req.body.size,
             location: req.body.location,
-            closest_landmark: req.body.closest_landmark,
-            crop: req.body.crop,
+            landmark: req.body.closest_landmark,
             state: req.body.state,
             local_govt: req.body.local_govt,
             ward: req.body.ward,
+            size: req.body.size,
         });
         if (!farm)
             return next(new app_error_1.default(401, 'Warehouse does not exist'));
