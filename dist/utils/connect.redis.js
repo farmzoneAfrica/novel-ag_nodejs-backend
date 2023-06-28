@@ -16,6 +16,6 @@ const connectRedis = async () => {
         setTimeout(connectRedis, 5000);
     }
 };
-connectRedis();
+// connectRedis();
 exports.default = redisClient;
 //# sourceMappingURL=connect.redis.js.map
