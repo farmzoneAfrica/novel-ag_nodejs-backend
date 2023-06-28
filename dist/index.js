@@ -35,6 +35,7 @@ app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
     next();
 });
+// Forward all other requests to Next.js
 app.use((0, cors_1.default)({
     origin: [config_1.default.get('origin')],
     credentials: true,
@@ -83,6 +84,6 @@ app.use(function (err, req, res) {
 const PORT = process.env.PORT;
 console.clear();
 app.listen(PORT, () => {
-    // console.log(`Server listening on port ${PORT}.`);
+    console.log(`Server listening on port ${PORT}.`);
 });
 //# sourceMappingURL=index.js.map
