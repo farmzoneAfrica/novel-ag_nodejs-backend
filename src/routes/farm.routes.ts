@@ -24,8 +24,8 @@ import { validate } from '../middleware/validate';
 const farmRouter = express.Router();
 
 farmRouter.post( '/:user_id', auth, validate(createFarmSchema), createFarmHandler);
-farmRouter.get( '/', getFarmsHandler);
-farmRouter.get( '/:id',  getFarmHandler);
+farmRouter.get( '/', auth, getFarmsHandler);
+farmRouter.get( '/:id', auth,  getFarmHandler);
 farmRouter.patch( '/:id', auth, validate(updateFarmSchema),  updateFarmHandler);
 farmRouter.delete( '/:id', auth, deleteFarmHandler);
 
